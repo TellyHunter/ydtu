@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet"  href="../../resource/css/login.css"/>
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/JQuery.md5.js"></script>
+<script src="../../resource/js/result.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<body>
+<!--header Begin--><!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tbody>
+		<tr>
+			<td height="50" bgcolor="#FFFFFF">&nbsp;</td>
+	    </tr>
+		<tr>
+			<td bgcolor="#FFFFFF">
+				<!------------内容主体部分 Start-------------->
+				<div id="Content_box">
+					<div class="main_content">    
+					<!--------登陆框START--------->  
+					<div id="Iin_box">
+					<form method="post" name="form_1" id="loginForm"/>
+						<input type="hidden" value="3" name="type"/>
+						<div class="title_box">用户登录 <a href="javascript:void(0);" id="reg">注册</a><div class="c"></div></div>
+					    <div class="input_list2"><input type="text" name="username" placeholder="请输入用户账号" value="" class="input_border input_name" id="Input_name"/></div>
+					    <div class="input_list2"><input type="password" name="password"  placeholder="请输入密码" value="" class="input_border input_password" id="Input_password"/></div>
+					    <div class="input_list2">
+					        <div class="verification_code"><input type="text" name="validateCode" id="inputCode"  placeholder="请输入验证码" value="" class="input_border input_code"/></div>
+					        <div class="verification_code_img"><img src="/ydtu/code.htm" width="127" height="40"  alt="" onclick="changeImg();" id="imgObj"/></div> 
+					        <div class="c"></div>  
+					    </div>
+					    <div class="input_list2"><input type="button" name="input_login" value="登录" class="input_border input_login" onclick="sub()"/></div>
+					    
+					    <div class="input_list2">
+<!-- 					        <div class="verification_code"> -->
+<!-- 					        <span id="WeiZhuang_checkbox_auto_login" class="checkbox WeiZhuang_checkbox"><input type="checkbox"  id="auto_login" />自动登录</span> -->
+<!-- 					        </div> -->
+					        <div class="verification_code_img"><a href="/ydtu/page/custom/forgot.html">忘记密码？</a></div>
+					        <div id="msg" class="msg-error"><b></b>${msg}</div> 
+					    </div>  
+					</form>      
+					</div>
+					<!--------登陆框END---------> 
+					</div>
+				</div>
+				<!------------内容主体部分 End-------------->
+     		 </td>
+    	</tr>
+  		</tbody>
+	</table>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+
+<!-- 表单验证 -->
+<script type="text/javascript">
+function changeImg() { 
+    var imgSrc = $("#imgObj"); 
+    var src = imgSrc.attr("src"); 
+    var timestamp = (new Date()).valueOf(); 
+    imgSrc.attr("src",src + "?timestamp=" + timestamp);
+} 
+$("#reg").click(function(){
+ 	window.location.href = "/ydtu/page/custom/regist.html";
+})
+</script>
+
+<script>
+function sub(){
+	var username = $("#Input_name").val();
+	var password = $("#Input_password").val();
+	if("" == username.trim()){
+		$("#msg").html("<b></b>用户名不能为空！");
+		$("#msg").css("display", "block");
+		return;
+	}
+	if("" == password.trim()){
+		$("#msg").html("<b></b>请输入用户密码！");
+		$("#msg").css("display", "block");
+		return;
+	}
+ 	var inputCode = $('#inputCode').val();
+	if("" == inputCode) {
+		$("#msg").html("<b></b>请输入验证码");
+		$("#msg").css("display", "block");
+		return;
+	}
+ 	$.ajax({
+ 		type:"post",
+ 		url:"/ydtu/getValidateCode.htm",
+ 		dataType:'json',
+ 		async:false,
+ 		success:function(data){
+ 			inputCode = $('#inputCode').val();
+ 			var dd = data;
+ 			if(dd.toUpperCase() != inputCode.toUpperCase()) {
+ 				changeImg();
+ 				$("#msg").html("<b></b>验证码错误");
+ 				$("#msg").css("display", "block");
+ 				return;
+ 			}else{
+ 				$.ajax({
+ 					type: "post",
+ 					url:"/ydtu/login.htm",
+ 					data:{"username":$("#Input_name").val(),"password":$.md5($("#Input_password").val()),"remember":""},
+ 					dataType:"json",
+ 					async:false,
+ 					success:function(data){
+ 						checkResult(data.result);
+ 						if(data.result=="SUCCESS"){
+ 							$("#msg").text("");
+ 							location.href="/ydtu/page/custom/index.html";
+ 						}
+ 						else if(data.result=="FAIL"){
+ 							$("#msg").html("<b></b>帐号或密码有误! ");
+ 							changeImg();
+ 							$("#Input_password").val("");
+ 							$("#inputCode").val("");
+ 							$("#msg").css("display", "block");
+ 							return;
+ 						}
+ 					}
+ 				})	 				
+ 			}
+ 		}
+ 	})	
+}
+
+document.onkeydown = function(e){
+    if(!e) e = window.event;//火狐中是 window.event
+    if((e.keyCode || e.which) == 13){
+        sub();
+    }
+}
+</script>
+</body>
+</html>

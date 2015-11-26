@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更改密码</title>
+	<link rel="stylesheet" href="../../resource/css/global.css" />
+	<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+	<link rel="stylesheet"  href="../../resource/css/login.css"/>
+	<link rel="stylesheet" href="../../resource/css/validation.css" />
+	<script src="../../resource/js/jquery-1.8.0.js"></script>
+	<script src="../../resource/js/result.js"></script>
+	 <script src="../../resource/js/JQuery.md5.js"></script>
+<!-- 表单验证 -->
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+<!-- 表单验证 -->
+<script type="text/javascript">
+
+	$(function() {
+		$("#modPaswdForm").validate({
+			rules : {
+				newPassword : {
+					required : true,
+					rangelength : [ 6, 20 ],
+					passRule : true,
+				},
+				password : {
+					required : true,
+					rangelength : [ 6, 20 ],
+					passRule : true
+				},
+				rePassword : {
+					required : true,
+					equalTo : "#newPassword"
+				}
+			},
+			messages : {
+				newPassword : {
+					required : "请输入新密码",
+					rangelength : "长度不符合要求",
+				},
+				password : {
+					required : "请输入密码",
+					rangelength : "长度不符合要求"
+				},
+				rePassword : {
+					required : "请确认新密码",
+					equalTo : "两次密码输入不一致"
+				}
+			},
+			submitHandler : function(form) { //通过之后回调 
+				checkPassword();
+			},
+			invalidHandler : function(form, validator) { //不通过回调 
+				return false;
+			}
+		});
+	})
+</script>
+</head>
+
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+<form id="modPaswdForm"  method="post">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+	<tr>
+		<td height="50" bgcolor="#FFFFFF">
+        <div class="Usuallypark2 bor01">
+			<h2><span>更改密码</span></h2>
+			<ul>
+             <!------------内容主体部分 Start-------------->
+			<div id="Content_box">
+				<div class="main_content main_find_password">
+					<div class="main_insq find_password_title">
+				  		<div class="find_passwerd_box">
+							<table width="100%" border="0" cellpadding=0 cellspacing=0 >
+							<tr>
+						    	<td class="left_td"><p>旧密码：</p></td>
+						      	<td><input type="password" name="password" class="input_sytle" id="password"/>
+						      	<label id="msg" for="password" class="tip" tip="请输入密码"></label>
+						      	</td>
+							</tr> 
+							<tr>
+								<td  class="left_td"><p>新密码：</p></td>
+							    <td><input type="password" name="newPassword" class="input_sytle" id="newPassword"/>
+							    <label id="nmsg" for="newPassword" class="tip" tip="请输入新密码"></label>
+							    </td>
+							</tr> 
+							<tr>
+							    <td  class="left_td"><p>确认密码：</p></td>
+							    <td><input type="password" name="rePassword" class="input_sytle" id="rePassword"/>
+							    <label id="rmsg" for="rePassword" class="tip" tip="请确认新密码"></label>
+							    </td>
+							</tr> 
+							<tr>
+							    <td>&nbsp;</td>
+							    <td><input type="submit" name="input_login"  style="width:262px;" value="提交" class="input_border input_login" id="Input_login"/></td>
+							    <td>&nbsp;</td>
+							</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!------------内容主体部分 End-------------->
+			</ul>
+		</div>
+        </td>
+	</tr>
+	<tr>
+        <td bgcolor="#FFFFFF">
+        </td>
+	</tr>
+    </tbody>
+  </table>
+</form>
+</div>
+
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+function checkPassword(){
+	$.ajax({
+		type:"post",
+		url:"/ydtu/tmember/checkPass.htm",
+		data : {"password":$.md5($("#password").val()),"newPassword":$.md5($("#newPassword").val())},
+		dataType:"json",
+		async:false,
+		success: function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				layer.msg("修改成功，请重新登录！");
+				setTimeout(function(){
+					location.href = "/ydtu/page/custom/login.html";
+				}, 1000);
+			}else{
+				if(data.data == 'REPEAT'){
+					$("#nmsg").text("新密码不能与旧密码相同").addClass("error1").show();
+				}else if(data.data == 'ERROR'){
+					$("#msg").text("请输入正确的密码").addClass("error1").show();
+				}
+			}
+		}
+	});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>停车一道通</title>
+
+<script type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+<link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+<script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+</head>
+<body>
+	<form>
+		<header class="ui-header ui-header-positive ui-border-b"> <i
+			class="ui-icon-return" onclick ="history.back()"></i>
+		<h1>修改用户名称</h1>
+		</header>
+		<section class="ui-container">
+			<div class="ui-input ui-border-radius">
+                    <input type="text" name="realname" id="realname" value="">
+                </div>
+		
+			<div class="ui-btn-wrap"  onclick="modify();">
+                <p class="ui-btn-lg ui-btn-primary" >
+                    修改
+                </p>
+            </div>
+           </section>
+          
+	</form>
+
+</body>
+<script type="text/javascript">
+
+	$.ajax({
+		type : "post",
+		url:linkPre+ "/ydtu/tmember/getBean.htm",
+		dataType : "json",
+		async : false,
+		success : function(data) {
+			checkResult_weixin(data.result);
+			if (data.result == SUCCESS) {
+				$("#realname").val(data.data.realname);
+			}
+		}
+	})
+
+	function modify() {
+		var realname;
+		realname = $("#realname").val();
+		if (realname == "") {
+			frozen_warn("用户名不能为空");
+			return;
+		}
+		if(realname.length > 15){
+			frozen_warn("用户名长度过长");
+			return;
+		}
+		$.ajax({
+			type : "post",
+			url:linkPre+ "/ydtu/tmember/save.htm",
+			data : {
+				"realname" : realname
+			},
+			dataType : "json",
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if (data.result == SUCCESS) {
+					frozen_info("修改成功");
+					setTimeout(function(){
+						location.href = "infomation.html";
+					}, 500 )
+				} else {
+					frozen_warn("修改失败");
+				}
+			}
+		})
+	}
+</script>
+</html>

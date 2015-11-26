@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TMemberCarMapper" >
+  <resultMap id="BaseResultMap" type="com.bean.TMemberCar" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="car_plate" property="carPlate" jdbcType="VARCHAR" />
+    <result column="car_color" property="carColor" jdbcType="VARCHAR" />
+    <result column="car_identi_num" property="carIdentiNum" jdbcType="VARCHAR" />
+    <result column="car_engine_num" property="carEngineNum" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="driver_img" property="driverImg" jdbcType="VARCHAR" />
+    <result column="car_img" property="carImg" jdbcType="VARCHAR" />
+    <result column="car_type" property="carType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="pay_auto" property="payAuto" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, member_id, car_plate, car_color, car_identi_num, car_engine_num, remark, driver_img, 
+    car_img, car_type, status, pay_auto
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bean.TMemberCarExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_member_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_member_car
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_member_car
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.TMemberCarExample" >
+    delete from t_member_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.TMemberCar" >
+    insert into t_member_car (id, member_id, car_plate, 
+      car_color, car_identi_num, car_engine_num, 
+      remark, driver_img, car_img, 
+      car_type, status, pay_auto
+      )
+    values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{carPlate,jdbcType=VARCHAR}, 
+      #{carColor,jdbcType=VARCHAR}, #{carIdentiNum,jdbcType=VARCHAR}, #{carEngineNum,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{driverImg,jdbcType=VARCHAR}, #{carImg,jdbcType=VARCHAR}, 
+      #{carType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{payAuto,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.TMemberCar" >
+    insert into t_member_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="carPlate != null" >
+        car_plate,
+      </if>
+      <if test="carColor != null" >
+        car_color,
+      </if>
+      <if test="carIdentiNum != null" >
+        car_identi_num,
+      </if>
+      <if test="carEngineNum != null" >
+        car_engine_num,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="driverImg != null" >
+        driver_img,
+      </if>
+      <if test="carImg != null" >
+        car_img,
+      </if>
+      <if test="carType != null" >
+        car_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payAuto != null" >
+        pay_auto,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="carPlate != null" >
+        #{carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="carColor != null" >
+        #{carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="carIdentiNum != null" >
+        #{carIdentiNum,jdbcType=VARCHAR},
+      </if>
+      <if test="carEngineNum != null" >
+        #{carEngineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="driverImg != null" >
+        #{driverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="carImg != null" >
+        #{carImg,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payAuto != null" >
+        #{payAuto,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bean.TMemberCarExample" resultType="java.lang.Integer" >
+    select count(*) from t_member_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_member_car
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.carPlate != null" >
+        car_plate = #{record.carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carColor != null" >
+        car_color = #{record.carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carIdentiNum != null" >
+        car_identi_num = #{record.carIdentiNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carEngineNum != null" >
+        car_engine_num = #{record.carEngineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.driverImg != null" >
+        driver_img = #{record.driverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carImg != null" >
+        car_img = #{record.carImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carType != null" >
+        car_type = #{record.carType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payAuto != null" >
+        pay_auto = #{record.payAuto,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_member_car
+    set id = #{record.id,jdbcType=INTEGER},
+      member_id = #{record.memberId,jdbcType=INTEGER},
+      car_plate = #{record.carPlate,jdbcType=VARCHAR},
+      car_color = #{record.carColor,jdbcType=VARCHAR},
+      car_identi_num = #{record.carIdentiNum,jdbcType=VARCHAR},
+      car_engine_num = #{record.carEngineNum,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      driver_img = #{record.driverImg,jdbcType=VARCHAR},
+      car_img = #{record.carImg,jdbcType=VARCHAR},
+      car_type = #{record.carType,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      pay_auto = #{record.payAuto,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.TMemberCar" >
+    update t_member_car
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="carPlate != null" >
+        car_plate = #{carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="carColor != null" >
+        car_color = #{carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="carIdentiNum != null" >
+        car_identi_num = #{carIdentiNum,jdbcType=VARCHAR},
+      </if>
+      <if test="carEngineNum != null" >
+        car_engine_num = #{carEngineNum,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="driverImg != null" >
+        driver_img = #{driverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="carImg != null" >
+        car_img = #{carImg,jdbcType=VARCHAR},
+      </if>
+      <if test="carType != null" >
+        car_type = #{carType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="payAuto != null" >
+        pay_auto = #{payAuto,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.TMemberCar" >
+    update t_member_car
+    set member_id = #{memberId,jdbcType=INTEGER},
+      car_plate = #{carPlate,jdbcType=VARCHAR},
+      car_color = #{carColor,jdbcType=VARCHAR},
+      car_identi_num = #{carIdentiNum,jdbcType=VARCHAR},
+      car_engine_num = #{carEngineNum,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      driver_img = #{driverImg,jdbcType=VARCHAR},
+      car_img = #{carImg,jdbcType=VARCHAR},
+      car_type = #{carType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      pay_auto = #{payAuto,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

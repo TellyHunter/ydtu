@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通 </title>
+
+ <script type="text/javascript">
+ function index(){
+		location.href="/ydtu/weixin/index.htm";
+ }
+ </script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b" >
+            <i class="ui-icon-return"  onclick="closeWindow()"></i><h1>会员车辆管理</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+</header>
+ <section class="ui-container">
+
+		<div class="ui-btn-wrap">
+			<a href="#"
+				class="ui-btn-lg ui-btn-primary" id="add">添加车辆</a>
+		</div>
+		<ul class="ui-list ui-list-pure ui-border-tb" id="carPlate">
+		<script type="text/html" id="tmembercar">
+							
+
+						{{each data as s}}
+<li class="ui-border-t">
+								{{s.carPlate }}
+{{if s.status=='3'}}
+									(审核中)
+								{{/if}}
+								{{if s.status=='4'}}
+									(审核不通过)
+								{{/if}}
+</li>
+						{{/each}}
+						
+
+								</script>
+		</ul>
+		
+  </section>
+
+
+	
+	
+</body>
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+		$("#add").click(function(){
+			if(carLength>=10){
+				frozen_warn("添加的车辆数量不能超过十辆");
+	            return false;
+			}
+			
+			location.href="tmembercar_add.html";
+			
+		});
+	var carLength;	
+		
+		$.ajax({
+			type:"post",
+			url:linkPre+"/ydtu/tmembercar/getList.htm",
+			data:{"currentPage":1, "pageSize":10},
+			dataType:"json",
+			success:function(data){
+				checkResult_weixin(data.result);
+				if(data.result == SUCCESS){
+					carLength=data.data.length;
+					var html = template('tmembercar', data);
+					$("#carPlate").html(html) ;			
+				}
+			}
+		});
+</script>
+</html>

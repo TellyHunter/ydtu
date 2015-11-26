@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>车辆管理</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/layui/layer.js"></script>
+<script src="../../resource/js/jquery.validate2.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/result.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		<a href="/ydtu/page/custom/index.html">首页</a> > 车辆管理</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li class="chose_2"><a href="/ydtu/page/custom/mem_car_list.html"><img src="../../resource/images/menu-icon-car.png" />车辆管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkcar_list.html"><img src="../../resource/images/menu-icon-card.png" />月卡管理</a></li>
+			<li><a href="/ydtu/page/custom/charge_list.html"><img src="../../resource/images/menu-icon-pay.png" />交易管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkinout_page.html"><img src="../../resource/images/menu-icon-park.png" />停车记录</a></li>
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark bor01"  id="carContent">
+			<script id="memberCar" type="text/html">
+	    	<h2><span id="pageType"></span></h2>
+	    	<form method="post" id="editCarForm" enctype="multipart/form-data">
+			<input type="hidden" name="id" id="id">
+			<div class="transaction_records_box">
+				<div class="transaction_records_box recor_box">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="modify_email_table">
+				 		<tr>
+						    <td width="88" class="left_td"><span>车牌号：</span></td>
+						    <td width="276"  class="right_td">
+						    <p><input type="text" name="carPlate" class="input_sytle" value="{{data != null?data.carPlate:''}}" maxlength="10"/>
+						    <label id="msg" for="carPlate" class="tip" tip="请输入车牌号"></label>
+						    </p>
+						    </td>
+					  	</tr>
+			     		<tr>
+					       	<td width="125"  class="left_td"><span>车架号：</span></td>
+					       	<td width="247"  class="right_td"><p><input type="text" name="carIdentiNum" class="input_sytle" value="{{data == null?'':data.carIdentiNum }}" maxlength="20"/>
+					       	<label  for="carIdentiNum" class="tip" tip="请输入车架号"></label>
+					       	</p>
+					       	</td>
+				     	</tr>
+			     		<tr>
+				       		<td width="125"  class="left_td"><span>发动机号：</span></td>
+				       		<td width="247"  class="right_td"><p><input type="text" name="carEngineNum" id="carEngineNum" class="input_sytle" value="{{data == null?'':data.carEngineNum }}" maxlength="20"/>
+				       		<label  for="carEngineNum" class="tip" tip="请输入发动机号"></label>
+				       		</p>
+				       		</td>
+				     	</tr>
+				     	<tr>
+				       		<td width="125" class="left_td"><span>车辆类型：</span></td>
+				       		<td width="247" class="right_td">
+				       		<p> 
+				       			<select class="matter" name="carType" id="carType" class="matter">
+			     					<option value="1" {{if data == null?'':data.carType==1}}selected=selected{{/if}}>小车</option>
+			     					<option value="2" {{if data == null?'':data.carType==2}}selected=selected{{/if}}>大车</option>
+			     					<option value="3" {{if data == null?'':data.carType==3}}selected=selected{{/if}}>摩托车</option>  
+			     				</select>
+				       		</p>
+				       		</td>
+				     		<td class="span_td"><span></span></td>
+				     	</tr>
+				     	
+						<!-- 
+				     	<tr>
+				       		<td width="125"  class="left_td"><span>车辆照片：</span></td>
+				       		<td width="247"  class="right_td"><input id="car_image_pic" type="text" name="car_image_pic" readonly {{if null !=  data && null != data.carImg}}value="已上传"{{else}}value="未上传"{{/if}} class="input_sytle"  /></td>     
+			     			<td class="span_td">
+					     		<input type="hidden" name="carImage" id="car_image_mac"/>
+					     		<input id="car_image" name="car_image" type="file" value="浏览"><input type="button" value="上传" class="upload" onclick="uploadImages('car_image');">
+			     			</td>	
+				     	</tr>
+				     
+				     	<tr>
+				       		<td width="125"  class="left_td"></td>
+				       		<td width="247"  class="right_td"> <img {{if null !=  data && null != data.carImg}}src="../../resource/uploads/{{data.carImg}}"{{else}}src="../../resource/images/no_pic.jpg"{{/if}}  id="img_car_image" width="230" height="150"></td>
+				     		<td class="span_td ver_top"><span>请上传车照片，上传的文件必须小于2M<br/>的jpg、 bmp、gif格式的图片文件.</span></td>
+				     	</tr>
+				     	<tr>
+				       		<td width="125"  class="left_td"><span>行驶证照片：</span></td>
+				       		<td width="247"  class="right_td"><input id="driver_image_pic" type="text" name="driver_image_pic" readonly {{if null !=  data && null != data.driverImg}}value="已上传"{{else}}value="未上传"{{/if}}  class="input_sytle"  /></td>     
+				     		<td class="span_td">
+					     		<input type="hidden" name="driverImage" id="driver_image_mac"/>
+					     		<input id="driver_image" name="driver_image" type="file" value="浏览"><input type="button" value="上传" class="upload" onclick="uploadImages('driver_image');">
+				     		</td>	
+				     	</tr>
+				     
+				     	<tr>
+				       		<td width="125"  class="left_td"></td>
+				       		<td width="247"  class="right_td"> <img {{if null !=  data && null != data.driverImg}}src="../../resource/uploads/{{data.driverImg}}"{{else}}src="../../resource/images/no_pic.jpg" {{/if}}  id="img_driver_image" width="230" height="150"></td>
+				     		<td class="span_td ver_top"><span>请行驶证照片，上传的文件必须小于2M<br/>的jpg、 bmp、gif格式的图片文件.</span></td>
+				     	</tr>
+						-->
+				     	<tr>
+				       		<td class="left_td">&nbsp;</td>
+				       		<td>
+				        	<input type="submit" value="提交" name="next" class="revised_data open_160">
+				       		</td>
+				       		<td></td>
+				     	</tr>
+					</table>
+				</div>
+			</div>
+			</form>
+			</script>
+		</div>
+	</div>
+</div>
+<!--mainContent End-->
+
+
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+	var id = getQueryString("id");
+	var param;
+	$(function() {
+		if (null != id) {
+			$.ajax({
+				type : "post",
+				url : "/ydtu/tmembercar/getBean.htm",
+				data : {
+					"id" : id
+				},
+				dataType : "json",
+				async : false,
+				success : function(data) {
+					checkResult(data.result);
+					var html = template('memberCar', data);
+					$("#carContent").html(html);
+					$("#pageType").text("车辆编辑");
+					$("#id").val(data.data.id);
+				}
+			});
+		} else {
+			var html = template('memberCar', null);
+			$("#carContent").html(html);
+			$("#pageType").text("车辆添加");
+		}
+	})
+
+	$(function() {
+		$("#editCarForm").validate({
+			rules : {
+				carPlate : {
+					required : true,
+					carPlate: true,
+					maxlength : 10
+				},
+				carIdentiNum : {
+					maxlength : 20
+				},
+				carEngineNum : {
+					maxlength : 20
+				}
+			},
+			messages : {
+				carPlate : {
+					required : "请输入车牌",
+					maxlength : "长度不符合要求"
+				},
+				carIdentiNum : {
+					maxlength : "长度不符合要求"
+				},
+				carEngineNum : {
+					maxlength : "长度不符合要求"
+				}
+			},
+			submitHandler : function(form) { //通过之后回调 
+				param= $("#editCarForm").serialize();
+				check();
+			},
+			invalidHandler : function(form, validator) { //不通过回调 
+				return false;
+			}
+	 });
+	});
+	
+	function check() {
+		$.ajax({
+			type : "post",
+			url : "/ydtu/tmembercar/add_check.htm",
+			data : param,
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				checkResult(data.result);
+				if (data.result == FAIL) {
+					$("#msg").text("相同车牌不能重复添加").addClass("error1").show();
+				} else if(data.result == SUCCESS) {
+					sub();
+				} else{
+					$("#msg").text("此车牌已存在").addClass("error1").show();
+				}
+			}
+		});
+	}
+// 	debugger;
+	function sub() {
+		if(null != id){
+			$.ajax({
+				type : "post", 
+			    url : "/ydtu/tmembercar/update.htm", 
+			    data: param,
+			    async : false,
+			    dataType : "json", 
+			    success : function(data){
+			    	checkResult(data.result);
+			    	if(data.result == SUCCESS){
+			    		layer.alert("更新成功");
+						setTimeout(function(){
+								location.href = "/ydtu/page/custom/mem_car_list.html";
+						},500)					
+			    	}
+			    }
+			})
+			
+		}else{
+			$.ajax({
+				type : "post", 
+			    url : "/ydtu/tmembercar/save.htm", 
+			    data: param,
+			    dataType : "json", 
+			    async : false,
+			    success : function(data){
+			    	checkResult(data.result);
+			    	if(data.result == SUCCESS){
+			    		layer.alert("添加成功");
+						setTimeout(function(){
+								location.href = "/ydtu/page/custom/mem_car_list.html";
+						}, 500 )
+			    	}
+			    }
+			})
+		}
+	}
+
+// 	function uploadImages(name) {
+// 		debugger;
+// 		var str = $("#" + name).val();
+// 		if (str == null || str.trim() == "") {
+// 			if (name == "driver_image") {
+// 				layer.alert("请选择行驶证照片！");
+// 				return;
+// 			} else {
+// 				layer.alert("请选择车辆照片！");
+// 				return;
+// 			}
+// 		}
+// 		debugger;
+// 		if (str.endsWith(".jpg") || str.endsWith(".png")) {
+// 			$.ajaxFileUpload({
+// 				url : '/ydtu/tmembercar/uploadImg.htm?updateP=' + name,
+// 				secureuri : false,
+// 				fileElementId : name, //文件选择框的id属性（必须）
+// 				dataType : 'json',
+// 				success : function(data) {
+// 					if (data.result == "SUCCESS") {
+// 						$("#" + name + "_pic").val("已上传");
+// 						$("#img_" + name).attr("src", "/ydtc" + data.path);
+// 						$("#" + name + "_mac").val(data.imageName);
+// 					} else {
+// 						layer.alert("请选择要上传的图片！");
+// 					}
+// 				}
+// 			});
+// 		} else {
+// 			layer.alert("照片只能是jpg或者png格式！");
+// 		}
+// 	}
+</script>
+</body>
+</html>

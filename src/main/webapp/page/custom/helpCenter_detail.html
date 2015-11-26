@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>消息中心</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+</head>
+
+<body>
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">首页 > 帮助中心 > 正文</p>
+	<div class="leftNav">
+		<ul>
+		<ul>
+			<li><a href="/ydtu/page/custom/helpCenter_list.html?type=0"><img src="../../resource/images/menu-icon-wu.png" />常见问题</a></li>
+			<li><a href="/ydtu/page/custom/helpCenter_list.html?type=1"><img src="../../resource/images/menu-icon-wu.png" />热门问题</a></li>
+			<li><a href="/ydtu/page/custom/helpCenter_list.html?type=2"><img src="../../resource/images/menu-icon-wu.png" />使用问题</a></li>
+			<li><a href="/ydtu/page/custom/helpCenter_list.html?type=3"><img src="../../resource/images/menu-icon-wu.png" />财务问题</a></li>
+		</ul>
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark3 bor01">
+  		<h2><span>正文</span></h2>
+		<table  cellpadding=0 cellspacing=0 class="vehicle_management_table2" >
+			<div class="wen_zw">
+		       <h3 id="title"></h3>
+		       <p style="text-indent:2em;" id="content"></p>
+		    </div>
+			<div class="height_20"></div>
+		</table>
+		</div>
+	</div>
+</div>
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+var id = getQueryString("id");
+$.ajax({
+	type: "post",
+	url: "/ydtu/helpcenter/getBean.htm",
+	data:{"id": id},
+	dataType:"json",
+	success:function(data){
+		checkResult(data.result);
+		$("#title").text(data.data.title);
+		$("#content").text(data.data.content);
+	}
+})
+</script>
+</body>
+</html>
+

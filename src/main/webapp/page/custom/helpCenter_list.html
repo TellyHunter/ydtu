@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>消息中心</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+</head>
+
+<body>
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent" id="helpContent">
+	<script type="text/html" id="helpTemp">
+	<p class="area">首页 > 帮助中心</p>
+	<div class="leftNav">
+		<ul>
+			<li {{if data.type==0}}class="chose_2"{{/if}}><a href="/ydtu/page/custom/helpCenter_list.html?type=0"><img src="../../resource/images/menu-icon-wu.png" />常见问题</a></li>
+			<li {{if data.type==1}}class="chose_2"{{/if}}><a href="/ydtu/page/custom/helpCenter_list.html?type=1"><img src="../../resource/images/menu-icon-wu.png" />热门问题</a></li>
+			<li {{if data.type==2}}class="chose_2"{{/if}}><a href="/ydtu/page/custom/helpCenter_list.html?type=2"><img src="../../resource/images/menu-icon-wu.png" />使用问题</a></li>
+			<li {{if data.type==3}}class="chose_2"{{/if}}><a href="/ydtu/page/custom/helpCenter_list.html?type=3"><img src="../../resource/images/menu-icon-wu.png" />财务问题</a></li>
+		</ul>
+	</div>
+
+	
+	<div class="rightContent">
+		<form id="search_form">
+		<div class="Usuallypark3 bor01">
+			<h2><span>帮助中心</span></h2>
+			<ul>
+				{{if data.list.length > 0}}
+					{{each data.list as dto}}
+						<li onclick="showDetail({{dto.id}});"><div class="place">{{$index + 1}}. {{dto.title}}</div><a>&nbsp;</a></li>
+					{{/each}}
+					{{else}}
+					<div style="height: 0px;border-bottom:0px;font-size: 17px;margin: 0px 0px 24px 9px;">暂无数据</div>
+				{{/if}}
+			</ul>
+		</div>
+		</form>
+   		<div class="page">	
+			<span  onclick="setPage(1)" >首页</span>
+			<span  onclick="setPage(2)">上一页</span>
+			<span class="chose_1">{{page.currentPage}}</span>
+			<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+			<span onclick="setPage(3)">下一页</span>
+			<span onclick="setPage(4)">末页</span>
+   		</div>		
+	 </div>
+	</script>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+<script>
+function showDetail(id){
+	window.location.href="/ydtu/page/custom/helpCenter_detail.html?" + base64encode("id=" + id);
+}
+</script>
+
+<script>
+
+$(function(){
+	getList();
+})
+function setPage(dir){
+	if(refreshPage(dir)){
+		getList();
+	}
+}
+function getList(){
+	var type = getQueryString2("type");
+	var param = getPage();
+	if(type != null){
+		param += "&type=" + type;
+	}
+	$.ajax({
+		type: "post",
+		url: "/ydtu/helpcenter/getList.htm",
+		data: param,
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			var html = template('helpTemp', data);
+			$("#helpContent").html(html) ;
+		}		
+	});
+}
+</script>
+
+</body>
+</html>

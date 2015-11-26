@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+   <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通</title>
+</head>
+<body ontouchstart>
+		<header class="ui-header ui-header-positive ui-border-b" >
+            <i class="ui-icon-return"  onclick="history.back();"></i><h1>月卡缴费</h1>
+        </header>
+        
+        <section class="ui-container">
+            		<div class="information_main_box" id="chargeContent">
+					<script type="text/html" id="chargeTemp">
+
+    <div class="demo-item">
+        <div class="demo-block">
+            <div class="ui-form ui-border-t">
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            	月数：
+                        </label>
+                        <input class="ui-border-t" type="text" name="num" id="num" placeholder="请输入充值月数" onblur="calculate();" onkeyup="value=value.replace(/\D+/g,'');"/>
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            	每月费用：
+                        </label>
+                        <input class="ui-border-t" type="text" name="monthFee" id="monthFee" placeholder="每月费用" readOnly="true"/>
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                        	    金额：
+                        </label>
+                        <input class="ui-border-t" type="text" name="num" id="cost" placeholder="金额" readOnly="true"/>
+                    </div>
+                        <input type="hidden" name="amount" id="amount">
+                        <input type="hidden" name="new_endDate_hidden" id="new_endDate_hidden">
+                    <div class="ui-btn-wrap">
+                        <button class="ui-btn-lg ui-btn-primary" id="sub">
+                       		     确定
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+					</script>
+					</div>
+            </div>
+        </section>
+        <div id="dispater">
+        
+        
+        </div>
+	
+</body>
+<script type="text/javascript">
+
+// 	function closeWindow(){
+// 		if (typeof WeixinJSBridge != "undefined"){
+// 	    	WeixinJSBridge.invoke('closeWindow',{},function(res){});
+// 		}
+// 	}
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+	var ruleId,monthFee,endDate,amount,num;
+	
+	function getEndDate(d1){
+		var d2 = new Date();
+		if(d1 == null){
+			return d2;
+		}else{
+			var d = new Date(d1.replace(/-/g,"/"));
+			if(d.valueOf() >= d2.valueOf()){
+				return d;
+			}else{
+				return d2;
+			}
+		}
+	}
+	
+// 	var id = getQueryString("id");
+	var id=localStorage.id;
+	var carPlate = localStorage.carPlate;
+	var parkId = localStorage.parkId;
+	localStorage.removeItem("id");
+	localStorage.removeItem("carPlate");
+	localStorage.removeItem("parkId");
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tparkcar/getBean.htm",
+		data:{"id": id},
+		dataType:"json",
+		async:false,
+		success:function(data){
+			checkResult(data.result);
+			var html = template("chargeTemp", data);
+			$("#chargeContent").html(html);
+			if(null != data){
+				ruleId = data.data.payRule;
+				endDate = getEndDate(data.data.endDate).pattern("yyyy-MM-dd");
+			}
+		}		
+	})
+
+
+	$.ajax({
+		type: "post",
+		url: "/ydtu/carpayrule/getBean.htm",
+		data:{"id": ruleId},
+		dataType:"json",
+		async:false,
+		success:function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				monthFee = data.data.monthFee;
+				$("#monthFee").val(monthFee);
+			}
+		}
+	})
+		
+	function calculate(){
+		num=$("#num").val();
+		var reg = /^\d+$/;
+		if(!reg.test(num)){
+			return false;
+		}
+		var d = new Date(endDate);
+		amount=num*monthFee;
+		d.setMonth(d.getMonth()+parseInt(num));
+		$("#cost").val(amount);
+		$("#amount").val(amount);
+		$("#new_endDate_hidden").val(d.pattern("yyyy-MM-dd"));
+	}
+	
+	
+	$("#num").blur(function() {
+		monthReg();
+	}); 
+	function monthReg(){
+		var len = $("#num").val();
+		var re =/^[1-9]+[0-9]*]*$/; 
+		if (!re.test(len)) {
+			frozen_info("月份必须大于0");
+		    return false;
+		}else{
+			return true;
+		}
+	}
+	
+	$("#num").bind('click',function(event) {
+		$("#sub").removeAttr("disabled");
+	});
+	
+	$("#sub").bind('click',function(event){
+		var flag=monthReg();
+		if(flag==false){
+			return false;
+		}
+		frozen_info("正在加载");
+		$("#sub").attr("disabled","disabled");//$("#sub").removeAttr("disabled");
+	
+		var orderId;
+		$.ajax({
+			url:linkPre+"/ydtu/charge/save.htm",
+			type:"post",
+			data:{"amount":amount,"payType":"1","num": num, "timetype": "2","carPlate":carPlate,"parkId":parkId,"orginType":"4"},
+			dataType:"json",
+			async: false,
+			success:function(data){
+				checkResult_weixin(data.result);
+				if(data.result==SUCCESS){
+					orderId=data.data.orderId;		
+				}
+				else{
+					frozen_warn("订单生成失败！请稍后再试");
+					return;
+				}
+			}
+		});
+// 		var param="orderId="+orderId;
+		localStorage.orderId = orderId
+		if (typeof WeixinJSBridge != "undefined"){
+			location.href="/ydtu/page/weixin/weixinpay.html";
+// 			location.href="weixinpay.html?"+base64encode(param);
+		}
+		else{
+			location.href="alipay.html";
+// 			location.href="alipay.html?"+base64encode(param);
+		}
+	 
+	});
+
+
+</script>
+</html>

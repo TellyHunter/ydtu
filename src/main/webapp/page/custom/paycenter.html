@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>充值中心</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script type="text/javascript" src="../../resource/js/public.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/result.js"></script>
+
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+
+<!-- 表单验证 -->
+<script type="text/javascript">
+//加载扩展模块
+layer.config({
+    extend: 'extend/layer.ext.js'
+});
+$(function() {
+	 $("#chargeForm").validate({
+		 rules:{
+			 amount:{
+				 required:true,
+				 digits:true,
+				 min:100
+			 } 
+		 },
+		 messages:{
+			 amount:{
+				 required:"请填写金额",
+				 digits:"充值金额必须为整数",
+				 min:"充值金额不能少于100"
+			 }
+		 },
+		 submitHandler: function(form) {  //通过之后回调 
+			sub();
+		 	return;
+         }, 
+         invalidHandler: function(form, validator) {  //不通过回调 
+         	return false;
+         } 
+	 });
+})
+
+//生成订单，跳转到选择支付
+function sub(){
+	var orderId;
+	var amount = $("#amount").val();
+	$.ajax({
+		url:linkPre+"/ydtu/charge/save.htm",
+		type:"post",
+		data: {"orginType" : "1", "payType": "2", "amount" : amount},
+		dataType:"json",
+		async: false,
+		success:function(data){
+			checkResult(data.result);
+			if(data.result==SUCCESS){
+				orderId=data.data.orderId;	
+				location.href="payType.html?"+ base64encode("orderId="+orderId);;
+			}
+			else{
+				layer.msg("订单生成失败！请稍后再试");
+				return;
+			}
+		}
+	});
+}
+
+</script>
+
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 充值中心</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li class="chose_2"><a href=""><img src="../../resource/images/menu-icon-wu.png" />充值中心</a></li>
+		</ul>
+	</div>
+	
+	<div class="rightContent">
+		<div class="Usuallypark bor01">
+	    <h2><span>充值</span></h2>
+	    <form id="chargeForm"  target="_blank">
+       		<div class="information_main_box">
+			<table width="100%" border="0" cellpadding=0 cellspacing=0 class="user_center_table">
+			<tr>
+				<td>
+			    <div class="content_right_box ging_fff">
+					<div class="rech_input">
+						<span>&nbsp;&nbsp;&nbsp;&nbsp;充值金额：</span><input type="text" maxlength="6" id="amount"  name="amount" class="input_1" onkeyup="value=value.replace(/\D+/g,'');"/> 元
+						<label for="amount" id="err" class="tip" tip="请输入充值金额"></label>
+						<p style="font-size: x-small;color: red;font-style: italic;margin: 20px 0px 0px 14px;">注：充值金额不能小于100元，且必须为整数</p>
+					</div>
+			
+					<div class="button_box">
+						<input type="submit" value="确认支付" id="firstStep" class="button"/>
+					</div>
+				</div>
+			    </td>
+		    </tr>
+			</table>
+			<div class="height_20"></div>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!--mainContent End-->
+
+</body>
+</html>

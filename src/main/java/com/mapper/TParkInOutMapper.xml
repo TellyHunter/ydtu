@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TParkInOutMapper" >
+  <resultMap id="BaseResultMap" type="com.bean.TParkInOut" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="park_id" property="parkId" jdbcType="INTEGER" />
+    <result column="occur_time" property="occurTime" jdbcType="VARCHAR" />
+    <result column="in_car_plate" property="inCarPlate" jdbcType="VARCHAR" />
+    <result column="in_card_code" property="inCardCode" jdbcType="VARCHAR" />
+    <result column="in_pic_path" property="inPicPath" jdbcType="VARCHAR" />
+    <result column="in_time" property="inTime" jdbcType="VARCHAR" />
+    <result column="in_type" property="inType" jdbcType="INTEGER" />
+    <result column="in_type_desc" property="inTypeDesc" jdbcType="VARCHAR" />
+    <result column="in_port_id" property="inPortId" jdbcType="INTEGER" />
+    <result column="in_port_name" property="inPortName" jdbcType="VARCHAR" />
+    <result column="out_card_code" property="outCardCode" jdbcType="VARCHAR" />
+    <result column="out_car_plate" property="outCarPlate" jdbcType="VARCHAR" />
+    <result column="out_pic_path" property="outPicPath" jdbcType="VARCHAR" />
+    <result column="out_car_type" property="outCarType" jdbcType="INTEGER" />
+    <result column="out_time" property="outTime" jdbcType="VARCHAR" />
+    <result column="stop_time" property="stopTime" jdbcType="VARCHAR" />
+    <result column="out_type" property="outType" jdbcType="INTEGER" />
+    <result column="out_type_desc" property="outTypeDesc" jdbcType="VARCHAR" />
+    <result column="out_port_id" property="outPortId" jdbcType="INTEGER" />
+    <result column="out_port_name" property="outPortName" jdbcType="VARCHAR" />
+    <result column="need_pay" property="needPay" jdbcType="DECIMAL" />
+    <result column="actual_pay" property="actualPay" jdbcType="DECIMAL" />
+    <result column="before_pay" property="beforePay" jdbcType="DECIMAL" />
+    <result column="charge_type" property="chargeType" jdbcType="INTEGER" />
+    <result column="duty_person" property="dutyPerson" jdbcType="VARCHAR" />
+    <result column="car_nature" property="carNature" jdbcType="INTEGER" />
+    <result column="local_id" property="localId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <association property="parkName" column="park_id" select="public.getParkName"/> 
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, company_id, park_id, occur_time, in_car_plate, in_card_code, in_pic_path, in_time, 
+    in_type, in_type_desc, in_port_id, in_port_name, out_card_code, out_car_plate, out_pic_path, 
+    out_car_type, out_time, stop_time, out_type, out_type_desc, out_port_id, out_port_name, 
+    need_pay, actual_pay, before_pay, charge_type, duty_person, car_nature, local_id, 
+    order_id, member_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bean.TParkInOutExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_park_in_out
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_park_in_out
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_park_in_out
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.TParkInOutExample" >
+    delete from t_park_in_out
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.TParkInOut" >
+    insert into t_park_in_out (id, company_id, park_id, 
+      occur_time, in_car_plate, in_card_code, 
+      in_pic_path, in_time, in_type, 
+      in_type_desc, in_port_id, in_port_name, 
+      out_card_code, out_car_plate, out_pic_path, 
+      out_car_type, out_time, stop_time, 
+      out_type, out_type_desc, out_port_id, 
+      out_port_name, need_pay, actual_pay, 
+      before_pay, charge_type, duty_person, 
+      car_nature, local_id, order_id, 
+      member_id)
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{parkId,jdbcType=INTEGER}, 
+      #{occurTime,jdbcType=VARCHAR}, #{inCarPlate,jdbcType=VARCHAR}, #{inCardCode,jdbcType=VARCHAR}, 
+      #{inPicPath,jdbcType=VARCHAR}, #{inTime,jdbcType=VARCHAR}, #{inType,jdbcType=INTEGER}, 
+      #{inTypeDesc,jdbcType=VARCHAR}, #{inPortId,jdbcType=INTEGER}, #{inPortName,jdbcType=VARCHAR}, 
+      #{outCardCode,jdbcType=VARCHAR}, #{outCarPlate,jdbcType=VARCHAR}, #{outPicPath,jdbcType=VARCHAR}, 
+      #{outCarType,jdbcType=INTEGER}, #{outTime,jdbcType=VARCHAR}, #{stopTime,jdbcType=VARCHAR}, 
+      #{outType,jdbcType=INTEGER}, #{outTypeDesc,jdbcType=VARCHAR}, #{outPortId,jdbcType=INTEGER}, 
+      #{outPortName,jdbcType=VARCHAR}, #{needPay,jdbcType=DECIMAL}, #{actualPay,jdbcType=DECIMAL}, 
+      #{beforePay,jdbcType=DECIMAL}, #{chargeType,jdbcType=INTEGER}, #{dutyPerson,jdbcType=VARCHAR}, 
+      #{carNature,jdbcType=INTEGER}, #{localId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{memberId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.TParkInOut" >
+    insert into t_park_in_out
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="parkId != null" >
+        park_id,
+      </if>
+      <if test="occurTime != null" >
+        occur_time,
+      </if>
+      <if test="inCarPlate != null" >
+        in_car_plate,
+      </if>
+      <if test="inCardCode != null" >
+        in_card_code,
+      </if>
+      <if test="inPicPath != null" >
+        in_pic_path,
+      </if>
+      <if test="inTime != null" >
+        in_time,
+      </if>
+      <if test="inType != null" >
+        in_type,
+      </if>
+      <if test="inTypeDesc != null" >
+        in_type_desc,
+      </if>
+      <if test="inPortId != null" >
+        in_port_id,
+      </if>
+      <if test="inPortName != null" >
+        in_port_name,
+      </if>
+      <if test="outCardCode != null" >
+        out_card_code,
+      </if>
+      <if test="outCarPlate != null" >
+        out_car_plate,
+      </if>
+      <if test="outPicPath != null" >
+        out_pic_path,
+      </if>
+      <if test="outCarType != null" >
+        out_car_type,
+      </if>
+      <if test="outTime != null" >
+        out_time,
+      </if>
+      <if test="stopTime != null" >
+        stop_time,
+      </if>
+      <if test="outType != null" >
+        out_type,
+      </if>
+      <if test="outTypeDesc != null" >
+        out_type_desc,
+      </if>
+      <if test="outPortId != null" >
+        out_port_id,
+      </if>
+      <if test="outPortName != null" >
+        out_port_name,
+      </if>
+      <if test="needPay != null" >
+        need_pay,
+      </if>
+      <if test="actualPay != null" >
+        actual_pay,
+      </if>
+      <if test="beforePay != null" >
+        before_pay,
+      </if>
+      <if test="chargeType != null" >
+        charge_type,
+      </if>
+      <if test="dutyPerson != null" >
+        duty_person,
+      </if>
+      <if test="carNature != null" >
+        car_nature,
+      </if>
+      <if test="localId != null" >
+        local_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkId != null" >
+        #{parkId,jdbcType=INTEGER},
+      </if>
+      <if test="occurTime != null" >
+        #{occurTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inCarPlate != null" >
+        #{inCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="inCardCode != null" >
+        #{inCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inPicPath != null" >
+        #{inPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="inTime != null" >
+        #{inTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inType != null" >
+        #{inType,jdbcType=INTEGER},
+      </if>
+      <if test="inTypeDesc != null" >
+        #{inTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="inPortId != null" >
+        #{inPortId,jdbcType=INTEGER},
+      </if>
+      <if test="inPortName != null" >
+        #{inPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="outCardCode != null" >
+        #{outCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outCarPlate != null" >
+        #{outCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="outPicPath != null" >
+        #{outPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="outCarType != null" >
+        #{outCarType,jdbcType=INTEGER},
+      </if>
+      <if test="outTime != null" >
+        #{outTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stopTime != null" >
+        #{stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outType != null" >
+        #{outType,jdbcType=INTEGER},
+      </if>
+      <if test="outTypeDesc != null" >
+        #{outTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="outPortId != null" >
+        #{outPortId,jdbcType=INTEGER},
+      </if>
+      <if test="outPortName != null" >
+        #{outPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="needPay != null" >
+        #{needPay,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPay != null" >
+        #{actualPay,jdbcType=DECIMAL},
+      </if>
+      <if test="beforePay != null" >
+        #{beforePay,jdbcType=DECIMAL},
+      </if>
+      <if test="chargeType != null" >
+        #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="dutyPerson != null" >
+        #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="carNature != null" >
+        #{carNature,jdbcType=INTEGER},
+      </if>
+      <if test="localId != null" >
+        #{localId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bean.TParkInOutExample" resultType="java.lang.Integer" >
+    select count(*) from t_park_in_out
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_park_in_out
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkId != null" >
+        park_id = #{record.parkId,jdbcType=INTEGER},
+      </if>
+      <if test="record.occurTime != null" >
+        occur_time = #{record.occurTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inCarPlate != null" >
+        in_car_plate = #{record.inCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inCardCode != null" >
+        in_card_code = #{record.inCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inPicPath != null" >
+        in_pic_path = #{record.inPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inTime != null" >
+        in_time = #{record.inTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inType != null" >
+        in_type = #{record.inType,jdbcType=INTEGER},
+      </if>
+      <if test="record.inTypeDesc != null" >
+        in_type_desc = #{record.inTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inPortId != null" >
+        in_port_id = #{record.inPortId,jdbcType=INTEGER},
+      </if>
+      <if test="record.inPortName != null" >
+        in_port_name = #{record.inPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outCardCode != null" >
+        out_card_code = #{record.outCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outCarPlate != null" >
+        out_car_plate = #{record.outCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outPicPath != null" >
+        out_pic_path = #{record.outPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outCarType != null" >
+        out_car_type = #{record.outCarType,jdbcType=INTEGER},
+      </if>
+      <if test="record.outTime != null" >
+        out_time = #{record.outTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stopTime != null" >
+        stop_time = #{record.stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outType != null" >
+        out_type = #{record.outType,jdbcType=INTEGER},
+      </if>
+      <if test="record.outTypeDesc != null" >
+        out_type_desc = #{record.outTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outPortId != null" >
+        out_port_id = #{record.outPortId,jdbcType=INTEGER},
+      </if>
+      <if test="record.outPortName != null" >
+        out_port_name = #{record.outPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.needPay != null" >
+        need_pay = #{record.needPay,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualPay != null" >
+        actual_pay = #{record.actualPay,jdbcType=DECIMAL},
+      </if>
+      <if test="record.beforePay != null" >
+        before_pay = #{record.beforePay,jdbcType=DECIMAL},
+      </if>
+      <if test="record.chargeType != null" >
+        charge_type = #{record.chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="record.dutyPerson != null" >
+        duty_person = #{record.dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carNature != null" >
+        car_nature = #{record.carNature,jdbcType=INTEGER},
+      </if>
+      <if test="record.localId != null" >
+        local_id = #{record.localId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_park_in_out
+    set id = #{record.id,jdbcType=INTEGER},
+      company_id = #{record.companyId,jdbcType=INTEGER},
+      park_id = #{record.parkId,jdbcType=INTEGER},
+      occur_time = #{record.occurTime,jdbcType=VARCHAR},
+      in_car_plate = #{record.inCarPlate,jdbcType=VARCHAR},
+      in_card_code = #{record.inCardCode,jdbcType=VARCHAR},
+      in_pic_path = #{record.inPicPath,jdbcType=VARCHAR},
+      in_time = #{record.inTime,jdbcType=VARCHAR},
+      in_type = #{record.inType,jdbcType=INTEGER},
+      in_type_desc = #{record.inTypeDesc,jdbcType=VARCHAR},
+      in_port_id = #{record.inPortId,jdbcType=INTEGER},
+      in_port_name = #{record.inPortName,jdbcType=VARCHAR},
+      out_card_code = #{record.outCardCode,jdbcType=VARCHAR},
+      out_car_plate = #{record.outCarPlate,jdbcType=VARCHAR},
+      out_pic_path = #{record.outPicPath,jdbcType=VARCHAR},
+      out_car_type = #{record.outCarType,jdbcType=INTEGER},
+      out_time = #{record.outTime,jdbcType=VARCHAR},
+      stop_time = #{record.stopTime,jdbcType=VARCHAR},
+      out_type = #{record.outType,jdbcType=INTEGER},
+      out_type_desc = #{record.outTypeDesc,jdbcType=VARCHAR},
+      out_port_id = #{record.outPortId,jdbcType=INTEGER},
+      out_port_name = #{record.outPortName,jdbcType=VARCHAR},
+      need_pay = #{record.needPay,jdbcType=DECIMAL},
+      actual_pay = #{record.actualPay,jdbcType=DECIMAL},
+      before_pay = #{record.beforePay,jdbcType=DECIMAL},
+      charge_type = #{record.chargeType,jdbcType=INTEGER},
+      duty_person = #{record.dutyPerson,jdbcType=VARCHAR},
+      car_nature = #{record.carNature,jdbcType=INTEGER},
+      local_id = #{record.localId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      member_id = #{record.memberId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.TParkInOut" >
+    update t_park_in_out
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkId != null" >
+        park_id = #{parkId,jdbcType=INTEGER},
+      </if>
+      <if test="occurTime != null" >
+        occur_time = #{occurTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inCarPlate != null" >
+        in_car_plate = #{inCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="inCardCode != null" >
+        in_card_code = #{inCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inPicPath != null" >
+        in_pic_path = #{inPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="inTime != null" >
+        in_time = #{inTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inType != null" >
+        in_type = #{inType,jdbcType=INTEGER},
+      </if>
+      <if test="inTypeDesc != null" >
+        in_type_desc = #{inTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="inPortId != null" >
+        in_port_id = #{inPortId,jdbcType=INTEGER},
+      </if>
+      <if test="inPortName != null" >
+        in_port_name = #{inPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="outCardCode != null" >
+        out_card_code = #{outCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outCarPlate != null" >
+        out_car_plate = #{outCarPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="outPicPath != null" >
+        out_pic_path = #{outPicPath,jdbcType=VARCHAR},
+      </if>
+      <if test="outCarType != null" >
+        out_car_type = #{outCarType,jdbcType=INTEGER},
+      </if>
+      <if test="outTime != null" >
+        out_time = #{outTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stopTime != null" >
+        stop_time = #{stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outType != null" >
+        out_type = #{outType,jdbcType=INTEGER},
+      </if>
+      <if test="outTypeDesc != null" >
+        out_type_desc = #{outTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="outPortId != null" >
+        out_port_id = #{outPortId,jdbcType=INTEGER},
+      </if>
+      <if test="outPortName != null" >
+        out_port_name = #{outPortName,jdbcType=VARCHAR},
+      </if>
+      <if test="needPay != null" >
+        need_pay = #{needPay,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPay != null" >
+        actual_pay = #{actualPay,jdbcType=DECIMAL},
+      </if>
+      <if test="beforePay != null" >
+        before_pay = #{beforePay,jdbcType=DECIMAL},
+      </if>
+      <if test="chargeType != null" >
+        charge_type = #{chargeType,jdbcType=INTEGER},
+      </if>
+      <if test="dutyPerson != null" >
+        duty_person = #{dutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="carNature != null" >
+        car_nature = #{carNature,jdbcType=INTEGER},
+      </if>
+      <if test="localId != null" >
+        local_id = #{localId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.TParkInOut" >
+    update t_park_in_out
+    set company_id = #{companyId,jdbcType=INTEGER},
+      park_id = #{parkId,jdbcType=INTEGER},
+      occur_time = #{occurTime,jdbcType=VARCHAR},
+      in_car_plate = #{inCarPlate,jdbcType=VARCHAR},
+      in_card_code = #{inCardCode,jdbcType=VARCHAR},
+      in_pic_path = #{inPicPath,jdbcType=VARCHAR},
+      in_time = #{inTime,jdbcType=VARCHAR},
+      in_type = #{inType,jdbcType=INTEGER},
+      in_type_desc = #{inTypeDesc,jdbcType=VARCHAR},
+      in_port_id = #{inPortId,jdbcType=INTEGER},
+      in_port_name = #{inPortName,jdbcType=VARCHAR},
+      out_card_code = #{outCardCode,jdbcType=VARCHAR},
+      out_car_plate = #{outCarPlate,jdbcType=VARCHAR},
+      out_pic_path = #{outPicPath,jdbcType=VARCHAR},
+      out_car_type = #{outCarType,jdbcType=INTEGER},
+      out_time = #{outTime,jdbcType=VARCHAR},
+      stop_time = #{stopTime,jdbcType=VARCHAR},
+      out_type = #{outType,jdbcType=INTEGER},
+      out_type_desc = #{outTypeDesc,jdbcType=VARCHAR},
+      out_port_id = #{outPortId,jdbcType=INTEGER},
+      out_port_name = #{outPortName,jdbcType=VARCHAR},
+      need_pay = #{needPay,jdbcType=DECIMAL},
+      actual_pay = #{actualPay,jdbcType=DECIMAL},
+      before_pay = #{beforePay,jdbcType=DECIMAL},
+      charge_type = #{chargeType,jdbcType=INTEGER},
+      duty_person = #{dutyPerson,jdbcType=VARCHAR},
+      car_nature = #{carNature,jdbcType=INTEGER},
+      local_id = #{localId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

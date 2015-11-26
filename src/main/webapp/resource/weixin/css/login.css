@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+
+body,div,ul,ol,li,dl,dd,dt,form,lable,img,span,td,input,select,label,textarea,h1,h2,h3,h4,h5,h6,p,th,i{ list-style:none; font-family:'微软雅黑'; font-size:12px; margin:0px;padding:0px; border:none; }
+body,div,ul,ol,li,dl,dd,dt,form,img,span,td,input,label,h1,h2,h3,h4,h5,h6,p{color:#808080;}
+body{ background:#e5e5e5;}
+
+
+a{text-decoration:none;outline: none;blr:expression(this.onFocus=this.blur());}
+input,input:focus,input:active{user-select:text;-webkit-appearance:none;outline:none;}
+
+.c{ clear:both;}
+.clear_right{ clear:right;}
+
+
+
+
+#Content{ width:90%; height:auto; margin:0px auto;}
+
+.logo{width:100%; background: url(../images/login.png) no-repeat center center; background-size:210px 50px; height:128px; background-size:210px 50px;}
+.form_box{ width:100%; height:auto;}
+
+
+.form_box .input_box{ width:100%; height:50px; border-radius:5px; background:#fff; margin-bottom:20px; line-height:50px;border:1px solid #d3d3d3;}
+
+
+
+.form_box .input_box .left{ width:15%; height:50px; float:left; line-height:50px;}
+.form_box .input_box .left span{ display:block; height:30px; margin:10px auto; border-right:1px solid #d3d3d3;}
+
+
+.username{background:url(../images/input_left_peo.png) no-repeat 50% 3px; background-size:25px 25px;}
+.password{background:url(../images/input_left_colk.png) no-repeat 50% 3px;background-size:25px 25px;}
+
+.form_box .input_box .right{ width:82%; float:right; height:50px; line-height:50px;}
+.form_box .input_box .right input{ width:99%; color:#c2c2c2; font-size:18px; outline:none; margin-top:10px; height:30px;padding:0px; padding:0px auto;}
+
+
+.form_box .button_box{background:none; border:none; text-align:center; line-height:50px; font-weight:bold; font-size:24px; color:#fff; width:100%;}
+#Submit{ width:100%; text-align:center; line-height:48px; font-weight:bold; font-size:21px; color:#fff; border:1px solid #0baae4;border-radius:5px;background:#18b4ed;  }
+
+.foot_er{ margin-top:50px; width:100%; height:50px; line-height:50px; font-size:21px;color:#00a5e0; text-align:center;}
+.foot_er a{ padding:10px; color:#00a5e0;}

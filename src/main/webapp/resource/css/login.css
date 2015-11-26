@@ -1,0 +1,140 @@
+body{ background:#f9f9f9;}
+
+
+.top_box{ width:100%; height:auto; background:#fff; border-bottom:1px solid #e2740e;}
+
+.in_top{ width:980px; height:auto; margin:0px auto; line-height:43px;}
+.in_top .logo{ width:190px; height:72px; float:left; padding-top:28px;}
+
+.in_top ul{ width:492px; height:52px; padding-top:48px; float:right;}
+.in_top ul li{width:82px; height:25px; float:left;}
+.in_top ul li a{ display:block; width:81px; height:25px; text-align:center; font-size:16px; line-height:25px;text-decoration:none;}
+.in_top ul li .color_37{color:#3798db;}
+.in_top ul li .color_37:hover{color:#2980b9;text-decoration:none;}
+<!----------logo、菜单导航 End----------->
+
+
+
+
+
+.main_content_box{width:100%; background:#f00; height:50px;}
+.main_content{ width:980px; height:100%; margin:40px auto; background:url(../images/curandtex.png) no-repeat 60px 40px; position:relative;}
+
+#Iin_box{ width:320px; height:350px; margin-top:46px; margin-left:600px; background:#fff; border:1px solid #efefef;}
+.title_box{ width:295px; height:27px; margin:0px auto; border-bottom:1px solid #e8e8e8; text-indent:5px; font-size:16px; color:#222; padding-top:20px; position:relative;}
+.title_box a{background:url(../images/backgroun_all_pic.png) no-repeat 30px -134px; width:58px; height:20px; display:block; position:absolute; left:235px; top:20px;}
+
+.input_list2{ width:278px; height:40px; margin:20px auto;}
+
+.input_name{ background:url(../images/accound_password_01.png) no-repeat 10px 10px;}
+.input_password{ background:url(../images/accound_password_02.png) no-repeat 10px 10px;}
+
+
+.input_border{ border:1px solid #e8e8e8; border-radius:5px; height:40px; line-height:40px; width:226px;text-indent:45px; margin-left:0px; padding-left:0px;}
+.after_click{ border:1px solid #d9d9d9;}
+
+
+
+.verification_code{ width:auto; height:40px; float:left; line-height:40px;}
+.verification_code_img{ width:127px; height:40px; float:right; text-align:right;line-height:40px;}
+.verification_code_img img{ cursor:pointer;}
+
+
+	.input_code{ width:107px; line-height:40px; height:40px; padding:0px 10px; text-indent:10px;}
+.input_login{ width:100%; background:#e2740e; text-align:center; color:#fff; font-size:18px; letter-spacing:2px; border:1px solid #c9680c; padding:0px; font-family:'微软雅黑'; font-size:14px; height:40px; text-indent:0px;}
+
+.verification_code .checkbox{font-size:14px; background:url(../images/check_box.png) no-repeat 0px 0px; color:#666; cursor:pointer;padding-left:22px;padding-bottom:2px;}
+
+.verification_code .checkbox:hover{background:url(../images/check_box.png) no-repeat 0px -19px; cursor:pointer;padding-bottom:2px;}
+.verification_code .checkbox_checked{  font-size:14px;  background:url(../images/check_box.png) no-repeat 0px -41px;color:#e2740e; cursor:pointer; padding-bottom:2px;}
+
+.verification_code_img a{color:#e2740e; text-decoration:underline;}
+#WeiZhuang_checkbox_auto_login_ent{ padding-bottom:1px;padding-top:1px;}
+
+
+/*找回密码*/
+.main_find_password{background:url(../images/curandtex.png) no-repeat 406px 85px #fff;}
+
+
+
+
+.find_password_title { width:auto; height:auto;  background:#fff; padding-bottom:20px;border:1px solid #Efefef;}
+
+.find_password_title .title_icon{ width:937px; height:27px; margin:0px auto; border-bottom:1px solid #Efefef ; line-height:27px; padding-top:22px; position:relative;}
+.find_password_title  .title_icon .posion{ width:auto; height:30px; position:absolute; left:0px; top:19px;}
+.find_password_title  .title_icon .posion_1{ border-bottom:1px solid #e2740e;}
+.find_password_title  .title_icon span{ padding:0px 10px;  color:#e2740e; font-size:16px; display:block; width:auto;}
+
+.title_icon samp{ float:right; font-size:16px;color:#666; font-family:'微软雅黑';}
+.title_icon samp a{ padding:0px 30px 0px 5px; background:url(../images/backgroun_all_pic.png) no-repeat 27px -134px;}
+
+
+.find_passwerd_box{ width:auto; height:auto;background:url(../images/find_password_bg.png) no-repeat 583px 35px #fff;}
+
+.find_passwerd_boxen{background:url(../images/find_password_bg.png) no-repeat 583px 35px #fff;}
+.find_passwerd_boxer{ background:url(../images/backgroun_all_pic.png) no-repeat 583px 35px #fff;}
+
+.find_passwerd_box table{ width:540px; margin-left:20px;margin-top: 20px;}
+.find_passwerd_box table td{ height:60px; }
+.find_passwerd_box table .left_td{ text-align:right;}
+.find_passwerd_box table .input_sytle{border-radius:5px; border:1px solid #e8e8e8; height:40px; line-height:40px; width:260px;text-indent:10px;}
+
+.Check_code_box{ height:38px; line-height:38px; border-radius:5px; border:1px solid #e8e8e8; text-align:left; text-indent:10px;  width:260px; display:block;}
+.Check_code_box a{ text-decoration:underline; padding-left:5px; border-left:1px solid #e8e8e8;}
+#Check_code{ border:none;line-height:35px;height:35px; width:160px; border:1px solid #fff;}
+.correct{ padding:10px; background:url(../images/backgroun_all_pic.png) no-repeat -90px -140px; padding-left:25px;}
+.error{ padding:10px; background:url(../images/backgroun_all_pic.png) no-repeat -90px -195px;padding-left:25px;}
+.strength{ padding:0px 30px; background:url(../images/backgroun_all_pic.png) no-repeat -10px -33px;}
+.strength_yello{background:url(../images/backgroun_all_pic.png) no-repeat -10px -51px;}
+
+
+.find_passwerd_box .rech_process{ width:520px; height:84px;margin-left:20px; padding-top:20px;}
+.itm_bg{ margin-top:40px; height:4px; background:url(../images/center_bg.png) repeat-x left top;position:relative;width:520px; }
+.yuan_bg{ width:24px; height:24px; background:url(../images/yuan_24_24.png) no-repeat left top; position:absolute; text-align:center; line-height:24px; color:#555;}
+.yuan_bg_1{ left:0px; top:-10px;}
+.yuan_bg_2{left:260px; top:-10px;}
+.yuan_bg_3{left:500px; top:-10px;}
+
+
+.text{width:100px; height:24px; position:absolute; text-align:center; line-height:24px; color:#555;}
+.text_1{ left:-35px; top:20px;}
+.text_2{left:225px; top:20px;}
+.text_3{left:463px; top:20px;}
+
+.color_e2{color:#e2740e;}
+
+.text_p{ width:520px; text-align:center; padding:70px 0px; }
+.text_p p{ line-height:20px;font-size:14px;}
+.text_p p a{ text-decoration:underline; color:#666;}
+
+
+/*忘记密码*/
+.rech_process2{ width:500px; height:100px; margin:0px auto; border-bottom:1px dashed #eeeeee; padding-left:40px; background:#fff;}
+
+
+
+/*ydt  登录 错误提示start*/
+.msg-error {
+     position: relative; 
+     background: #ffebeb; 
+     color: #e4393c; 
+     border: 1px solid #e4393c; 
+     padding: 3px 10px 3px 40px; 
+     line-height: 18px; 
+     min-height: 18px; 
+     _height: 18px;
+     width:130px;
+     display: none;
+     font-size:13px;
+}
+.msg-error b{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    display: block;
+    margin-top: -8px;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    background: url(../../resource/images/pwd-icons-new.png) -104px -49px no-repeat;
+}

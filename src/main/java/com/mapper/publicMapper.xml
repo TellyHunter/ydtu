@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="public">
+	<select id="getParkName" parameterType="java.lang.Integer" resultType="java.lang.String">
+		select park_name from t_company_park where id=#{value}
+	</select>
+	<select id="getRuleName" parameterType="java.lang.Integer" resultType="java.lang.String">
+		select rule_name from t_car_pay_rule where local_id=#{value}
+	</select>
+</mapper>

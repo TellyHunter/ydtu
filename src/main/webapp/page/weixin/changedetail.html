@@ -1,0 +1,99 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+ <script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+  <link rel="stylesheet" href="../../resource/css/demo.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+  <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通</title>
+
+
+</head>
+<body>
+ <header class="ui-header ui-header-positive ui-border-b" >
+            <i class="ui-icon-return"  onclick ="closeWindow()"></i><h1>缴费记录</h1>
+</header>
+<section class="ui-container">
+
+ 
+<section id="form">
+<div class="demo-block">
+            <div class="ui-form ui-border-t">
+                <form action="#" id="content">
+                <script type="text/html" id="contentScript">
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            时间
+                        </label>
+                        <input type="text" placeholder="18位身份证号码" value="{{data.orderTime}}" readonly="readonly">
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            交易流水
+                        </label>
+                        <input type="text" placeholder="18位身份证号码" value="{{data.orderId }}" readonly="readonly">
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            金额
+                        </label>
+                        <input type="text" placeholder="18位身份证号码" value="{{data.amount }}" readonly="readonly">
+                    </div>
+                    <div class="ui-form-item ui-border-b">
+                        <label>
+                            状态
+                        </label>
+                        <input type="text" placeholder="18位身份证号码" value="{{data.result == '0'?'未支付':'已支付'}}" readonly="readonly">
+                    </div>
+					</script>
+                </form>
+            </div>
+        </div>
+
+
+</section>
+
+</section>
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+// var id=getQueryString("id");
+var id = localStorage.id;
+localStorage.removeItem("id");
+$.ajax({
+	type:"post",
+	url:linkPre+"/ydtu/charge/getBean.htm",
+	data:{id:id},
+	dataType:"json",
+	success:function(data){
+		checkResult_weixin(data.result);
+		if(data.result == SUCCESS){
+			var html = template("contentScript", data);
+			$("#content").html(html);
+		}
+	}
+})
+
+</script>
+</body>
+</html>

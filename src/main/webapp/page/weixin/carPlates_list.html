@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<title>停车一道通</title>
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+ <script type="text/javascript">
+ function index(){
+		location.href="/ydtu/weixin/index.htm";
+ }
+
+  function closeWindow(){
+		if (typeof WeixinJSBridge != "undefined"){
+	    	WeixinJSBridge.invoke('closeWindow',{},function(res){});
+
+		}
+	}
+  </script>
+</head>
+<body ontouchstart>
+  <header class="ui-header ui-header-positive ui-border-b">
+            <i class="ui-icon-return" onclick="closeWindow()"></i><h1>云锁车</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+        </header>
+ <section class="ui-container">
+  	<form id="search_form" method="post" >	
+            <table class="ui-table ui-border-tb">
+                <thead>
+                <tr><th>车牌号</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody id="carPlate">
+                <script type="text/html" id="tmembercar">
+				{{each data as s}}
+                <tr >
+                	
+                
+                <td>{{s.carPlate}}</td>
+                <td>{{if s.status == '1' }}已解锁{{/if}}{{if s.status == '2' }}已锁车{{/if}}</td>
+						<td>
+						<a href="javascript:void(0)" onclick="handle({{s.id}},'{{s.status}}','{{s.carPlate}}')">
+						{{if s.status == '1' }}锁车{{/if}}
+						{{if s.status == '2' }}解锁{{/if}}
+						</a>
+						</td>
+					
+					
+						</tr>
+       {{/each}}    
+</script>
+                </tbody>
+            </table>
+       </form>
+
+</section>
+
+<script type="text/javascript">
+
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+
+function init(){
+	$.ajax({
+		type:"post",
+		url:linkPre+"/ydtu/tmembercar/getList.htm",
+		data:{"currentPage":1, "pageSize":10},
+		dataType:"json",
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				carLength=data.data.length;
+				var html = template('tmembercar', data);
+				$("#carPlate").html(html) ;			
+			}
+		}
+	});
+}
+init();
+function handle(id,status, carPlate){
+	if(status=="1"){
+		status="2";
+	}
+	else{
+		status="1";
+	}
+	$.ajax({
+		type:"post",
+		url:linkPre+"/ydtu/tmembercar/updateWithLock.htm",
+		data:{id:id, status:status, carPlate:carPlate},
+		dataType:"json",
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				frozen_info("操作成功");
+				setTimeout(init(), 2000 )
+			}
+		}
+	});
+}
+</script>
+
+
+	
+</body>
+</html>

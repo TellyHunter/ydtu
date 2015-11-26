@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+
+<title>停车一道通</title>
+
+ <script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+ <script src="../../resource/js/phoneTip.js"></script>
+<script src="../../resource/js/result.js"></script>
+ <script src="../../resource/js/md5.js"></script>
+ 
+</head>
+<body>
+	<header class="ui-header ui-header-positive ui-border-b"> <i
+			class="ui-icon-return" onclick ="history.back()"></i>
+		<h1>修改用户密码</h1>
+		</header>
+	<section class="ui-container">
+	<form id="modPaswdForm">
+			<div class="ui-form-item ui-form-item-l ui-border-b">
+                        <label class="ui-border-r">
+                            原密码:
+                        </label>
+                        <input type="password" placeholder="请输入原密码" name="password"  id="password" class="ui-input ui-border-radius" />
+                        <p class="ui-icon-close">
+                        </p>
+                    </div>
+		
+			<div class="ui-form-item ui-form-item-l ui-border-b">
+                        <label class="ui-border-r">
+                            新密码:
+                        </label>
+                        <input type="password" name="newPassword" placeholder="请输入新密码" id="newPassword" class="ui-input ui-border-radius" />
+                         <p class="ui-icon-close">
+                        </p>
+                    </div>
+            <div class="ui-form-item ui-form-item-l ui-border-b">
+                        <label class="ui-border-r">
+                            确认密码:
+                        </label>
+                        <input  type="password" name="rePassword"  placeholder="请再次输入新密码"  id="rePassword" class="ui-input ui-border-radius" />
+                        <p class="ui-icon-close">
+                        </p>
+                    </div>
+			
+			
+		
+			<div class="ui-btn-wrap"  onclick="checkPassword();">
+                <input class="ui-btn-lg ui-btn-primary" id="sub" type="button" value="修改">
+            </div>
+            </form>
+           </section>
+
+</body>
+
+<!-- 表单验证 -->
+<script type="text/javascript">
+function checkPassword(){
+	$.ajax({
+		type:"post",
+		url:linkPre+"/ydtu/tmember/checkPass.htm",
+		data : {"password":hex_md5($("#password").val()),"newPassword":hex_md5($("#newPassword").val()), "rePassword":hex_md5($("#rePassword").val())},
+		dataType:"json",
+		async:false,
+		success: function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				frozen_info("修改成功");
+				setTimeout(function(){
+					location.href="infomation.html";
+				}, 500 )
+			}else{
+				if(data.data == 'REPEAT'){
+					frozen_warn("新密码不能与旧密码相同");
+				}else if(data.data == 'ERROR'){
+					frozen_warn("请输入正确的密码");
+				}
+			}
+		}
+	});
+}
+</script>
+</html>

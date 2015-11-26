@@ -1,0 +1,78 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+        
+    <!-- mybatis related... start -->
+	<!-- 引入jdbc配置文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- 这里支持多种寻址方式：classpath和file -->
+				<value>classpath:jdbc.properties</value>
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource ">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://${jdbc.host}:${jdbc.port}/${jdbc.database}?useUnicode=true&amp;characterEncoding=utf8" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="acquireIncrement" value="1" />
+		<property name="initialPoolSize" value="5" />
+		<property name="maxPoolSize" value="20" />
+		<property name="minPoolSize" value="5" />
+		<property name="maxStatements" value="100" />
+		<property name="testConnectionOnCheckout" value="true" />
+	</bean>
+
+	<!-- mybatis文件配置，扫描所有mapper文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/mapper/*.xml"/>
+	</bean>
+
+	<!-- spring与mybatis整合配置，扫描所有dao -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.mapper"/>
+    </bean>
+    <!-- mybatis related... end -->
+
+	<!-- class annotation related... start -->
+	<context:component-scan base-package="com.service" />
+	<!-- class annotation related... end -->
+	<context:annotation-config />
+
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 对dataSource 数据源进行事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- transaction config related... end -->
+	
+	<!-- 全局异常配置 start -->     
+     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">     
+         <property name="exceptionMappings">     
+             <props>     
+                 <prop key="java.lang.Exception">error</prop>     
+                 <prop key="java.lang.Throwable">error</prop>     
+             </props>     
+         </property>     
+              
+         <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->     
+         <property name="warnLogCategory" value="WARN"></property>     
+         <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->     
+         <property name="defaultErrorView" value="error"></property>     
+         <!-- 默认HTTP状态码 -->     
+         <property name="defaultStatusCode" value="500"></property>     
+     </bean>     
+     <!-- 全局异常配置 end -->    
+	</beans>

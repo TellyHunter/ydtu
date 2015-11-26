@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+  <link rel="stylesheet" href="../../resource/weixin/css/carplate/carplate.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通</title>
+</head>
+<body  onclick="bodyOn()">
+	<header class="ui-header ui-header-positive ui-border-b">
+		<i class="ui-icon-return" onclick="history.back()"></i>
+		<h1>添加会员车辆</h1>
+	</header>
+	<section class="ui-container">
+		<section id="form" style="text-align: center; font-weight: bold;">
+			<div class="demo-item">
+				<div class="demo-block">
+					<div class="ui-form ui-border-t">
+						<div style="width: 100%; height: 100%;">
+							<div class="ui-form-item ui-form-item-pure ui-border-b">
+								<input type="text" onclick="pshow()" id="pro"
+									readonly="readonly" placeholder="请选择归属地省份">
+							</div>
+							<div class="ui-form-item ui-form-item-pure ui-border-b">
+								<input type="text" name="carPlateContent" id="carPlateContent"
+									maxlength="5" placeholder="请填写车辆车牌号"
+									onkeyup="this.value = this.value.toUpperCase();" />
+							</div>
+
+							<div id="jianpan" style="display: none;" onclick="divOn()">
+								<div onclick="quxiao()" class=" anjian_0 lan_0"
+									style="left: 28px;">
+									取消</span>
+								</div>
+								<div onclick="queren()" class=" anjian_0 lan_0"
+									style="right: 28px;">
+									<span class="second sec1">确定</span>
+								</div>
+								<div name="province" class="a_1 anjian lan_1">京</div>
+								<div name="province" class="a_2 anjian lan_1">津</div>
+								<div name="province" class="a_3 anjian lan_1">翼</div>
+								<div name="province" class="a_4 anjian lan_1">蒙</div>
+								<div name="province" class="a_5 anjian lan_1">辽</div>
+								<div name="province" class="a_6 anjian lan_1">鲁</div>
+								<div name="province" class="a_7 anjian lan_1">晋</div>
+								<div name="province" class="a_8 anjian lan_1">吉</div>
+								<div name="province" class="a_9 anjian lan_1">苏</div>
+
+								<div name="province" class="a_1 anjian lan_2">皖</div>
+								<div name="province" class="a_2 anjian lan_2">豫</div>
+								<div name="province" class="a_3 anjian lan_2">陕</div>
+								<div name="province" class="a_4 anjian lan_2">黑</div>
+								<div name="province" class="a_5 anjian lan_2">沪</div>
+								<div name="province" class="a_6 anjian lan_2">浙</div>
+								<div name="province" class="a_7 anjian lan_2">赣</div>
+								<div name="province" class="a_8 anjian lan_2">鄂</div>
+								<div name="province" class="a_9 anjian lan_2">湘</div>
+
+								<div name="province" class="a_1 anjian lan_3">渝</div>
+								<div name="province" class="a_2 anjian lan_3">川</div>
+								<div name="province" class="a_3 anjian lan_3">甘</div>
+								<div name="province" class="a_4 anjian lan_3">宁</div>
+								<div name="province" class="a_5 anjian lan_3">闽</div>
+								<div name="province" class="a_6 anjian lan_3">粤</div>
+								<div name="province" class="a_7 anjian lan_3">桂</div>
+								<div name="province" class="a_8 anjian lan_3">贵</div>
+								<div name="province" class="a_9 anjian lan_3">云</div>
+
+								<div name="province" class="a_1 anjian lan_4">藏</div>
+								<div name="province" class="a_2 anjian lan_4">青</div>
+								<div name="province" class="a_3 anjian lan_4">新</div>
+								<div name="province" class="a_4 anjian lan_4">琼</div>
+
+
+
+								<div name="city" class="a_1 anjian lan_5 anjian2"><span class="sec">A</span></div>
+								<div name="city" class="a_2 anjian lan_5 anjian2"><span class="sec">B</span></div>
+								<div name="city" class="a_3 anjian lan_5 anjian2"><span class="sec">C</span></div>
+								<div name="city" class="a_4 anjian lan_5 anjian2"><span class="sec">D</span></div>
+								<div name="city" class="a_5 anjian lan_5 anjian2"><span class="sec">E</span></div>
+								<div name="city" class="a_6 anjian lan_5 anjian2"><span class="sec">F</span></div>
+								<div name="city" class="a_7 anjian lan_5 anjian2"><span class="sec">G</span></div>
+								<div name="city" class="a_8 anjian lan_5 anjian2"><span class="sec">H</span></div>
+								<div name="city" class="a_9 anjian lan_5 anjian2"><span class="sec">I</span></div>
+                                                                                  
+								<div name="city" class="a_1 anjian lan_6 anjian2"><span class="sec">J</span></div>
+								<div name="city" class="a_2 anjian lan_6 anjian2"><span class="sec">K</span></div>
+								<div name="city" class="a_3 anjian lan_6 anjian2"><span class="sec">L</span></div>
+								<div name="city" class="a_4 anjian lan_6 anjian2"><span class="sec">M</span></div>
+								<div name="city" class="a_5 anjian lan_6 anjian2"><span class="sec">N</span></div>
+								<div name="city" class="a_6 anjian lan_6 anjian2"><span class="sec">O</span></div>
+								<div name="city" class="a_7 anjian lan_6 anjian2"><span class="sec">P</span></div>
+								<div name="city" class="a_8 anjian lan_6 anjian2"><span class="sec">Q</span></div>
+								<div name="city" class="a_9 anjian lan_6 anjian2"><span class="sec">R</span></div>
+                                                                                  
+								<div name="city" class="a_1 anjian lan_7 anjian2"><span class="sec">S</span></div>
+								<div name="city" class="a_2 anjian lan_7 anjian2"><span class="sec">T</span></div>
+								<div name="city" class="a_3 anjian lan_7 anjian2"><span class="sec">U</span></div>
+								<div name="city" class="a_4 anjian lan_7 anjian2"><span class="sec">V</span></div>
+								<div name="city" class="a_5 anjian lan_7 anjian2"><span class="sec">W</span></div>
+								<div name="city" class="a_6 anjian lan_7 anjian2"><span class="sec">X</span></div>
+								<div name="city" class="a_7 anjian lan_7 anjian2"><span class="sec">Y</span></div>
+								<div name="city" class="a_8 anjian lan_7 anjian2"><span class="sec">Z</span></div>
+							</div>
+
+							<div class="ui-btn-wrap">
+								<input class="ui-btn-lg ui-btn-primary" type="button"
+									id="submit" value="添加车辆" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</section>
+</body>
+
+
+
+<script type="text/javascript">
+	/* var carkey = $("#carPlateContent")
+	carkey.keyup(function(event) {
+	 	
+	}); */
+	function onBridgeReady() {
+		WeixinJSBridge.call('hideOptionMenu');
+	}
+	if (typeof WeixinJSBridge == "undefined") {
+		if (document.addEventListener) {
+			document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+					false);
+		} else if (document.attachEvent) {
+			document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+			document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+		}
+	} else {
+		onBridgeReady();
+	}
+
+	//车牌键盘
+	var show_flag = false;
+	function pshow() {
+		show_flag = true;
+		$("#jianpan").show();
+	}
+
+	var provice_value = "";
+	$("div[name='province']").click(
+			function() {
+				provice_value = $(this).text().trim();
+				$(this).addClass("select_font")
+						.siblings("div[name='province']").removeClass(
+								"select_font");
+				$("#pro").val(provice_value + city_value);
+			})
+
+	var city_value = "";
+	$("div[name='city']").click(
+			function() {
+				city_value = $(this).text().trim();
+				$(this).addClass("select_font").siblings("div[name='city']")
+						.removeClass("select_font");
+				$("#pro").val(provice_value + city_value);
+			})
+	function quxiao() {
+		$("#jianpan").hide();
+	}
+	function queren() {
+		$("#jianpan").hide();
+	}
+	function divOn() {
+		show_flag = true;
+
+	}
+	function bodyOn() {
+		if (show_flag != true) {
+			$("#jianpan").hide();
+		}
+		show_flag = false;
+	}
+	//车牌键盘
+
+	$("#submit").click(function() {
+		var len = $("#carPlateContent").val();
+		var proLen = $("#pro").val();
+		if (len.length != 5 || proLen.length != 2) {
+			frozen_warn("请填写正确车牌号");
+			return false;
+		}
+
+		var carStart = $("#pro").val();
+		var carNO = $("#carPlateContent").val();
+		var carPlate = carStart + carNO;
+
+		//验证用户是否已经添加了该车辆
+		var member_id = "";
+		var user_id = "";
+		$.ajax({
+			type : "post",
+			url : linkPre + "/ydtu/tmembercar/getBeanByCarPlate.htm",
+			data : {
+				"carPlate" : carPlate
+			},
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if (data.result == SUCCESS) {
+					member_id = data.data.memberId;
+				}
+			}
+		});
+
+		$.ajax({
+			type : "post",
+			url : linkPre + "/ydtu/tmember/getBean.htm",
+			data : {},
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if (data.result == SUCCESS) {
+					user_id = data.data.id;
+				}
+			}
+		});
+		if (member_id != "" && member_id == user_id) {
+			frozen_warn("您已添加了该车辆，不能重复添加！");
+			return false;
+		} else if (member_id != "" && member_id != user_id) {
+			frozen_warn("该车辆已被添加,请进行车辆认证！");
+			// 			var param=base64encode("carPlate="+encodeURI(encodeURI(carPlate)));
+			// 			setTimeout(function(){
+			// 				location.href="tmember_verifyCar.html?"+param;
+			// 			}, 2000 )
+			localStorage.carPlate = carPlate;
+			setTimeout(function() {
+				location.href = "tmember_verifyCar.html";
+			}, 2000)
+			return false;
+		}
+		$.ajax({
+			type : "post",
+			url : linkPre + "/ydtu/tmembercar/save.htm",
+			data : {
+				"carPlate" : carPlate
+			},
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if (data.result == SUCCESS) {
+					frozen_info("添加成功");
+					setTimeout(function() {
+						location.href = "tmembercar_select.html";
+					}, 2000)
+				}
+			}
+		});
+
+	});
+</script>
+</html>

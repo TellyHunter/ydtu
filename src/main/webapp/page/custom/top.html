@@ -1,0 +1,66 @@
+<!--header Begin-->
+<div class="header">
+	<div class="topCon">
+        <h1 class="logo">大拇指用户中心-停车一道通，智慧让生活更轻松</h1>
+        <div class="service" style="width:520px;">
+            <ul>
+                <li>
+                   <span id="username"></span><a href="javascript:void(0);" onclick="logout();"><img src="../../resource/images/icn_13.png"  /> 注销退出</a>
+                </li>	                
+                <li>
+                    <a href="/ydtu/page/custom/helpCenter_list.html"><img src="../../resource/images/icn_10.png" />常见问题</a>
+                </li>
+                <li>
+                    <a href=""><img src="../../resource/images/icn_11.png"  />投诉建议</a>
+                </li>
+                <li>
+                    <a href="tencent://message/?uin=81473083&Site=qq&Menu=yes"><img src="../../resource/images/icn_12.png"  />在线客服</a>
+                </li>
+            </ul> 
+        </div>
+        <div class="uploader">
+            <a href="#"><img src="../../resource/images/icon_10.gif" />下载停车一道通APP，生活更轻松！</a>
+        </div>
+        <div class="cl"></div>
+        <div class="navgation">
+            <ul>
+                <li><a   href="/ydtu/page/custom/index.html">首页</a></li>
+                <li><a   href="/ydtu/page/custom/infomation.html">账户设置</a></li>
+                <li><a   href="/ydtu/page/custom/paycenter.html">充值中心</a></li>
+                <li><a   href="/ydtu/page/custom/systip_list.html">消息中心</a></li>
+             	<li><a   href="/ydtu/page/custom/helpCenter_list.html">帮助中心</a></li>  
+            </ul>
+        </div>
+    </div>
+</div>
+<!--header End-->
+<script>
+$.ajax({
+	type:"post",
+	url:"/ydtu/tmember/getBean.htm",
+	data:{},
+	dataType:"json",
+	success: function(data){
+		if(data.result == 'SUCCESS'){
+			var realname = data.data.realname;
+			if(null != realname && realname != ""){
+				$("#username").text(realname);
+			}else{
+				$("#username").text(data.data.phone);
+			}
+		}
+	}
+});
+function logout(){
+	$.ajax({
+		type:"post",
+		url:"/ydtu/logout.htm",
+		data:{},
+		dataType:"json",
+		success: function(data){
+			location.href="/ydtu/page/custom/login.html";
+		}
+	});
+	
+}
+</script>

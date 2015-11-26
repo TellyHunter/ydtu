@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>安全设置</title>
+	<link rel="stylesheet" href="../../resource/css/global.css" />
+	<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+	<script src="../../resource/js/result.js"></script>
+	<script src="../../resource/js/common.js"></script>
+	<script src="../../resource/js/jquery-1.8.0.js"></script>
+</head>
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 账户设置 > 安全设置</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li><a href="/ydtu/page/custom/infomation.html"><img src="../../resource/images/menu-icon-wu.png" />个人设置</a></li>
+			<li class="chose_2"><a href="/ydtu/page/custom/safe.html"><img src="../../resource/images/menu-icon-wu.png" />安全设置</a></li> 
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark bor01">
+	    <h2><span>安全设置</span></h2>
+		<table  cellpadding=0 cellspacing=0 class="vehicle_management_table2">
+		 <tr>
+		    <td align="center">
+		    <div class="security_settings_box">
+			<!-- 	<div class="security_settings_box">
+			
+				<div class="binding_mobile">
+			        <span>支付密码</span>
+			        <samp><span class="bound">未设置</span></samp>   
+			    </div>
+			    <div class="binding_mobile_next"><p>设置密码后可以使用快捷支付功能</p></div>
+			    <div class="modify"><a href=" ">设置</a></div>
+			    <div class="c"></div>
+			
+			</div> -->
+			<!-- <div class="security_settings_box">
+			
+				<div class="binding_mobile">
+			        <span>邮箱绑定</span>
+			        <samp>-  <span class="bound">未绑定</span></samp>   
+			    </div>
+			    <div class="binding_mobile_next"><p>绑定邮箱后，您即可享受慧泊丰富的服务，
+			如手机登录、手机找回密码等。</p></div>
+			    <div class="modify"><a href=" ">绑定</a></div>
+			    <div class="c"></div>
+			
+			</div> -->
+			<div class="security_settings_box">
+				<div class="binding_mobile password_bg">
+			        <span style="float:left;">手机号</span>
+			    </div>
+			    <div class="binding_mobile_next"><p>如果已更换手机号，可以在此更换绑定手机</p></div>
+			    <div class="modify"><a href="/ydtu/page/custom/modify_phone.html">修改</a></div>
+			    <div class="c"></div>
+			</div>
+		
+			<div class="security_settings_box">
+				<div class="binding_mobile password_bg">
+			        <span style="float:left;">邮箱&nbsp; - &nbsp;<span id="bundleStatus"></span></span>
+			    </div>
+			    <div class="binding_mobile_next"><p>绑定邮箱后，您即可享受停车一道通丰富的服务</p></div>
+			    <div class="modify">
+			    <a href="/ydtu/page/custom/modify_mail.html?" id="emailUrl">绑定</a>
+			    </div>
+			    <div class="c"></div>
+			</div>
+			
+			<div class="security_settings_box">
+				<div class="binding_mobile password_bg">
+			        <span style="float:left;">登录密码</span>
+			    </div>
+			    <div class="binding_mobile_next"><p>安全性高的密码可以使账号更安全。建议您定期更换密码</p></div>
+			    <div class="modify"><a href="/ydtu/page/custom/modify_pass.html">修改</a></div>
+			    <div class="c"></div>
+			</div>
+			
+			<!-- 
+			<div class="security_settings_box bor_bottom_none">
+			
+				<div class="binding_mobile">
+			        <span>身份认证</span>
+			        <samp><span class="bound">未认证</span> </samp>  
+			    </div>
+			    <div class="binding_mobile_next"><p>您还没有通过实名认证</p></div>
+			    <div class="modify"><a href=" ">认证</a></div>
+			    <div class="c"></div>
+			
+			</div> -->
+			</div>
+		    </td>
+		</tr>
+		</table>
+		<div style="height: 500px"></div>
+	</div>
+    <!-- <div class="Usuallypark bor01">
+	    <h2><span>登录记录</span></h2>
+		<table  cellpadding=0 cellspacing=0 class="vehicle_management_table2" >
+		 <tr>
+		    <td align="center"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="dataTableCar">
+		      <tr>
+		        <th width="19%" align="center"><strong>登录时间</strong></th>
+		        <th width="22%" align="center"><strong>登陆终端</strong></th>
+		        <th width="38%" align="center"><strong>IP地址</strong></th>
+		        <th width="21%" align="center"><strong>操作</strong></th>
+		        </tr>
+		      <tr>
+		        <td>2015-07-15 14:30:31</td>
+		        <td><p>web端</p></td>
+		        <td>219.134.28.175 [广东省深圳市南山区/福田区电信ADSL]</td>
+		        <td ><p>不是您登录的？请点击<a style="color:#FF3F00" href=" ">这里</a></p></td>
+		        </tr>
+		      <tr>
+		        <td>2015-07-13 14:13:17</td>
+		        <td><p>web端</p></td>
+		        <td>219.134.28.175 [广东省深圳市南山区/福田区电信ADSL]</td>
+		        <td ><p>不是您登录的？请点击<a style="color:#FF3F00" href=" ">这里</a></p></td>
+		        </tr>
+		      <tr>
+		        <td>2015-06-10 17:55:18</td>
+		        <td><p>app android 华为</p></td>
+		        <td>219.134.28.175 [广东省深圳市南山区/福田区电信ADSL]</td>
+		        <td ><p>不是您登录的？请点击<a style="color:#FF3F00" href=" ">这里</a></p></td>
+		        </tr>
+		      <tr>
+		        <td>2015-06-10 17:55:18</td>
+		        <td><p>web端</p></td>
+		        <td>219.134.28.175 [广东省深圳市南山区/福田区电信ADSL]</td>
+		        <td ><p>不是您登录的？请点击<a style="color:#FF3F00" href=" ">这里</a></p></td>
+		        </tr>
+		      <tr>
+		        <td>2015-06-10 17:55:18</td>
+		        <td><p>app IOS 6</p></td>
+		        <td>219.134.28.175 [广东省深圳市南山区/福田区电信ADSL]</td>
+		        <td ><p>不是您登录的？请点击<a style="color:#FF3F00" href=" ">这里</a></p></td>
+		        </tr>
+		      <tr>
+		        <td colspan="4"  bordercolor="#EEEEEE"><div class="page"> <span>首页</span> <span>上一页</span> <span class="chose_1">1</span> <span>2</span> <span>3</span> <span>4</span> <span>5</span> <span>下一页</span> <span>尾页</span></div></td>
+		      </tr>
+		    </table>
+		    </td>
+		  </tr></table>
+			  </div>
+	 -->
+	</div>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+
+<script>
+$.ajax({
+	type:"post",
+	url:"/ydtu/tmember/getBean.htm",
+	dataType:"json",
+	success:function(data){
+		checkResult(data.result);
+		if(data.result == SUCCESS){
+			var email = data.data.email;
+			if(email != null){
+				$("#bundleStatus").text("已绑定");
+				$("#emailUrl").html("修改");
+				var url = $("#emailUrl").attr("href");
+				url +=  base64encode("type=4") ;
+				$("#emailUrl").attr("href", url);
+			}else{
+				$("#bundleStatus").text("未绑定");
+				$("#emailUrl").html("绑定");
+				var url = $("#emailUrl").attr("href");
+				url +=  base64encode("type=3") ;
+				$("#emailUrl").attr("href", url);
+			}
+			
+		}
+	}
+})
+</script>
+</body>
+</html>

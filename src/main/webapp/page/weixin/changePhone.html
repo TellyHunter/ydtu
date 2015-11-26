@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<title>停车一道通</title>
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+<link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+<script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+</head>
+<body>
+		<header class="ui-header ui-header-positive ui-border-b"> <i
+			class="ui-icon-return" onclick ="history.back()"></i>
+				<h1>安全验证</h1>
+		</header>
+		<section class="ui-container">
+			<div class="ui-form-item ui-form-item-r ui-border-b">
+                        <input type="text"   class="ui-input ui-border-radius" placeholder="请输入原手机号" name="phone" id="Check_code">
+                        <!-- 若按钮不可点击则添加 disabled 类 -->
+                        <button type="button" class="ui-border-l" id="J_BtnMobileCode"><span id="fff">发送验证码</span></button>
+                        
+                    </div>
+                    
+			<div class="ui-form-item ui-form-item-pure ui-border-b">
+                        <input type="text"   id="code" name="code"  name="code" placeholder="请输入接受到的验证码" class="ui-input ui-border-radius">
+                        
+                    </div>   
+               <div class="ui-form-item ui-form-item-pure ui-border-b">
+                        <input type="text"  name="newPhone" id="newPhone"  placeholder="请输入新手机号" class="ui-input ui-border-radius">
+                        
+                    </div>   
+             <div class="ui-btn-wrap">
+                <button class="ui-btn-lg ui-btn-primary" onclick="codeTest();">
+                    验证              
+                 </button>
+       
+            </div>
+            <div class="ui-form-item ui-form-item-pure ui-border-b"> 
+             <p  class="ui-txt-highlight" style=" font-size: 16px;color: #7CAE23;">收不到短信验证码？试试以下方式验证</p>   
+            </div>    
+            
+            
+             
+             
+             <ul class="ui-list ui-list-text ui-border-tb">
+               
+                <li class="ui-border-t">
+                    <div class="ui-list-info">
+                        <h4></h4>
+                    </div>
+                    <div class="ui-list-action">客服电话：0755-66801658</div>
+                </li>
+                
+                
+            </ul>
+		</section>
+
+
+
+
+
+
+
+
+</body>
+
+<script>
+
+function phoneReg(phone) {
+	if (phone.trim() == "") {
+		frozen_warn("请输入手机号");
+		return false;
+	}
+	var re = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+	if (!re.test(phone) || phone.length != 11) {
+		frozen_warn("手机号格式错误");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+
+var vcode_status = 0;
+var countdown = 60;
+$("#J_BtnMobileCode").click(function() {
+	if (vcode_status == 0) {
+		$.ajax({
+			type : "post",
+			url:linkPre+ '/ydtu/tmember/sendCode.htm',
+			data : {
+				"phone" : $("#Check_code").val()
+			},
+			dataType : 'json',
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if(data.result == SUCCESS){
+					settime();
+				}else{
+					frozen_warn("原手机号输入错误");
+					return false;
+				}
+			}
+		});
+	}
+	return false;
+})
+function settime() {
+		countdown--;
+		if (countdown <= 0) {
+			vcode_status = 0;
+			$("#fff").text("获取验证码");
+			countdown = 60;
+		} else {
+			setTimeout(settime, 1000);
+			vcode_status = 1;
+			$("#fff").text(countdown + "秒");
+		}
+	}
+
+
+	function codeTest() {
+		if($("#Check_code").val()==""||$("#code").val()==""||$("#newPhone").val()==""){
+			frozen_warn("数据不能为空");
+			return false;
+		}
+		var newPhone = $("#newPhone").val();
+		if(!phoneReg(newPhone)){
+			return false;
+		}
+		$.ajax({
+			type : "POST",
+			url:linkPre+ '/ydtu/tmember/codeTest.htm',
+			data : {"phone":$("#Check_code").val(),"code":$("#code").val(),"newPhone":$("#newPhone").val()},
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				checkResult_weixin(data.result);
+				if(data.result == SUCCESS){
+					frozen_info("修改成功");
+					setTimeout(function(){
+						location.href = "login.html";
+					}, 500 )
+				}else{
+					if(data.data == FAIL){
+						frozen_warn("验证码输入错误");
+					}else if(data.data == 'ERROR'){
+						frozen_warn("新手机号已存在");
+					}
+				}
+			}
+		});
+		return false;
+	}
+	
+</script>
+
+
+</html>

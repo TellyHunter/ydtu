@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+
+body, dl, dd, h1, h2, h3, h4, h5, h6, p, form{margin:0;} 
+ol,ul{margin:0; padding:0;}
+body{font-size:14px; font-family:Microsoft Yahei,Arial, Helvetica, sans-serif; background:#2E363F;color:#666;overflow-x: hidden;}
+a{color:#eee;text-decoration: none;}
+a:hover, a:focus {text-decoration: none; color:#28b779;
+}
+li{list-style:none}
+img{border:none}
+.clearfix:after {clear: both;content: ' ';display: block;font-size: 0;line-height: 0;visibility: hidden;width: 0;height: 0;}
+.clearfix {margin-bottom:30px;overflow:hidden;zoom:1}
+.clearfix li{cursor:pointer}
+.cl{clear:both}
+img{vertical-align:middle}
+.orange{color:#FF8901}
+.bgorange{background-color:#FFB848}
+.bgblue{background-color:#27A9E3}
+.bgred{background-color:#FA8564}
+.bggreen{background-color:#28B779}
+.bgwhite{background-color:#fff}
+.bgdarkRed{background-color:#F74D4D}
+
+

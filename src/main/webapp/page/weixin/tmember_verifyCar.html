@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+
+	<script src="../../resource/LocalResizeIMG/LocalResizeIMG.js" type="text/javascript"></script>
+	<script src="../../resource/LocalResizeIMG/mobileBUGFix.mini.js" type="text/javascript"></script>
+<title>停车一道通</title>
+</head>
+<body>
+	<header class="ui-header ui-header-positive ui-border-b">
+		<i class="ui-icon-return" onclick="history.back()"></i>
+		<h1>车辆认证</h1>
+	</header>
+ <section class="ui-container">
+ <form action="/ydtu/weixin/uploadCarImage.htm" id="form1" method="post"  enctype="multipart/form-data">
+ 
+	 <div class="ui-whitespace">
+					<p class="ui-txt-highlight">请上传相关照片,进行车辆信息验证</p>
+				</div>
+	
+	 <ul class="ui-list ui-list-pure ui-border-tb">
+            <li class="ui-border-t">
+				<p class="ui-txt-default">车牌号:<span id="carPlate"></span></p>
+				
+				
+				<ul class="ui-list ui-border-tb">
+                <li class="ui-border-t">
+                   
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap"> <label>
+                            行驶证照片
+                        </label>
+                        
+                        <input type="file" name="driver_image"  id="driver_image"></h4>
+                    </div>
+                     <div class="ui-list-thumb">
+                        <span id="driver_image_base"></span>
+                    </div>
+                </li>
+                <li class="ui-border-t">
+                   
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap"> <label>
+                           车牌照片
+                        </label>
+                        <input type="file" name="car_image"   id="car_image"> </h4>
+                    </div>
+                     <div class="ui-list-thumb">
+                        <span  id="car_image_base"></span>
+                    </div>
+                </li>
+            </ul>
+				
+				
+			</li>
+		</ul>
+		<ul class="ui-list ui-list-pure ui-border-tb">
+                <li class="ui-border-t">
+                  
+                    <h4>1.驾驶证,行驶证仅供审核使用,不公开给任何组织跟个人</h4>
+                </li>
+                <li class="ui-border-t">
+                   
+                    <h4>2.一次提交将不可修改</h4>
+                </li>
+            </ul>
+		<div class="ui-btn-wrap">
+				<input class="ui-btn-lg ui-btn-primary" type="button" onclick="sub()" value="提交认证" />
+			</div>
+			  </form>
+			
+  </section>
+  <script type="text/javascript">
+
+			function onBridgeReady() {
+				WeixinJSBridge.call('hideOptionMenu');
+			}
+			if (typeof WeixinJSBridge == "undefined") {
+				if (document.addEventListener) {
+					document.addEventListener('WeixinJSBridgeReady',
+							onBridgeReady, false);
+				} else if (document.attachEvent) {
+					document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+					document
+							.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+				}
+			} else {
+				onBridgeReady();
+			}
+
+			//   		var carPlate=decodeURI(decodeURI(getQueryString("carPlate")));
+			var carPlate = localStorage.carPlate;
+			localStorage.removeItem("carPlate");
+			$("#carPlate").text(carPlate);
+
+			var driver_image_result = "";
+			var car_image_result = "";
+			$("#driver_image").localResizeIMG({
+				width : 800,
+				quality : 1,
+				success : function(result) {
+					driver_image_result = result.clearBase64;
+					/* $("#driver_image_base").css("background-image","url("+result.base64+")"); */
+				}
+			});
+			$("#car_image").localResizeIMG({
+				width : 600,
+				quality : 1,
+				success : function(result) {
+					car_image_result = result.clearBase64;
+					/* $("#car_image_base").css("background-image","url("+result.base64+")"); */
+				}
+			});
+			function sub() {
+				if (driver_image_result == "") {
+					frozen_warn("请上传行驶证照片");
+					return false;
+				}
+				if (car_image_result == "") {
+					frozen_warn("请上传车辆照片");
+					return false;
+				}
+
+				$.ajax({
+					url : linkPre + linkPre
+							+ '/ydtu/tmembercar/saveWithImg.htm',
+					type : 'POST',
+					data : {
+						"driverImg" : driver_image_result,
+						"carImg" : car_image_result,
+						"carPlate" : carPlate
+					},
+					dataType : 'json',
+					success : function(data) {
+						checkResult_weixin(data.result);
+						if (data.result == SUCCESS) {
+							frozen_info("提交成功，等待审核");
+							setTimeout(function() {
+								location.href = "tmembercar_select.html";
+							}, 2000)
+						}
+					}
+				});
+			}
+		</script>
+</body>
+</html>

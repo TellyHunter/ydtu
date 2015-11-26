@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TParkCarMapper" >
+  <resultMap id="BaseResultMap" type="com.bean.TParkCar" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="park_id" property="parkId" jdbcType="INTEGER" />
+    <result column="car_id" property="carId" jdbcType="VARCHAR" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="car_plate" property="carPlate" jdbcType="VARCHAR" />
+    <result column="pay_rule" property="payRule" jdbcType="INTEGER" />
+    <result column="begin_date" property="beginDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="stop_time" property="stopTime" jdbcType="VARCHAR" />
+    <result column="stop_days" property="stopDays" jdbcType="INTEGER" />
+    <result column="is_owner" property="isOwner" jdbcType="TINYINT" />
+    <result column="is_sync" property="isSync" jdbcType="VARCHAR" />
+    <result column="lock_time" property="lockTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="local_id" property="localId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+      <association column="park_id"  property="parkName" select="public.getParkName"/>  
+    <association column="pay_rule" property="ruleName"  select="public.getRuleName"/>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, company_id, park_id, car_id, member_id, car_plate, pay_rule, begin_date, end_date, 
+    status, stop_time, stop_days, is_owner, is_sync, lock_time, create_time, update_time, 
+    local_id, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bean.TParkCarExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_park_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_park_car
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_park_car
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.TParkCarExample" >
+    delete from t_park_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.TParkCar" >
+    insert into t_park_car (id, company_id, park_id, 
+      car_id, member_id, car_plate, 
+      pay_rule, begin_date, end_date, 
+      status, stop_time, stop_days, 
+      is_owner, is_sync, lock_time, 
+      create_time, update_time, local_id, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{parkId,jdbcType=INTEGER}, 
+      #{carId,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER}, #{carPlate,jdbcType=VARCHAR}, 
+      #{payRule,jdbcType=INTEGER}, #{beginDate,jdbcType=VARCHAR}, #{endDate,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{stopTime,jdbcType=VARCHAR}, #{stopDays,jdbcType=INTEGER}, 
+      #{isOwner,jdbcType=TINYINT}, #{isSync,jdbcType=VARCHAR}, #{lockTime,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{localId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.TParkCar" >
+    insert into t_park_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="parkId != null" >
+        park_id,
+      </if>
+      <if test="carId != null" >
+        car_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="carPlate != null" >
+        car_plate,
+      </if>
+      <if test="payRule != null" >
+        pay_rule,
+      </if>
+      <if test="beginDate != null" >
+        begin_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="stopTime != null" >
+        stop_time,
+      </if>
+      <if test="stopDays != null" >
+        stop_days,
+      </if>
+      <if test="isOwner != null" >
+        is_owner,
+      </if>
+      <if test="isSync != null" >
+        is_sync,
+      </if>
+      <if test="lockTime != null" >
+        lock_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="localId != null" >
+        local_id,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkId != null" >
+        #{parkId,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        #{carId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="carPlate != null" >
+        #{carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="payRule != null" >
+        #{payRule,jdbcType=INTEGER},
+      </if>
+      <if test="beginDate != null" >
+        #{beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="stopTime != null" >
+        #{stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stopDays != null" >
+        #{stopDays,jdbcType=INTEGER},
+      </if>
+      <if test="isOwner != null" >
+        #{isOwner,jdbcType=TINYINT},
+      </if>
+      <if test="isSync != null" >
+        #{isSync,jdbcType=VARCHAR},
+      </if>
+      <if test="lockTime != null" >
+        #{lockTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="localId != null" >
+        #{localId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bean.TParkCarExample" resultType="java.lang.Integer" >
+    select count(*) from t_park_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_park_car
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkId != null" >
+        park_id = #{record.parkId,jdbcType=INTEGER},
+      </if>
+      <if test="record.carId != null" >
+        car_id = #{record.carId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberId != null" >
+        member_id = #{record.memberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.carPlate != null" >
+        car_plate = #{record.carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payRule != null" >
+        pay_rule = #{record.payRule,jdbcType=INTEGER},
+      </if>
+      <if test="record.beginDate != null" >
+        begin_date = #{record.beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endDate != null" >
+        end_date = #{record.endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.stopTime != null" >
+        stop_time = #{record.stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stopDays != null" >
+        stop_days = #{record.stopDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.isOwner != null" >
+        is_owner = #{record.isOwner,jdbcType=TINYINT},
+      </if>
+      <if test="record.isSync != null" >
+        is_sync = #{record.isSync,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lockTime != null" >
+        lock_time = #{record.lockTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.localId != null" >
+        local_id = #{record.localId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_park_car
+    set id = #{record.id,jdbcType=INTEGER},
+      company_id = #{record.companyId,jdbcType=INTEGER},
+      park_id = #{record.parkId,jdbcType=INTEGER},
+      car_id = #{record.carId,jdbcType=VARCHAR},
+      member_id = #{record.memberId,jdbcType=INTEGER},
+      car_plate = #{record.carPlate,jdbcType=VARCHAR},
+      pay_rule = #{record.payRule,jdbcType=INTEGER},
+      begin_date = #{record.beginDate,jdbcType=VARCHAR},
+      end_date = #{record.endDate,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      stop_time = #{record.stopTime,jdbcType=VARCHAR},
+      stop_days = #{record.stopDays,jdbcType=INTEGER},
+      is_owner = #{record.isOwner,jdbcType=TINYINT},
+      is_sync = #{record.isSync,jdbcType=VARCHAR},
+      lock_time = #{record.lockTime,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=VARCHAR},
+      local_id = #{record.localId,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.TParkCar" >
+    update t_park_car
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkId != null" >
+        park_id = #{parkId,jdbcType=INTEGER},
+      </if>
+      <if test="carId != null" >
+        car_id = #{carId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="carPlate != null" >
+        car_plate = #{carPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="payRule != null" >
+        pay_rule = #{payRule,jdbcType=INTEGER},
+      </if>
+      <if test="beginDate != null" >
+        begin_date = #{beginDate,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="stopTime != null" >
+        stop_time = #{stopTime,jdbcType=VARCHAR},
+      </if>
+      <if test="stopDays != null" >
+        stop_days = #{stopDays,jdbcType=INTEGER},
+      </if>
+      <if test="isOwner != null" >
+        is_owner = #{isOwner,jdbcType=TINYINT},
+      </if>
+      <if test="isSync != null" >
+        is_sync = #{isSync,jdbcType=VARCHAR},
+      </if>
+      <if test="lockTime != null" >
+        lock_time = #{lockTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="localId != null" >
+        local_id = #{localId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.TParkCar" >
+    update t_park_car
+    set company_id = #{companyId,jdbcType=INTEGER},
+      park_id = #{parkId,jdbcType=INTEGER},
+      car_id = #{carId,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=INTEGER},
+      car_plate = #{carPlate,jdbcType=VARCHAR},
+      pay_rule = #{payRule,jdbcType=INTEGER},
+      begin_date = #{beginDate,jdbcType=VARCHAR},
+      end_date = #{endDate,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      stop_time = #{stopTime,jdbcType=VARCHAR},
+      stop_days = #{stopDays,jdbcType=INTEGER},
+      is_owner = #{isOwner,jdbcType=TINYINT},
+      is_sync = #{isSync,jdbcType=VARCHAR},
+      lock_time = #{lockTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      local_id = #{localId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+   <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通</title>
+</head>
+<body ontouchstart>
+
+		<header class="ui-header ui-header-positive ui-border-b" >
+            <i class="ui-icon-return"  onclick="closeWindow()"></i><h1>会员充值</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+        </header>
+        <section class="ui-container">
+            <div class="ui-form ui-border-t">
+            
+                    <div class="ui-form-item ui-border-b">
+                    
+                        <label>
+                            金额
+                        </label>
+                        <input type="input" name="amount" id="amount" placeholder="请输入充值金额"/>
+                    </div>
+                  <div class="ui-btn-wrap">
+                <button class="ui-btn-lg ui-btn-primary" id="sub">
+                    确定
+                </button>
+            </div>
+                    
+            </div>
+        </section>
+        <div id="dispater">
+        
+        
+        </div>
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+function index(){
+	location.href="/ydtu/weixin/index.htm";
+}
+
+$("#amount").blur(function() {
+	amountReg();
+}); 
+function amountReg(){
+	
+	var len = $("#amount").val();
+	var re =/^[1-9]+[0-9]*]*$/; 
+	if (!re.test(len)) {
+		frozen_info("金额必须大于0"); 
+	    return false;
+	}else
+	{
+		return true;
+	}
+}
+$("#amount").bind('click',function(event) {
+	$("#sub").removeAttr("disabled");
+});
+
+$("#sub").bind('click',function(event){
+	var flag=amountReg();
+	if(flag==false){
+		return false;
+	}
+	frozen_info("正在加载");
+	var amount = $("#amount").val();
+	$("#sub").attr("disabled","disabled");//$("#sub").removeAttr("disabled");
+
+	var orderId;
+	
+	$.ajax({
+		url:linkPre+"/ydtu/charge/save.htm",
+		type:"post",
+		data:{"amount":amount, "payType":"2"},
+		dataType:"json",
+		async: false,
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result==SUCCESS){
+				orderId=data.data.orderId;	
+				localStorage.orderId=orderId;				
+			}
+			else{
+				frozen_warn("订单生成失败！请稍后再试");
+				return;
+			}
+		}
+	});
+
+	if (typeof WeixinJSBridge != "undefined"){
+// 		location.href="weixinpay.html?"+base64encode(param);
+		location.href="/ydtu/page/weixin/weixinpay.html";
+	}
+	else{
+//		location.href="alipay.html?"+base64encode(param);
+		location.href="alipay.html";
+	}
+
+	 
+});
+
+</script>	
+</body>
+</html>

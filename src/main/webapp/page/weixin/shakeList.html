@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+<link rel="stylesheet" href="../../resource/frozen/css/demo.css">
+
+<link rel="stylesheet" type="text/css" href="../../resource/css/pulltofresh.css" media="all" />
+
+<script type="text/javascript" src="../../resource/js/iscroll.js"></script>
+<script type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+<script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/date.js"></script>
+<script src="../../resource/js/common.js"></script>
+
+<script src="../../resource/js/pulltofresh.js"></script>
+<title>停车一道通</title>
+
+</head>
+<body onload="checkCookie()">
+	<header class="ui-header ui-header-positive ui-border-b">
+		<i class="ui-icon-return" onclick="history.back()"></i>
+		<h1>摇一摇历史</h1>
+	</header>
+		<section class="ui-container">
+          <section id="wrapper">
+          	    <div class="demo-item" id="scroller">
+          			<div id="pullDown">
+          				<p  style="margin:0 auto;width:200px;"><span class="pullDownIcon"></span><span class="pullDownLabel">下拉可以刷新</span></p>
+          				<p  style="margin:0 auto;width:200px;"><span id="refreshTime"></span></p>
+          			</div>
+          	        <div class="demo-block">
+          	            <ul class="ui-list ui-border-tb" id="loadContent">
+          	            <script type="text/html" id="loadTemp">
+          				{{if data.length > 0}}
+          					{{each data as dto}}	            
+          	                <li class="ui-border-t" style="height: 70px;line-height: 31px;margin-left: 0px;">
+          	                    <div class="ui-avatar">
+          	                        <span style="background-image:url('../../resource/images/shakeIcon.jpg')"></span>
+          	                    </div>
+          	                    <div class="ui-list-info">
+									<div>摇一摇现金券</div>
+          	                    </div>
+          	                    <div class="ui-list-info" style="padding-right: 5px;">
+          							<div style="padding-right: 0px;text-align:right;height:25px;">{{dto.date}}</div>
+          							<div style="padding-right: 0px;text-align:right;height:25px;font-size: large;">{{dto.amount}}元</div>
+          						</div>
+          	                </li>
+          					{{/each}}
+          					{{else}}
+          					<li  class="ui-border-t" style="height: 70px;">你还没有现金券哦~</li>
+          				{{/if}}
+						<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+          				</script>	              
+          	            </ul>
+          	        </div>
+          			<div id="pullUp" style="display:none;">
+          				<span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+          			</div>	        
+          	    </div>
+          	</section>
+         </section>
+<script>
+
+function setPage(dir){
+	if(refreshPage(dir)){
+		return getList();
+	}else{
+		return "";
+	}
+}
+
+function getList(){
+	var html;
+	$.ajax({
+		type:"post",
+		url: linkPre+"/ydtu/shake/getList.htm",
+		dataType:"json",
+		data: getPage(),
+		async:false,
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				html = template("loadTemp", data);
+			}
+		}
+	})
+	return html;
+}
+
+</script>
+
+</body>
+</html>

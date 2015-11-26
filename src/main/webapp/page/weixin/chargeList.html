@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>充值记录</title>
+
+<script type="text/javascript" src="../../resource/js/iscroll.js"></script>
+<script type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+<link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+<link rel="stylesheet" href="../../resource/frozen/css/demo.css">
+
+<link rel="stylesheet" type="text/css" href="../../resource/css/pulltofresh.css" media="all" />
+
+
+<script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/date.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<script src="../../resource/js/pulltofresh.js"></script>
+
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+ //显示页面内容
+function index(){
+	location.href="/ydtu/weixin/index.htm";
+}
+function detail(id){
+	localStorage.id=id;
+	location.href="changedetail.html";
+}
+
+
+function getList(){
+	var html;
+	$.ajax({
+		type:"post",
+		url:linkPre+"/ydtu/charge/getList.htm",
+		data: getPage(),
+		dataType:"json",
+		async: false,
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				if(data.data.length > 0){
+					for(var i=0;i<data.data.length;i++){
+						if(data.data[i].orderTime.substring(0,10)==today){
+							data.data[i].orderTime="今天"+data.data[i].orderTime.substring(11,16);
+						}
+						else if(data.data[i].orderTime.substring(0,10)==yestoday){
+							data.data[i].orderTime="昨天"+data.data[i].orderTime.substring(11,16);
+						}
+						else if(data.data[i].orderTime.substring(0,10)==yesyestoday){
+							data.data[i].orderTime="前天"+data.data[i].orderTime.substring(11,16);
+						}
+						else{
+							data.data[i].orderTime=data.data[i].orderTime.substring(0,10);
+						}
+					}
+					
+				}
+				html =  template("loadTemp", data);
+			}
+		}
+	})
+	return html;
+}
+
+function setPage(dir){
+	if(refreshPage(dir)){
+		return getList();
+	}else{
+		return "";
+	}
+}
+
+
+</script>
+
+</head>
+<body onload="checkCookie()">
+
+<header class="ui-header ui-header-positive ui-border-b" >
+            <i class="ui-icon-return"  onclick="history.back()"></i><h1>充值记录</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+</header>
+
+<div id="wrapper"> 
+	<div id="scroller">
+		<div id="pullDown">
+			<p  style="margin:0 auto;width:200px;"><span class="pullDownIcon"></span><span class="pullDownLabel">下拉可以刷新</span></p>
+			<p  style="margin:0 auto;width:200px;"><span id="refreshTime"></span></p>
+		</div>
+		<div>
+            <table class="ui-table ui-border-tb">
+                <thead>
+                <tr ><th>时间</th><th>金额</th><th>状态</th></tr>
+                </thead>
+                <tbody  id="loadContent">
+                	<script type="text/html" id="loadTemp">	
+					{{if data.length > 0}}
+   					{{each data as dto}}
+                	<tr onclick="detail({{dto.id}});">
+                		<td>
+                		{{dto.orderTime}}
+                		</td>
+                		<td>{{dto.amount }}</td>
+                		<td>{{dto.result == "0"?"未支付":"已支付"}}</td>
+                	</tr>
+					{{/each}}
+					{{else}}
+					<tr><td colspan="3" style="color:#F54F12"> 暂无记录</td></tr>
+					{{/if}}	
+					<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+					</script>
+                </tbody>
+            </table>
+		</div>	
+		<div id="pullUp" style="display:none;">
+			<span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+		</div>
+	</div>
+</div>
+<!-- <div id="footer"></div> -->
+
+
+</body>
+</html>

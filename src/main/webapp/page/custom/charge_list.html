@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>交易管理</title>
+
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/laydate-master/laydate.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 交易管理</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li><a href="/ydtu/page/custom/mem_car_list.html"><img src="../../resource/images/menu-icon-car.png" />车辆管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkcar_list.html"><img src="../../resource/images/menu-icon-card.png" />月卡管理</a></li>
+			<li class="chose_2"><a href="/ydtu/page/custom/charge_list.html"><img src="../../resource/images/menu-icon-pay.png" />交易管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkinout_page.html"><img src="../../resource/images/menu-icon-park.png" />停车记录</a></li>
+		</ul>
+	</div>
+	<div class="rightContent">
+
+      	<div class="Usuallypark bor01">
+		    <h2><span>交易记录</span></h2>
+	    	<table  cellpadding=0 cellspacing=0 class="vehicle_management_table2" >
+				 <tr>
+		    		<td align="right"> 
+		    		<form id="search_form"  method="post" >
+		    		<table>
+		     		<div class="searchCar" >  
+		     			<div class="list_input_box" >
+		        			<span>交易时间：</span>
+	        				<input id="btime" class="laydate-icon_ydt" name="beginTime">&nbsp;至&nbsp;
+	        				<input id="etime" class="laydate-icon_ydt" name="endTime">
+		          			<input type="button" class="searchBtn" value="搜索" onclick="search()"/>
+		      			</div>    
+		    		</div>
+		    		</table>
+		    		</form>
+					</td>
+		  		</tr>   
+	  			<tr>
+	    			<td align="center" id="chargeContent">
+	    			<script type="text/html" id="chargeTemp">
+      				<form id="sForm"  method="post" >	
+	    				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dataTableCar">
+	    					<tr>
+	    						<th width="5%" align="center">序号</th>
+						    	<th width="20%" align="center"><strong>交易时间</strong></th>
+						      	<th width="33%" align="center"><strong>交易事项 - 流水号</strong></th>
+						      	<th width="16%" align="center"><strong>交易金额</strong></th>
+						      	<th width="16%" align="center"><strong>交易事项</strong></th>
+						      	<th width="16%" align="center"><strong>交易状态</strong></th>
+						    </tr>
+						    {{if data.length > 0}}
+						    	{{each data as dto}}
+								<tr>
+									<td>{{page.pageSize*(page.currentPage-1)+$index+1}}</td>
+									<td align="center">{{dto.orderTime}}</td>
+									<td align="center">{{dto.orderId }}</td>
+									<td align="center">{{dto.amount }}</td>
+									<td align="center">
+										{{bankMap[dto.type]}}
+									</td>
+									<td align="center">{{dto.result == "0"?"未支付":"已支付"}}</td>
+								</tr>
+								{{/each}}
+								{{else}}
+								<tr>
+									<td colspan="9" style="margin-left: 20px;font-size: 17px;">暂无数据</td>
+								</tr>
+							{{/if}}
+							
+					            <tr>
+					            	<td colspan="9"  bordercolor="#EEEEEE">
+					            		<div class="page">	
+					           				<span  onclick="setPage(1)" >首页</span>
+					           				<span  onclick="setPage(2)">上一页</span>
+					           				<span class="chose_1">{{page.currentPage}}</span>
+					           				<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+					           				<span onclick="setPage(3)">下一页</span>
+					           				<span onclick="setPage(4)">末页</span>
+					            		</div>		
+					            	</td>			    	
+					            </tr>	
+	 					</table>
+			    	</form>
+					</script>
+	  				</td>
+	  			</tr>
+	    	</table>
+	  	</div> 
+	</div>
+</div>
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+	var btime = {
+	    elem: '#btime',
+	    format: 'YYYY-MM-DD',
+// 	    min: laydate.now(), //设定最小日期为当前日期
+// 	    max: '2099-06-16 23:59:59', //最大日期
+	    istime: true,
+	    istoday: false,
+	    choose: function(datas){
+	    	etime.min = datas; //开始日选好后，重置结束日的最小日期
+	    	etime.start = datas //将结束日的初始值设定为开始日
+	    }
+	};
+	var etime = {
+	    elem: '#etime',
+	    format: 'YYYY-MM-DD',
+// 	    min: laydate.now(),
+// 	    max: '2099-06-16 23:59:59',
+	    istime: true,
+	    istoday: false,
+	    choose: function(datas){
+	    	btime.max = datas; //结束日选好后，重置开始日的最大日期
+	    }
+	};
+	
+	laydate(btime);
+	laydate(etime);
+</script>
+
+<script>
+
+function setPage(dir){
+	if(refreshPage(dir)){
+		getList();
+	}
+}
+function search(){
+	currentPage=1;
+	getList();
+}
+
+$(function(){
+	getList();
+})
+
+function getList(){
+	var bankMap;
+	$.ajax({
+		type:"post",
+		url:"/ydtu/bank/getList.htm",
+		data:{"currentPage":1, "pageSize":10},
+		dataType:"json",
+		async:false,
+		success:function(data){
+			checkResult(data.result);
+			bankMap=data.data;
+		}
+	})
+	$.ajax({
+		type:"post",
+		url:"/ydtu/charge/getList.htm",
+		data:$("#search_form").serialize() + getPage(),
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			data["bankMap"]=bankMap;
+			var html = template("chargeTemp", data);
+			$("#chargeContent").html(html);
+		}
+	})
+}
+</script>
+</body>
+</html>

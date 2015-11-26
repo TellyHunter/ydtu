@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>月卡管理</title>
+
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 月卡管理</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li><a href="/ydtu/page/custom/mem_car_list.html"><img src="../../resource/images/menu-icon-car.png" />车辆管理</a></li>
+			<li class="chose_2"><a href="/ydtu/page/custom/tparkcar_list.html"><img src="../../resource/images/menu-icon-card.png" />月卡管理</a></li>
+			<li><a href="/ydtu/page/custom/charge_list.html"><img src="../../resource/images/menu-icon-pay.png" />交易管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkinout_page.html"><img src="../../resource/images/menu-icon-park.png" />停车记录</a></li>
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark bor01">
+		<h2><span>我的月卡</span></h2>
+		<table  cellpadding=0 cellspacing=0 class="vehicle_management_table2">
+	  		<tr id="parkResultCont">
+	    		<script type="text/html" id="parkCarResult">
+	    		<td align="center">
+				<form id="sform">
+	    		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dataTableCar">
+				    <tr>
+				    	<th width="5%" align="center">序号</th>
+						<th width="12%" align="center">车牌号</th>
+						<th width="13%" align="center">停车场名</th>
+						<th width="11%" align="center">结束时间</th>
+						<th width="16%" align="center">操作</th>
+				    </tr>
+				    {{if data.length > 0}}
+				    	{{each data as r}}
+					    <tr>
+				      		<td>{{page.pageSize*(page.currentPage-1)+$index+1}}</td>
+				      		<td>{{r.carPlate}} </td>
+				      		<td>{{r.parkName}}</td>
+				      		<td>{{r.endDate }}</td>
+							<td>
+			      			<input type="button" id="submitBtn" value="续费" name="submitBtn3" onclick="applyMonthCard({{r.id}})"  class="revised_data2"/>
+							</td>
+				      	</tr>
+			      		{{/each}}
+						{{else}}
+						<tr><td colspan="9" style="margin-left: 20px;font-size: 17px;">暂无数据</td></tr>
+			      	{{/if}}
+				    <tr>
+				    	<td colspan="9"  bordercolor="#EEEEEE">
+				    		<div class="page">	
+								<span  onclick="setPage(1)" >首页</span>
+								<span  onclick="setPage(2)">上一页</span>
+								<span class="chose_1">{{page.currentPage}}</span>
+								<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+								<span onclick="setPage(3)">下一页</span>
+								<span onclick="setPage(4)">末页</span>
+				    		</div>		
+				    	</td>			    	
+			        </tr>
+	  			</table>
+    			</form>
+	  			</td>
+				</script>	
+	 		 </tr>
+    	</table>
+		</div> 
+	</div>
+</div>
+<!--mainContent End-->
+
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+<script>
+
+function setPage(dir){
+	if(refreshPage(dir)){
+		getList();
+	}
+}
+
+function getList(){
+	$.ajax({
+		type:"post",
+		url:"/ydtu/tparkcar/getList.htm",
+		data:$("#sform").serialize()+getPage(),
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				var html = template('parkCarResult', data);
+				$("#parkResultCont").html(html);
+			}
+		}
+	});
+}
+$(function(){
+	//加载扩展模块
+	layer.config({
+	    extend: 'extend/layer.ext.js'
+	});
+	getList();
+})
+
+function applyMonthCard(id){
+	window.location.href="/ydtu/page/custom/tparkcar_charge.html?" + base64encode("id="+id);
+}
+
+// function del(id){
+// 	layer.confirm('确定要删除吗？', {
+// 		title:['提示信息','font-size:20px;'],
+// 		btn: ['确定','取消'] //按钮
+// 	}, function(){
+// 		$.ajax({
+// 			type:"post",
+// 			url:"/ydtu/tparkcar/delete.htm",
+// 			data:{"id":id},
+// 			dataType:"json",
+// 			success:function(data){
+// 				checkResult(data.result);
+// 				if(data.result == SUCCESS){
+// 					layer.msg("删除成功！");
+// // 					window.location.href="/ydtu/page/custom/tparkcar_list.html";
+// 					setTimeout(function(){
+// 						location.reload();
+// 					}, 500)
+// 				}else if(data.result == FAIL){
+// 					layer.msg("删除失败！");
+// 				}else{
+// 					layer.msg("月卡正在使用中，不能删除！");
+// 				}
+// 			}
+// 		})
+// 	}, function(){
+		
+// 	});
+// }
+</script>
+
+</body>
+</html>

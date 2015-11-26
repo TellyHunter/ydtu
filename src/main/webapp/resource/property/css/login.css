@@ -1,0 +1,122 @@
+
+
+body{ background:#f9f9f9;}
+
+<!----------logo、菜单导航 Start----------->
+.color_37{ color:#3798db;}
+.color_30{ color:#30cc71;}
+.color_9b{ color:#9b59b6;}
+.color_f1{ color:#f1c40e;}
+.color_ff{ color:#ffffff; background:#e74e3e;}
+.color_95{ color:#95a5a6;}
+
+.color_37:hover{ color:#2980b9;text-decoration:none;}
+.color_30:hover{ color:#27ae60;text-decoration:none;}
+.color_9b:hover{ color:#8e46ac;text-decoration:none;}
+.color_f1:hover{ color:#f39c12;text-decoration:none;}
+.color_95:hover{ color:#7f8c8d;text-decoration:none;}
+
+
+.top_box{ width:100%; height:auto; background:#fff; border-bottom:1px solid #e2740e;}
+
+.in_top{ width:980px; height:auto; margin:0px auto; line-height:43px;}
+.in_top .logo{ width:190px; height:72px; float:left; padding-top:28px;}
+
+.in_top ul{ width:492px; height:52px; padding-top:48px; float:right;}
+.in_top ul li{width:82px; height:25px; float:left;}
+.in_top ul li a{ display:block; width:81px; height:25px; text-align:center; font-size:16px; line-height:25px;text-decoration:none;}
+.in_top ul li .color_37{color:#3798db;}
+.in_top ul li .color_37:hover{color:#2980b9;text-decoration:none;}
+<!----------logo、菜单导航 End----------->
+
+
+
+
+
+.main_content_box{width:100%; background:#f00; height:50px;}
+.main_content{ width:980px; height:100%; margin:40px auto; background:url(../images/curandtex2.png) no-repeat 438px 54px; position:relative;}
+
+#Iin_box{ width:320px; height:auto; margin-top:20px; margin-left:40px; background:#fff; border:1px solid #efefef;}
+.title_box{ width:295px; height:27px; margin:0px auto; border-bottom:1px solid #e8e8e8; text-indent:5px; font-size:16px; color:#222; padding-top:20px;}
+
+.input_list{ width:278px; height:40px; margin:15px auto;}
+.input_list2{ width:278px; height:45px; font-size:12px; color:#a9a9a9; margin:15px auto; margin-bottom:40px; border:1px solid #d9d9d9;}
+
+
+#CarPark_Login{ padding-left:0px; text-indent:10px;}
+
+.input_name{ background:url(../images/accound_password.png) no-repeat 10px 10px;}
+.input_password{ background:url(../images/accound_password.png) no-repeat 10px -20px;}
+
+
+.input_border{ border:1px solid #d9d9d9; border-radius:5px; padding-left:50px; height:40px; line-height:40px; width:228px;font-family:'微软雅黑';}
+
+
+
+.verification_code{ width:130px; height:40px; float:left;}
+.verification_code_img{ width:146px; height:40px; float:right; text-align:right;}
+.verification_code_img img{ cursor:pointer;}
+
+
+	.input_code{ width:107px; line-height:40px; padding:0px 10px;}
+.input_login{ width:100%; background:#e2740e; text-align:center; color:#fff; font-size:18px; letter-spacing:2px; border:1px solid #c9680c; padding:0px; font-family:'微软雅黑'; font-size:14px;}
+
+.verification_code .checkbox{ display:block; padding-left:22px; font-size:14px; background:url(../images/check_box.png) no-repeat 0px 0px; color:#666; cursor:pointer;}
+.verification_code .checkbox:hover{background:url(../images/check_box.png) no-repeat 0px -17px; cursor:pointer;}
+.verification_code .checkbox_checked{ display:block; padding-left:22px; font-size:14px;  background:url(../images/check_box.png) no-repeat 0px -39px;color:#e2740e; cursor:pointer;}
+
+.verification_code_img a{color:#e2740e; text-decoration:underline;}
+
+
+
+
+
+
+.find_password_title { width:auto; height:auto;  background:#fff; padding-bottom:20px;border:1px solid #Efefef;}
+
+.find_password_title .title_icon{ width:937px; height:27px; margin:0px auto; border-bottom:1px solid #Efefef ; line-height:27px; padding-top:22px; position:relative;}
+.find_password_title  .title_icon .posion{ width:auto; height:30px; position:absolute; left:0px; top:19px;}
+.find_password_title  .title_icon .posion_1{ border-bottom:1px solid #e2740e;}
+.find_password_title  .title_icon span{ padding:0px 10px;  color:#e2740e; font-size:16px; display:block; width:auto;}
+
+.title_icon samp{ float:right; font-size:16px;color:#666; font-family:'寰蒋闆呴粦';}
+.title_icon samp a{ padding:0px 30px 0px 5px; background:url(../images/backgroun_all_pic.png) no-repeat 27px -134px;}
+
+
+.find_passwerd_box{ width:auto; height:auto;background:url(../images/find_password_bg.png) no-repeat 583px 35px #fff;}
+
+.find_passwerd_boxen{background:url(../images/find_password_bg.png) no-repeat 583px 35px #fff;}
+.find_passwerd_boxer{ background:url(../images/backgroun_all_pic.png) no-repeat 583px 35px #fff;}
+
+.find_passwerd_box table{ width:540px; margin-left:20px;margin-top: 20px;}
+.find_passwerd_box table td{ height:60px; }
+.find_passwerd_box table .left_td{ text-align:right; color:#333;}
+.find_passwerd_box table .input_sytle{border-radius:5px; border:1px solid #e8e8e8; height:40px; line-height:40px; width:260px;text-indent:10px;}
+
+.Check_code_box{ height:38px; line-height:38px; border-radius:5px; border:1px solid #e8e8e8; text-align:left; text-indent:10px;  width:260px; display:block;}
+.Check_code_box a{ text-decoration:underline; padding-left:5px; border-left:1px solid #e8e8e8;}
+#Check_code{ border:none;line-height:35px;height:35px; width:160px; border:1px solid #fff;}
+.correct{ padding:10px; background:url(../images/backgroun_all_pic.png) no-repeat -90px -140px; padding-left:25px;}
+.error{ padding:10px; background:url(../images/backgroun_all_pic.png) no-repeat -90px -195px;padding-left:25px;}
+.strength{ padding:0px 30px; background:url(../images/backgroun_all_pic.png) no-repeat -10px -33px;}
+.strength_yello{background:url(../images/backgroun_all_pic.png) no-repeat -10px -51px;}
+
+
+.find_passwerd_box .rech_process{ width:520px; height:84px;margin-left:20px; padding-top:20px;}
+.itm_bg{ margin-top:40px; height:4px; background:url(../images/center_bg.png) repeat-x left top;position:relative;width:520px; }
+.yuan_bg{ width:24px; height:24px; background:url(../images/yuan_24_24.png) no-repeat left top; position:absolute; text-align:center; line-height:24px; color:#555;}
+.yuan_bg_1{ left:0px; top:-10px;}
+.yuan_bg_2{left:260px; top:-10px;}
+.yuan_bg_3{left:500px; top:-10px;}
+
+
+.text{width:100px; height:24px; position:absolute; text-align:center; line-height:24px; color:#555;}
+.text_1{ left:-35px; top:20px;}
+.text_2{left:225px; top:20px;}
+.text_3{left:463px; top:20px;}
+
+.color_e2{color:#e2740e;}
+
+.text_p{ width:520px; text-align:center; padding:70px 0px; }
+.text_p p{ line-height:20px;font-size:14px;}
+.text_p p a{ text-decoration:underline; color:#666;}

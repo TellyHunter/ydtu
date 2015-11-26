@@ -1,0 +1,124 @@
+<!DOCTYPE html> 
+<html lang="zh-cn"> 
+<head> 
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<title></title> 
+<style type="text/css"> 
+body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#map{width:100%;height:500px;}
+		p{margin-left:5px; font-size:14px;}
+</style> 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=wqBXfIN3HkpM1AHKWujjCdsi"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script> 
+</head> 
+<body> 
+<div id="map"></div> 
+<div id="divShow" style="display:none;width:100%;position:absolute;bottom:0;background-color:white;font-size: 17px;font-weight:bold;">
+<div style="height:30px;margin-top: 5px;margin-left: 5px;margin-right: 5px">
+<span id="parkName" style="float:left"></span>
+<span id="dist"  style="float:right; "></span>
+</div>
+<div style="margin-top: 3px;width: 100%;text-align: center;margin-bottom: 5px;">
+<a onclick="driver()" style="width: 100%;height: 35px;color: #0baae4;border:0;">显示驾车路线</a>
+</div>
+</div>
+</body> 
+</html> 
+<script> 
+
+
+//初始化地图 
+map = new BMap.Map("map");
+
+
+$(function(){ 
+navigator.geolocation.getCurrentPosition(translatePoint); //定位 
+}); 
+function translatePoint(position){ 
+var currentLat = position.coords.latitude; 
+var currentLon = position.coords.longitude; 
+var gpsPoint = new BMap.Point(currentLon, currentLat); 
+BMap.Convertor.translate(gpsPoint, 0, initMap); //转换坐标 
+} 
+var pointA;
+function initMap(point){ 
+pointA= point;
+map.addControl(new BMap.NavigationControl()); 
+map.addControl(new BMap.ScaleControl()); 
+map.addControl(new BMap.OverviewMapControl()); 
+map.centerAndZoom(point, 15); 
+
+map.addEventListener("dragend", function (e) {
+	addMarket();
+});
+map.addEventListener("zoomend", function (e) {
+	addMarket();
+});
+
+	addMarket();
+} 
+
+function addMarket(){
+var bs = map.getBounds();   //获取可视区域
+	var bssw = bs.getSouthWest();   //可视区域左下角
+	var bsne = bs.getNorthEast();   //可视区域右上角
+	$.ajax({
+			type : "post",
+			url: "/ydtu/companyPark/getList.htm",
+			data: {"currentPage": 1,"pageSize":30,"positionX":bssw.lng,"positionY":bssw.lat,"positionX2":bsne.lng,"positionY2":bsne.lat},
+			dataType: "json",
+			async: false,
+			success: function(data){
+
+					if(data.result == "SUCCESS"){
+						//var data_info = [[114.078356,22.719619,"王府井大街88号"],
+						// [114.077511,22.720027,"东华门大街"],
+						// [114.077493,22.718919,"正义路甲5号"]
+						//];
+					var data_info=data.data;
+					for(var i=0;i<data_info.length;i++){
+						var marker = new BMap.Marker(new BMap.Point(data_info[i].positionX,data_info[i].positionY));  // 创建标注
+						map.addOverlay(marker);               // 将标注添加到地图中
+						
+						var pointB=new BMap.Point(data_info[i].positionX,data_info[i].positionY);
+						var dist=(map.getDistance(pointA,pointB)/1000).toFixed(2);
+						data_info[i]["dist"]=dist;
+						addClickHandler(data_info[i],marker);
+						
+					}
+				}else{
+					
+				}
+			}
+		})
+		
+	
+	
+
+}
+	var click_data;
+	function addClickHandler(data,marker){
+		marker.addEventListener("click",function(e){
+			click_data=data;
+			$("#parkName").text(data.parkName);
+			$("#dist").text("距您"+data.dist+"公里");
+			$("#divShow").show();
+		});
+	}
+	function openInfo(content,e){
+		var p = e.target;
+		var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+		var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+		map.openInfoWindow(infoWindow,point); //开启信息窗口
+	}
+	function driver(){
+		map.clearOverlays();
+		var p2 = new BMap.Point(click_data.positionX,click_data.positionY);
+		var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+		driving.search(pointA, p2);
+		driving.setResultsHtmlSetCallback(addMarket)
+	}
+</script> 

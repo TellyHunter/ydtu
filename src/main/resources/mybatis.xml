@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >  
+<generatorConfiguration >  
+  <context id="context1" >  
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@192.168.2.21:1521:ORCL" userId="atfm" password="atfm" />  
+    <javaModelGenerator targetPackage="com.topsci.atfm.persistence.mybatis.model" targetProject="ATFM" />  
+    <sqlMapGenerator targetPackage="com.topsci.atfm.persistence.mybatis.mapper" targetProject="ATFM" ></sqlMapGenerator>  
+    <javaClientGenerator targetPackage="com.topsci.atfm.persistence.mybatis.client" targetProject="ATFM" type="XMLMAPPER" />  
+    <table schema="" tableName="ATFM_ROUTE_CTRL" ></table>  
+    <table tableName="SYN_TRACK_EST" domainObjectName="AtfmTrack"></table>  
+  </context>  
+</generatorConfiguration>  

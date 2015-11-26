@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/frozen/js/frozen.js"></script>
+   <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b">
+            <i class="ui-icon-return" onclick="history.back()"></i><h1>支付</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+        </header>	
+        <div id="dispater"></div>
+<script type="text/javascript">
+
+var orderId=localStorage.orderId;
+localStorage.removeItem("orderId");
+$.ajax({
+	url:linkPre+"/ydtu/phoneAlipayWapDemo.htm",
+	type:"post",
+	data:{"orderId":orderId},
+	dataType:"html",
+	success:function(data){
+			$("#dispater").html(data);
+	}
+});
+</script>
+
+</body>
+</html>

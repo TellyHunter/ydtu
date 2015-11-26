@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>更换手机</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet"  href="../../resource/css/login.css"/>
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+<!-- 表单验证 -->
+
+<script type="text/javascript">
+	$(function() {
+		$("#modForm").validate({
+			rules : {
+				phone : {
+					required : true,
+					phoneCheck : true
+				},
+				code : {
+					required : true
+				},
+				newPhone : {
+					required : true,
+					phoneCheck : true
+				}
+			},
+			messages : {
+				phone : {
+					required : "请输入手机号"
+				},
+				code : {
+					required : "请输入验证码"
+				},
+				newPhone : {
+					required : "请输入新手机号"
+				}
+			},
+			submitHandler : function(form) { //通过之后回调 
+				codeTest();
+			},
+			invalidHandler : function(form, validator) { //不通过回调 
+				return false;
+			}
+		});
+	})
+</script>
+	
+</head>
+<body>
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+    	<tr>
+        <td height="50" bgcolor="#FFFFFF">
+        <div class="Usuallypark2 bor01">
+			<h2><span>更换手机</span></h2>
+			<ul>
+             <!------------内容主体部分 Start-------------->
+			<div id="Content_box">
+				<div class="main_content main_find_password">
+					<div class="main_insq find_password_title">
+						<div class="find_passwerd_box">
+							<form id="modForm">
+							<table width="100%" border="0" cellpadding=0 cellspacing=0 >
+								<tr>
+							    	<td width="88"  class="left_td"><p>手机号：</p></td>
+							    	<td width="276"  ><samp class="Check_code2_box"><input type="text" name="phone" class=" check_code2" id="Check_code" maxlength="15"/><a href="javascript:;" id="J_BtnMobileCode"><span id="fff">获取验证码</span></a> </samp>
+							    	<label id="msg" for="Check_code" class="tip" tip="请输入手机号码"></label>
+							    	</td>
+							    </tr>
+							    <tr>
+							      	<td  class="left_td"><p>手机验证码：</p></td>
+							      	<td><input type="text" name="code" class="input_sytle" id="code"/>
+							      	<label id="cmsg" for="code" class="tip" tip="请输入验证码"></label>
+							      	</td>
+							    </tr> 
+							    <tr>
+							      	<td  class="left_td"><p>新手机号：</p></td>
+							      	<td><input type="text" name="newPhone" class="input_sytle" id="newPhone"/>
+							      	<label id="nmsg" for="newPhone" class="tip" tip="请输入新手机号"></label>
+							      	</td>
+							    </tr> 
+							    <tr>
+							        <td>&nbsp;</td>
+							      	<td><input type="submit" name="input_login"  style="width:262px;" value="提交" class="input_border input_login"/></td>
+							      	<td>&nbsp;</td>
+							    </tr>
+							 </table>
+							 </form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!------------内容主体部分 End-------------->
+			</ul>
+		</div>
+        </td>
+      </tr>
+      <tr>
+        <td bgcolor="#FFFFFF">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+	function codeTest() {
+		$.ajax({
+			type : "POST",
+			url : '/ydtu/tmember/codeTest.htm',
+			data : $("#modForm").serialize(),
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				checkResult(data.result);
+				if(data.result == SUCCESS){
+					layer.alert("修改成功，请重新登录！");
+					setTimeout(function(){
+						location.href = "/ydtu/page/custom/login.html";
+					}, 1000);
+				}else{
+					if(data.data == 'FAIL'){
+						$("#cmsg").text("验证码输入错误").addClass("error1").show();
+					}else if(data.data == 'ERROR'){
+						$("#nmsg").text("新手机号已存在").addClass("error1").show();
+					}
+				}
+			}
+		});
+	}
+	
+	function phoneReg() {
+		var val = $("#Check_code").val();
+		if (val.trim() == "") {
+			$("#msg").text("请输入手机号").addClass("error1").show();
+			return;
+		}
+		var re = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		if (!re.test(val) || val.length != 11) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+
+	var vcode_status = 0;
+	var countdown = 60;
+	$("#J_BtnMobileCode").click(function() {
+		if (!phoneReg()) {
+			return false;
+		}
+		if (vcode_status == 0) {
+			$.ajax({
+				type : "post",
+				url : '/ydtu/tmember/sendCode.htm',
+				data : {
+					"phone" : $("#Check_code").val()
+				},
+				dataType : 'json',
+				success : function(data) {
+					checkResult(data.result);
+					if (data.result == 'FAIL') {
+						$("#msg").text("原手机号输入错误").addClass("error1").show();
+						return;
+					} else {
+						settime();
+					}
+				}
+			});
+		}
+	})
+	function settime() {
+		countdown--;
+		if (countdown <= 0) {
+			vcode_status = 0;
+			$("#fff").text("获取验证码");
+			countdown = 60;
+		} else {
+			setTimeout(settime, 1000);
+			vcode_status = 1;
+			$("#fff").text(countdown + "秒");
+		}
+	}
+</script>
+
+</body>
+</html>

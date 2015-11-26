@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>安全设置</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet"  href="../../resource/css/login.css"/>
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/layui/layer.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/result.js"></script>
+<!-- 表单验证 -->
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+		<tr>
+        	<td height="50" bgcolor="#FFFFFF">
+	        	<div class="Usuallypark2 bor01">
+				<h2><span id="mailPage"></span><a href="/ydtu/page/custom/login.html">已有账户？马上登录</a></h2>
+				<ul>
+	             <!------------内容主体部分 Start-------------->
+				<div id="Content_box">
+					<div class="main_content main_find_password">
+						<div class="main_insq find_password_title">
+	  						<div class="find_passwerd_box" id="mailContent">
+	  							<script type="text/html" id="mailTemp">
+	  							<form id="modPaswdForm"  method="post">
+	  							<table width="100%" border="0" cellpadding=0 cellspacing=0 class="user_center_table">
+	  								{{if type==4}}
+								 	<tr>
+								      	<td width="112"  class="left_td"><p>邮箱：</p></td>
+								      	<td width="409"  ><input type="text" name="mail" value="{{data.email}}" class="input_sytle"  disabled="disabled"><br>
+								      	<label id="msg" for="email" class="tip" tip="请输入邮箱"></label>
+								      	</td>
+								    </tr> 
+								    {{/if}}
+								    <tr>
+								      	<td width="112"  class="left_td"><p>新邮箱：</p></td>
+								      	<td width="409"  ><input type="text" name="newEmail" class="input_sytle"  id="newEmail"/>
+								      	<label id="nmsg" for="newEmail" class="tip" tip="请输入新邮箱"></label>
+								      	</td>
+								    </tr> 
+								    <tr>
+								       	<td class="left_td"><p>请确认新邮箱：</p></td>
+								       	<td><input type="text" name="reMail" class="input_sytle" id="reMail"/>
+								       	<label for="reMail" class="tip" tip="请确认新邮箱"></label>
+								       	</td>
+								    </tr> 
+								    <tr>
+								      	<td>&nbsp;</td>
+								      	<td><input type="submit" name="input_login"  style="width:262px;" value="下一步" class="input_border input_login" id="Input_login"/></td>
+								      	<td>&nbsp;</td>
+								    </tr>
+	  							</table>
+	  							</form>
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!------------内容主体部分 End-------------->
+				</ul>
+				</div>
+       		 </td>
+      	</tr>
+      	<tr>
+        	<td bgcolor="#FFFFFF">
+        	</td>
+      	</tr>
+		</tbody>
+	</table>
+</div>
+
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+	var type = getQueryString("type");
+	if (type == 3) {
+		$("#mailPage").text("邮箱绑定");
+	} else {
+		$("#mailPage").text("邮箱修改");
+	}
+
+	$.ajax({
+		type : "post",
+		url : "/ydtu/tmember/getBean.htm",
+		dataType : "json",
+		async:false,
+		success : function(data) {
+			checkResult(data.result);
+			data["type"] = type;
+			var html = template("mailTemp", data);
+			$("#mailContent").html(html);
+		}
+	})
+
+	$(function() {
+		$("#modPaswdForm").validate({
+			rules : {
+				mail : {
+					email : true
+				},
+				newEmail : {
+					required : true,
+					email : true
+				},
+				reMail : {
+					equalTo : "#newEmail"
+				}
+			},
+			messages : {
+				mail : {
+					email : "邮箱格式不正确"
+				},
+				newEmail : {
+					required : "请输入新邮箱",
+					email : "邮箱格式不正确"
+				},
+				reMail : {
+					equalTo : "两次邮箱输入不一致"
+				}
+			},
+			submitHandler : function(form) { //通过之后回调 
+				checkMail();
+			},
+			invalidHandler : function(form, validator) { //不通过回调 
+				return false;
+			}
+		});
+	})
+
+	function checkMail() {
+		$.ajax({
+			type : "post",
+			url : "/ydtu/tmember/checkMail.htm",
+			data : $("#modPaswdForm").serialize(),
+			dataType : "json",
+			success : function(data) {
+				checkResult(data.result);
+				if (data.result == SUCCESS) {
+					layer.confirm('修改成功，要返回个人信息页面吗？', {
+						title:['提示信息','font-size:20px;'],
+						btn: ['确定','取消'] //按钮
+					}, function(){
+						window.location.href = "/ydtu/page/custom/infomation.html";
+					},function(){
+						 location.reload();
+					});
+				} else {
+					if (data.data = "REPEAT") {
+						$("#nmsg").text("请输入新邮箱").addClass("error1").show();
+					}
+				}
+			}
+		});
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+
+input.error1 { border: 1px solid red; }
+label.error1 {
+	margin-left: 12px;
+    color: #f00;
+    line-height: 36px;
+    height: 36px;
+    position: absolute;
+    width: 185px;
+    padding: 0 5px;
+    background: #FFEBEB;
+    border: 1px solid #ffbdbe;
+}
+label.normal{
+	margin-left: 12px;
+    color:#666;
+    line-height: 36px;
+    height: 36px;
+    position: absolute;
+    width: 185px;
+    padding: 0 5px;
+    background: #f7f7f7;
+    border: 1px solid #dddddd;
+}
+/* label.checked { */
+/*     background:url("./demo/images/checked.gif") no-repeat 0px 0px; */
+/* } */
+label.focus{
+	margin-left: 12px;
+    color:#666;
+    line-height: 36px;
+    height: 36px;
+    position: absolute;
+    width: 185px;
+    padding: 0 5px;
+    background: #f7f7f7;
+    border: 1px solid #dddddd;
+}

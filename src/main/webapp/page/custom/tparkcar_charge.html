@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车辆管理</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+<script src="../../resource/laydate-master/laydate.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<!-- 表单验证 -->
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+<script src="../../resource/js/jquery.validate2.js"></script>
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 充值中心</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li><a href=""><img src="../../resource/images/menu-icon-wu.png" />缴费</a></li>
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark bor01" id="chargeContent">
+		<script type="text/html" id="chargeTemp">
+	    <h2><span>缴费</span></h2>
+	    <form id="chargeForm" method="post" target="_blank" style="margin:20px 0px 0px 0px">
+		<table width="700" border="0" cellspacing="0" cellpadding="0"  class="jiao_table2">
+			<tbody>
+				<input type="hidden" name="carPlate" value="{{data.carPlate}}">
+		    	<input type="hidden" name="parkId" value="{{data.parkId }}">
+		    	<input type="hidden" name="companyId" value="{{data.companyId }}">	
+				<input type="hidden" name="endDate" id="endDate">
+				<input type="hidden" name="amount" id="amount">
+				<input type="hidden" name="payType" value="1">
+				<input type="hidden" name="orginType" value="1">
+
+				<tr>
+			    	<td width="144" height="40" style="text-align: right">停车场：</td>
+			    	<td width="556">&nbsp;
+						{{data.parkName}}
+			    	</td>
+			    </tr>
+				
+			    <tr>
+			    	<td height="40" style="text-align: right">月卡类型：</td>
+			    	<td>&nbsp;&nbsp;{{data.ruleName }}</td>
+			    </tr>
+				
+			    <tr>
+			    	<td height="40" style="text-align: right">车牌：</td>
+			    	<td>&nbsp;&nbsp;{{data.carPlate }}</td>
+			    </tr>
+			    <tr>
+			    	<td height="40" style="text-align: right">充值方式：</td>
+			    	<td> &nbsp;&nbsp;
+				    	<select id="type" name="timetype" onchange="calculate();" class="select2"  title="选择方式">
+							<option value="1">按日充</option>
+							<option value="2">按月充</option>
+							<option value="3">按季度充</option>
+							<option value="4">按年充</option>
+				        </select>
+			        </td>
+			    </tr>
+			    <tr>
+			    	<td height="40" style="text-align: right"><span id="unit">数量：</span></td>
+			    	<td>&nbsp;&nbsp;<input type="number" class="input2" name="num" id="num" onblur="calculate();" onkeyup="value=value.replace(/\D+/g,'');"/ style="width: 88px;height: 32px;margin-left: 4px;padding-left: 10px;">
+			        <input type="button" name="button"  class="input3" id="button" value="计算" style="height: 28px;margin-left: 16px;"/>
+			        <label for="num" class="tip" tip="请输入充值数量"></label></td>
+			    </tr>
+				<!-- 
+			    <tr>
+			    	<td height="40" style="text-align: right">开始日期：</td>
+			    	<td>&nbsp;&nbsp;<span id="new_startDate" style="margin:0px 0px 0px 3px"></span></td>
+			    </tr>
+				-->
+			    <tr>
+			    	<td height="40" style="text-align: right">截至日期：</td>
+			    	<td>&nbsp;&nbsp;<span id="new_endDate" style="margin-left: 3px"></span></td>
+			    </tr>
+			    <tr>
+			    	<td height="40" style="text-align: right">金额：</td>
+			    	<td>&nbsp;&nbsp;<span id="cost"></span></td>
+			    </tr>
+
+			   	<tr>
+			      	<td height="40" style="text-align: right">&nbsp;</td>
+			      	<td>
+				      	<div class="jfbtn_box">
+							<input type="submit" value="下一步" class="button"/>
+						</div>
+					</td>
+			    </tr>
+			</tbody>
+		</table>
+		</form>
+		</script>
+		</div>
+	</div>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script type="text/javascript">
+//初始化数据
+var dayFee;
+var monthFee;
+var seasonFee;
+var yearFee;
+var endDate;
+var ruleId;
+var localId;
+var parkId;
+//判断是否能计算金额
+var flag = true;
+//返回靠后的日期
+function getEndDate(d1){
+	var d2 = new Date();
+	if(d1 == null){
+		return d2;
+	}else{
+		var d = new Date(d1.replace(/-/g,"/"));
+		if(d.valueOf() >= d2.valueOf()){
+			return d;
+		}else{
+			return d2;
+		}
+	}
+}
+
+
+$("#button").click(function(){
+	calculate();
+})
+
+
+$(function(){
+	var id = getQueryString("id");
+	//模板加载
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tparkcar/getBean.htm",
+		data:{"id": id},
+		dataType:"json",
+		async:false,
+		success:function(data){
+			checkResult(data.result);
+			var html = template("chargeTemp", data);
+			$("#chargeContent").html(html);
+			if(null != data){
+				localId = data.data.payRule;
+				parkId = data.data.parkId;
+				endDate = getEndDate(data.data.endDate).pattern("yyyy-MM-dd");
+// 				$("#new_startDate").text(endDate);
+// 				$("#new_endDate").text(endDate);
+			}
+		}		
+	})
+	//收费标准加载
+	$.ajax({
+		type: "post",
+		url: "/ydtu/carpayrule/getBean.htm",
+		data:{"parkId": parkId, "localId": localId},
+		dataType:"json",
+		async:false,
+		success:function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				dayFee = data.data.dayFee;
+				monthFee = data.data.monthFee;
+				seasonFee = data.data.seasonFee;
+				yearFee = data.data.yearFee;
+			}else{
+				flag = false;
+			}
+		}
+	})
+})
+
+
+//计算费用
+function calculate(){
+	if(!flag){
+		layer.msg("没有对应的缴费规则");
+		return;
+	}
+	var type=$("#type").val();
+	var num=$("#num").val();
+	var reg = /^\d+$/;
+	var sum;
+	if(!reg.test(num)){
+		return false;
+	}
+	var d = new Date(endDate);
+	if(type=="1"){
+		sum=num*dayFee;
+		d.setDate(d.getDate()+parseInt(num));
+		$("#unit").text("天数：");
+	}
+	else if(type=="2"){
+		sum=num*monthFee;
+		d.setMonth(d.getMonth()+parseInt(num));
+		$("#unit").text("月数：");
+	}
+	else if(type=="3"){
+		sum=num*seasonFee;
+		d.setMonth(d.getMonth()+parseInt(num)*3);
+		$("#unit").text("季数：");
+	}
+	else if(type=="4"){
+		sum=num*yearFee;
+		d.setFullYear(d.getFullYear()+parseInt(num))
+		$("#unit").text("年数：");
+	}
+	$("#cost").html(sum);
+	$("#amount").val(sum);
+	$("#num").val(num);
+	$("#new_endDate").html(d.pattern("yyyy-MM-dd"));
+	$("#endDate").val(d.pattern("yyyy-MM-dd"));
+}
+
+<!-- 表单验证 -->
+$(function() {
+	 $("#chargeForm").validate({
+		 rules:{
+			 num:{
+				required:true,
+				digits:true,
+				range:[1,99]
+			 }
+		 },
+		 messages:{
+			 num:{
+				 required:"请输入天数",
+				 digits:"必须输入正整数",	
+				 range:"介于1至99" 
+			 }
+		 },
+		 submitHandler: function(form) {  //通过之后回调 
+			sub();
+		 	return;
+        }, 
+        invalidHandler: function(form, validator) {  //不通过回调 
+         	return false;
+        }
+	 });
+});
+<!-- 表单验证 -->
+
+//生成订单，跳转到选择支付
+function sub(){
+	var orderId;
+	$.ajax({
+		url:linkPre+"/ydtu/charge/save.htm",
+		type:"post",
+		data: $("#chargeForm").serialize(),
+		dataType:"json",
+		async: false,
+		success:function(data){
+			checkResult(data.result);
+			if(data.result==SUCCESS){
+				orderId=data.data.orderId;	
+				location.href="payType.html?"+ base64encode("orderId="+orderId);;
+			}
+			else{
+				layer.msg("订单生成失败！请稍后再试");
+				return;
+			}
+		}
+	});
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>充值中心</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script type="text/javascript" src="../../resource/js/public.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+
+
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+<!-- 表单验证 -->
+<script type="text/javascript">
+	//加载扩展模块
+	layer.config({
+		extend : 'extend/layer.ext.js'
+	});
+
+	var orderId = getQueryString("orderId");
+	var payway;
+
+	function chargeType(type) {
+		payway = type;
+	}
+	function sub() {
+		if (payway == undefined) {
+			layer.alert("请选择支付方式");
+			return false;
+		}
+		payTip();
+	}
+
+	function payTip() {
+		window.open("/ydtu/custom/charge.htm?orderId=" + orderId + "&payway="
+				+ payway + "", "_blank");
+
+		//询问框
+		layer.confirm('请您在新打开的支付平台页面进行支付，支付完成前请不要关闭该窗口', {
+			title : [ '登录平台支付', 'font-size:20px' ],
+			btn : [ '已完成支付', '支付遇到问题' ]
+		//按钮
+		}, function() {
+			getCharge();
+		}, function() {
+			layer.msg('可以选择其他方式进行支付');
+		});
+	}
+	
+
+	function getCharge() {
+		$.ajax({
+			type : "post",
+			url : "/ydtu/charge/getLast_charge.htm",
+			data : {"orderId" : orderId},
+			dataType : "json",
+			success : function(data) {
+				checkResult(data.result);
+				if (data.result == SUCCESS) {
+					layer.msg('支付成功');
+					window.location.href = "/ydtu/custom/index.htm";
+				} else {
+					layer.msg('支付失败');
+				}
+			}
+		})
+	}
+</script>
+</head>
+<body>
+
+
+
+	<!--header Begin-->
+	<div id="top_sidebar"></div>
+	<script>
+		$("#top_sidebar").load("top.html");
+	</script>
+	<!--header End-->
+
+
+	<!--mainContent Begin-->
+	<div class="mainContent">
+		<p class="area">首页 > 充值中心</p>
+		</p>
+		<div class="leftNav">
+			<ul>
+				<li class="chose_2"><a href=""><img
+						src="../../resource/images/menu-icon-wu.png" />充值中心</a></li>
+			</ul>
+		</div>
+
+		<div class="rightContent">
+			<div class="Usuallypark bor01">
+				<h2>
+					<span>支付方式</span>
+				</h2>
+				<form id="chargeForm" action="/ydtu/custom/charge.htm"
+					target="_blank">
+					<div class="information_main_box">
+						<table width="100%" border="0" cellpadding=0 cellspacing=0
+							class="user_center_table">
+							<tr>
+								<td>
+									<div class="content_right_box ging_fff">
+										<div id="Bank">
+											<ul class="ban_title">
+												<table width="400" border="0" cellspacing="0"
+													cellpadding="0">
+													<tbody>
+														<tr>
+															<td class="titlie_li" id="titlie_li_1"><a href="#"
+																class="title_a e2" id="titlie_a_1">储蓄卡</a></td>
+															<td class="titlie_li" id="titlie_li_2"><a href="#"
+																class="title_a" id="titlie_a_2">信用卡</a></td>
+															<td class="titlie_li" id="titlie_li_3"><a href="#"
+																class="title_a" id="titlie_a_3">支付平台支付</a></td>
+														</tr>
+													</tbody>
+												</table>
+												<div class="c"></div>
+											</ul>
+
+											<div class="back_box" id="back_box_1" style="height: 300px;">
+												<input type="hidden" name="Quick_Method" id="Quick_Method" />
+												<!--<div>你还没有开通快捷支付！ <a href=" " title="马上开通" style="color:brown;text-decoration:underline;">开通快捷支付</a></div>-->
+												<ul>
+													<li class="back_li_first">
+														<table width="98%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tbody>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('ICBC-DEBIT')"><img
+																			src="../../resource/images/bank01.jpg" width="170"
+																			height="52" alt="工商银行" way="6" id="Quick_1" /><span
+																			id="Quick_choiced_1" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CMB-DEBIT')"><img
+																			src="../../resource/images/bank02.jpg" width="170"
+																			height="52" alt="招商银行" way="6" id="Quick_2" /><span
+																			id="Quick_choiced_2" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CCB-DEBIT')"><img
+																			src="../../resource/images/bank03.jpg" width="170"
+																			height="52" alt="建设银行" way="6" id="Quick_3" /><span
+																			id="Quick_choiced_3" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('ABC')"><img
+																			src="../../resource/images/bank04.jpg" width="170"
+																			height="52" alt="农业银行" way="6" id="Quick_4" /><span
+																			id="Quick_choiced_4" class="choiced"></span></li></td>
+
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('COMM')"><img
+																			src="../../resource/images/bank05.jpg" width="170"
+																			height="52" alt="交通银行" way="6" id="Quick_5" /><span
+																			id="Quick_choiced_5" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BOC-DEBIT')"><img
+																			src="../../resource/images/bank06.jpg" width="170"
+																			height="52" alt="中国银行" way="6" id="Quick_6" /><span
+																			id="Quick_choiced_6" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CIB')"><img
+																			src="../../resource/images/bank07.jpg" width="170"
+																			height="52" alt="兴业银行" way="6" id="Quick_7" /><span
+																			id="Quick_choiced_7" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CEB-DEBIT')"><img
+																			src="../../resource/images/bank08.jpg" width="170"
+																			height="52" alt="光大银行" way="6" id="Quick_8" /><span
+																			id="Quick_choiced_8" class="choiced"></span></li></td>
+
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SPDB-DEBIT')"><img
+																			src="../../resource/images/bank09.jpg" width="170"
+																			height="52" alt="浦发银行" way="6" id="Quick_9" /><span
+																			id="Quick_choiced_9" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('GDB-DEBIT')"><img
+																			src="../../resource/images/bank10.jpg" width="170"
+																			height="52" alt="广发银行" way="6" id="Quick_10" /><span
+																			id="Quick_choiced_10" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CITIC-DEBIT')"><img
+																			src="../../resource/images/bank11.jpg" width="170"
+																			height="52" alt="中信银行" way="6" id="Quick_11" /><span
+																			id="Quick_choiced_11" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CMBC')"><img
+																			src="../../resource/images/bank12.jpg" width="170"
+																			height="52" alt="民生银行" way="6" id="Quick_12" /><span
+																			id="Quick_choiced_12" class="choiced"></span></li></td>
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SPA-DEBIT')"><img
+																			src="../../resource/images/bank13.jpg" width="170"
+																			height="52" alt="平安银行" way="6" id="Quick_13" /><span
+																			id="Quick_choiced_13" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BJBANK')"><img
+																			src="../../resource/images/bank14.jpg" width="170"
+																			height="52" alt="北京银行" way="6" id="Quick_14" /><span
+																			id="Quick_choiced_14" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BJRCB')"><img
+																			src="../../resource/images/bank15.jpg" width="170"
+																			height="52" alt="北京农商" way="6" id="Quick_15" /><span
+																			id="Quick_choiced_15" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('PSBC-DEBIT')"><img
+																			src="../../resource/images/bank16.jpg" width="170"
+																			height="52" alt="邮政储蓄" way="6" id="Quick_16" /><span
+																			id="Quick_choiced_16" class="choiced"></span></li></td>
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SHRCB')"><img
+																			src="../../resource/images/bank17.jpg" width="170"
+																			height="52" alt="上海农商" way="6" id="Quick_17" /><span
+																			id="Quick_choiced_17" class="choiced"></span></li></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('HZCBB2C')"><img
+																			src="../../resource/images/bank18.jpg" width="170"
+																			height="52" alt="杭州银行" way="6" id="Quick_18" /><span
+																			id="Quick_choiced_18" class="choiced"></span></li></td>
+																	<td></td>
+																	<td></td>
+																</tr>
+															</tbody>
+														</table>
+													</li>
+												</ul>
+												<div class="c"></div>
+											</div>
+
+											<div class="back_box" id="back_box_2" style="height: 300px;">
+												<input type="hidden" name="Bank_Method" id="Bank_Method" />
+												<ul>
+													<li class="back_li_first">
+														<table width="98%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tbody>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('ICBCB2C')"><img
+																			src="../../resource/images/bank01.jpg" width="170"
+																			height="52" alt="工商银行" way="6" id="Bank_1" /><span
+																			id="choiced_1" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CMB')"><img
+																			src="../../resource/images/bank02.jpg" width="170"
+																			height="52" alt="招商银行" way="6" id="Bank_2" /><span
+																			id="choiced_2" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CCB')"><img
+																			src="../../resource/images/bank03.jpg" width="170"
+																			height="52" alt="建设银行" way="6" id="Bank_3" /><span
+																			id="choiced_3" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('ABC')"><img
+																			src="../../resource/images/bank04.jpg" width="170"
+																			height="52" alt="农业银行" way="6" id="Bank_4" /><span
+																			id="choiced_4" class="choiced"></span></td>
+
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('COMM')"><img
+																			src="../../resource/images/bank05.jpg" width="170"
+																			height="52" alt="交通银行" way="6" id="Bank_5" /><span
+																			id="choiced_5" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BOCB2C')"><img
+																			src="../../resource/images/bank06.jpg" width="170"
+																			height="52" alt="中国银行" way="6" id="Bank_6" /><span
+																			id="choiced_6" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CIB')"><img
+																			src="../../resource/images/bank07.jpg" width="170"
+																			height="52" alt="兴业银行" way="6" id="Bank_7" /><span
+																			id="choiced_7" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CEB-DEBIT')"><img
+																			src="../../resource/images/bank08.jpg" width="170"
+																			height="52" alt="光大银行" way="6" id="Bank_8" /><span
+																			id="choiced_8" class="choiced"></span></td>
+
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SPDB')"><img
+																			src="../../resource/images/bank09.jpg" width="170"
+																			height="52" alt="浦发银行" way="6" id="Bank_9" /><span
+																			id="choiced_9" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('GDB')"><img
+																			src="../../resource/images/bank10.jpg" width="170"
+																			height="52" alt="广发银行" way="6" id="Bank_10" /><span
+																			id="choiced_10" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CITIC-DEBIT')"><img
+																			src="../../resource/images/bank11.jpg" width="170"
+																			height="52" alt="中信银行" way="6" id="Bank_11" /><span
+																			id="choiced_11" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('CMBC')"><img
+																			src="../../resource/images/bank12.jpg" width="170"
+																			height="52" alt="民生银行" way="6" id="Bank_12" /><span
+																			id="choiced_12" class="choiced"></span></td>
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SPABANK')"><img
+																			src="../../resource/images/bank13.jpg" width="170"
+																			height="52" alt="平安银行" way="6" id="Bank_13" /><span
+																			id="choiced_13" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BJBANK')"><img
+																			src="../../resource/images/bank14.jpg" width="170"
+																			height="52" alt="北京银行" way="6" id="Bank_14" /><span
+																			id="choiced_14" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('BJRCB')"><img
+																			src="../../resource/images/bank15.jpg" width="170"
+																			height="52" alt="北京农商" way="6" id="Bank_15" /><span
+																			id="choiced_15" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('POSTGC')"><img
+																			src="../../resource/images/bank16.jpg" width="170"
+																			height="52" alt="邮政储蓄" way="6" id="Bank_16" /><span
+																			id="choiced_16" class="choiced"></span></td>
+																</tr>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('SHRCB')"><img
+																			src="../../resource/images/bank17.jpg" width="170"
+																			height="52" alt="上海农商" way="6" id="Bank_17" /><span
+																			id="choiced_17" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('HZCBB2C')"><img
+																			src="../../resource/images/bank18.jpg" width="170"
+																			height="52" alt="杭州银行" way="6" id="Bank_18" /><span
+																			id="choiced_18" class="choiced"></span></td>
+																	<td></td>
+																	<td></td>
+																</tr>
+															</tbody>
+														</table>
+													</li>
+												</ul>
+												<div class="c"></div>
+											</div>
+
+											<div class="back_box" id="back_box_3">
+												<input type="hidden" name="Platform_Method"
+													id="Platform_Method" />
+												<ul>
+													<li class="back_li_first">
+														<table width="98%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tbody>
+																<tr>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('1')"><img
+																			src="../../resource/images/pay02.jpg" width="168"
+																			height="51" alt="" way="6" id="Platform_2" /><span
+																			id="Platform_choiced_2" class="choiced"></span></td>
+																	<td><li class="back_li_first"
+																		onclick="chargeType('0')"><img
+																			src="../../resource/images/pay03.jpg" width="168"
+																			height="51" alt="" way="6" id="Platform_3" /><span
+																			id="Platform_choiced_3" class="choiced"></span></td>
+																	<td></td>
+																</tr>
+															</tbody>
+														</table>
+													</li>
+												</ul>
+												<div class="c"></div>
+											</div>
+										</div>
+										<div style="height: 40px;"></div>
+										<div class="button_box">
+											<input type="button" value="下一步" onclick="sub()"
+												class="button" />
+										</div>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<div class="height_20"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

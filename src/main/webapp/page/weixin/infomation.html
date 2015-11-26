@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<title>停车一道通</title>
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/template.js"></script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b"> <i
+			class="ui-icon-return" onclick ="closeWindow()"></i><h1>个人信息</h1><!-- <button class="ui-btn" onclick="index()">首页</button> -->
+</header>
+  
+        <section class="ui-container">
+	<div class="information_main_box" id="infoContent">
+       		<script type="text/html" id="infoTemp">
+            <ul class="ui-list ui-list-text ui-border-tb ui-list-link">
+                <li class="ui-border-t" onclick="modifyName();" id="name">
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap"><p>姓名：<span id="#display">{{data.realname}}</span>
+                    </div>
+                    <div class="ui-badge">修改</div>
+                </li>
+                 <li class="ui-border-t" onclick="change(1)">
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap"><p>手机号码: {{data.phone}}</p></h4>
+                    </div>
+                    <div class="ui-badge">修改</div>
+                </li>
+                <li class="ui-border-t" onclick="change(2)">
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap">
+                        <p>修改密码</p></h4>
+                    </div>
+                     <div class="ui-badge">修改</div>
+                </li>
+              	<li class="ui-border-t">
+                    <div class="ui-list-info">
+                        <h4 class="ui-nowrap">
+                        <p>余额：{{data.balance}}元</p></h4>
+                    </div>
+                </li>
+            </ul>
+            <div class="ui-btn-wrap">
+                <button class="ui-btn-lg ui-btn-primary"  onclick="loginOut();return false;">
+                    注销
+                </button>
+            </div>
+</script>
+	</div>
+        </section>
+	
+</body>
+
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+$.ajax({
+	type:"post",
+	url:linkPre+"/ydtu/tmember/getTmember.htm",
+	dataType:"json",
+	async:false,
+	success:function(data){
+		checkResult_weixin(data.result);
+		if(data.result == SUCCESS){
+			var html = template("infoTemp", data);
+			$("#infoContent").html(html);
+		}
+	}
+})
+
+function change(a){
+	if(a==1){
+		window.location.href = "changePhone.html";
+	}else{
+		window.location.href = "modify_pass.html";
+	}
+}
+function modifyName(){
+	window.location.href = "modify_username.html";
+}
+
+
+function loginOut(){
+	if (typeof WeixinJSBridge != "undefined"){
+	    $.ajax({ 
+	        type : "post", 
+	        url : linkPre+"/ydtu/weixin/unbind.htm", 
+	        data: {},
+	        dataType : "json", 
+	        async:false, 
+        	success : function(data) {
+            	checkResult_weixin(data.result);
+        	} 
+        });
+	}
+	$.ajax({ 
+	    type : "post", 
+	    url : linkPre+"/ydtu/logout.htm", 
+	    data: {},
+	    dataType : "json", 
+	    success : function(data) {
+	    	checkResult_weixin(data.result);
+	    	if(data.result == SUCCESS){
+	    		location.href="login.html";
+	    	}
+		} 
+	});
+	
+	
+	
+	return false;
+}
+
+
+// function index(){
+// 	location.href="/ydtu/weixin/index.htm";
+// }
+</script>
+</html>

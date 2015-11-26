@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>大拇指用户中心</title>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+</head>
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 >
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li><a href="/ydtu/page/custom/mem_car_list.html"><img src="../../resource/images/menu-icon-car.png" />车辆管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkcar_list.html"><img src="../../resource/images/menu-icon-card.png" />月卡管理</a></li>
+			<li><a href="/ydtu/page/custom/charge_list.html"><img src="../../resource/images/menu-icon-pay.png" />交易管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkinout_page.html"><img src="../../resource/images/menu-icon-park.png" />停车记录</a></li>
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="customerMes">
+			<dl>
+				<dt><a href="/ydtu/page/custom/infomation.html"><img src="../../resource/images/peopleImg.png" /></a></dt>
+				<dd class="userName" id="name"></dd>
+				<dd class="orange" id="phone"></dd>
+<!-- 				<dd>最近一次登录：<span>2015-5-28 22:06</span></dd> -->
+			</dl>
+			<ul>
+				<li>
+					<img src="../../resource/images/icon_2.png" />
+					<div class="detailMes">
+						账户余额
+						<span class="orange" id="balance"></span>
+					</div>
+				</li>
+				<li>
+					<img src="../../resource/images/icon_3.png" />
+					<div class="detailMes">
+						<a href="/ydtu/page/custom/mem_car_list.html">我的车</a>
+						<span class="orange" id="carNum"></span>
+					</div>
+				</li>
+				<li>
+					<img src="../../resource/images/icon_4.png" />
+					<div class="detailMes">
+						<a href="/ydtu/page/custom/tparkcar_list.html">月卡管理</a>
+						<span class="orange" id="monthCarNum"></span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="parkActually bor01">
+			<h2><span>停车实况</span></h2>
+			<div id="parkContent">
+			</div>
+			<script id="parkSituation" type="text/html">
+				{{if data.length > 0}}  
+					{{each data as dto}}
+						{{if $index == 0}}
+							<p>车牌  <span class="orange font28">{{dto.inCarPlate}}</span> 正在停车</p>
+							<p><span class="font70">{{dto.stopTime}}</span><img src="../../resource/images/icon_7.png" class="iconPark"/></p>
+							<p>{{dto.parkName}}</p>
+						{{/if}}
+					{{/each}}
+					{{else}}
+					<p style="margin-left: 10px;font-size: 17px;">暂无停车</p>
+				{{/if}}
+				
+			</script>
+		</div>
+		<div class="noticeAccount">
+			<div id="sysContent">
+			</div>
+			<script id="systemTip" type="text/html">
+				{{if data.length > 0}}
+				<h3>{{data[0].title}}<a href="/ydtu/page/custom/systip_list.html">MORE</a></h3>
+					<div class="noticeMain">
+						&nbsp;&nbsp;{{data[0].content}}
+					</div>
+					{{else}}
+					<div class="noticeMain">
+					<p style="margin-left: 10px;font-size: 17px;">暂无数据</p>
+					</div>
+				{{/if}}
+			</script>			
+		</div>
+		<div class="Usuallypark2 bor01">
+			<h2><span>我的车辆</span><a href="/ydtu/page/custom/mem_car_list.html">查看更多</a></h2>
+			<div id="carContent">
+			</div>
+			<script id="memberCars" type="text/html">
+				<ul>
+				{{if data.length > 0}}
+					{{each data as dto}}
+						{{if $index < 5}}
+							<li><div class="place">{{dto.carPlate}}</div><a onclick="del({{dto.id}})">&nbsp;</a></li>
+						{{/if}}
+					{{/each}}
+					{{else}}
+						<p style="margin-left: 10px;font-size: 17px;">暂无数据</p>
+				{{/if}}
+				</ul>
+			</script>						
+		</div>
+	</div>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+<script>
+$(function(){
+	//加载扩展模块
+	layer.config({
+	    extend: 'extend/layer.ext.js'
+	});
+	
+	$.ajax({
+		type:"post",
+		url:"/ydtu/tmember/getBean.htm",
+		data:{},
+		dataType:"json",
+		success: function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				if(null != data.data.realname){
+					$("#name").text(data.data.realname);
+				}
+				$("#phone").text(data.data.phone);
+			}else{
+				location.href="/ydtu/page/custom/login.html";
+			}
+			
+		}
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tmembercar/getCount.htm",
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			if(data.result=='SUCCESS'){
+				$("#carNum").text(data.data);
+			}
+		}		
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tparkcar/getCount.htm",
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			if(data.result=='SUCCESS'){
+				$("#monthCarNum").text(data.data);
+			}
+		}		
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tmembercar/parkingSituation.htm",
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			var html = template('parkSituation', data);
+			$("#parkContent").html(html) ;
+		}		
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/systemtip/getList.htm",
+		data:{"currentPage":1, "pageSize":1},
+		dataType: "json",
+		success:function(data){
+			checkResult(data.result);
+			var html = template('systemTip', data);
+			$("#sysContent").html(html) ;
+		}
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tmembercar/getList.htm",
+		data:{"currentPage":1, "pageSize":5},
+		dataType: "json",
+		success:function(data){
+			checkResult(data.result);
+			var html = template('memberCars', data);
+			$("#carContent").html(html) ;
+		}
+	});
+	
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tmember/getBalance.htm",
+		dataType: "json",
+		success:function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				$("#balance").text(data.data.balance) ;
+			}
+		}
+	});
+})
+
+function del(id){
+	layer.confirm('确定要删除吗？', {
+		title:['提示信息','font-size:20px;'],
+		btn: ['确定','取消'] //按钮
+	}, function(){
+		$.ajax({
+			type:"post",
+			url:"/ydtu/tmembercar/delete.htm",
+			data:{"id":id},
+			dataType:"json",
+			success:function(data){
+				checkResult(data.result);
+				if(data.result == SUCCESS){
+					layer.msg("删除成功！");
+					setTimeout(function(){
+						location.reload();
+					}, 500);
+				}else if(data.result == FAIL){
+					layer.msg("删除失败！");
+				}else{
+					layer.msg("已绑定月卡的车辆不能删除！");
+				}
+			}
+		})
+	},function(){
+		
+	})
+}
+</script>
+</body>
+</html>

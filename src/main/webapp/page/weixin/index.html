@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width" />
+<title>停车一道通</title>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+  <link rel="stylesheet" href="../../resource/frozen/css/demo.css">
+ <script src="../../resource/js/result.js"></script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b">
+            <i class="ui-icon-return" onclick="closeWindow()"></i><h1>首页</h1>
+        </header>
+               <section class="ui-container">
+<section id="layout">
+
+  <div class="demo-item">
+        <div class="demo-block"> 
+            <ul class="ui-row-flex ui-tiled">
+                <li onclick="go(1)" class="ui-col ui-flex ui-flex-pack-start ui-flex  ui-flex-align-center"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">个人信息</div></li>
+                <li onclick="go(2)" class="ui-col ui-flex ui-flex-pack-center ui-flex  ui-flex-align-center" style="border-left: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">充值</div></li>
+                <li onclick="go(3)" class="ui-col ui-flex ui-flex-pack-end ui-flex  ui-flex-align-center" style="border-left: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">车辆管理</div></li>
+                
+            </ul>
+         <ul class="ui-row-flex ui-tiled">
+                <li onclick="go(4)" class="ui-col ui-flex ui-flex-pack-start ui-flex  ui-flex-align-center" style="border-top: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">消费记录</div></li>
+                <li onclick="go(5)" class="ui-col ui-flex ui-flex-pack-center ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">充值记录</div></li>
+                <li onclick="go(6)" class="ui-col ui-flex ui-flex-pack-end ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">云锁车</div></li>
+         </ul>
+         <ul class="ui-row-flex ui-tiled">
+                <li onclick="go(7)" class="ui-col ui-flex ui-flex-pack-start ui-flex  ui-flex-align-center" style="border-top: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">停车实况</div></li>
+                <li onclick="go(8)" class="ui-col ui-flex ui-flex-pack-center ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">停车缴费</div></li>
+                <li onclick="go(9)" class="ui-col ui-flex ui-flex-pack-end ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0;"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">我的优惠券</div></li>
+         </ul>
+          <ul class="ui-row-flex ui-tiled">
+                <li onclick="go(10)" class="ui-col ui-flex ui-flex-pack-start ui-flex  ui-flex-align-center" style="border-top: 0"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">摇一摇</div></li>
+                <li onclick="go(11)" class="ui-col ui-flex ui-flex-pack-center ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0;"><div><i class="ui-icon-personal"></i></div><div style="font-size: 13px;">月卡缴费</div></li>
+                <li onclick="go(12)" class="ui-col ui-flex ui-flex-pack-end ui-flex  ui-flex-align-center" style="border-top: 0;border-left: 0;"><div></div><div style="font-size: 13px;">附近停车场</div></li>
+         </ul> 
+        </div>
+        
+    </div>
+    </section>
+    
+    </section>
+<script type="text/javascript">
+    function go(type){
+        if(type==1){
+            location.href="infomation.html";
+        }
+        else if(type==2){
+            location.href="payment.html";
+        }
+        else if(type==3){
+            location.href="tmembercar_select.html";
+        }
+        else if(type==4){
+            location.href="Consumptionrecords_select.html";
+        }
+        else if(type==5){
+            location.href="chargeList.html";
+        }
+        else if(type==6){
+            location.href="carPlates_list.html";
+        }
+        else if(type==7){
+            location.href="tparkinoutlivecar_select.html";
+        }
+        else if(type==8){
+            location.href="park_charge.html";
+        }
+        else if(type==9){
+            location.href="couponList.html";
+        }
+        else if(type==10){
+            location.href="shake.html";
+        }
+        else if(type==11){
+            location.href="parkcarList.html";
+        }
+        else if(type==12){
+            location.href="companyParkList.html";
+        }
+    }
+
+
+</script>
+</body>
+</html>

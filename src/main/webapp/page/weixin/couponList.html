@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+<link rel="stylesheet"
+	href="../../resource/frozen/css/frozen.css">
+<link rel="stylesheet" href="../../resource/frozen/css/demo.css">
+<link rel="stylesheet"
+	href="../../resource/weixin/css/coupon/base2013.css">
+<link rel="stylesheet"
+	href="../../resource/weixin/css/coupon/my.css">
+
+<link rel="stylesheet"
+	href="../../resource/weixin/css/coupon/header.css">
+<link rel="stylesheet"
+	href="../../resource/weixin/css/coupon/header(1).css">
+	
+<link rel="stylesheet" type="text/css" href="../../resource/css/pulltofresh.css" media="all" />
+
+
+<script type="text/javascript" src="../../resource/js/iscroll.js"></script>
+<script src="../../resource/js/pulltofresh.js"></script>
+
+<script type="text/javascript"
+	src="../../resource/js/zepto.min.js"></script>
+<script src="../../resource/frozen/js/frozen.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/date.js"></script>
+<script src="../../resource/js/common.js"></script>
+<title>停车一道通</title>
+
+</head>
+<body  onload="checkCookie()">
+	<header class="ui-header ui-header-positive ui-border-b">
+		<i class="ui-icon-return" onclick="closeWindow()"></i>
+		<h1>优惠券</h1>
+	</header>
+	
+	<section class="ui-container">
+		<section  id="wrapper">
+		<section id="scroller">
+  			<div id="pullDown">
+          				<p  style="margin:0 auto;width:200px;"><span class="pullDownIcon"></span><span class="pullDownLabel">下拉可以刷新</span></p>
+          				<p  style="margin:0 auto;width:200px;"><span id="refreshTime"></span></p>
+  			</div>			
+			<div class="demo-item" id="loadContent" style="margin-top: 5px;">
+				<script type="text/html" id="loadTemp">
+				{{if data.length > 0}}
+					{{each data as dto}}
+					<div id="cpsDiv" class="common-wrapper">
+						<div class="pepper-con">
+							<div class="pepper-w">
+								<div class="pepper pepper-blue">
+									<div class="pepper-l">
+										<p class="pepper-l-num">
+											<i>¥</i><span>{{dto.amount}}.</span><i>00</i>
+										</p>
+										<p class="pepper-l-con">{{dto.remark }}</p>
+									</div>
+									<div class="pepper-r">
+										<span>有效期至</span>
+										<div>
+											<p class="pepper-line">~</p>
+											{{dto.endTime}}
+										</div>
+									</div>
+								</div>
+								<div class="pepper-b pepper-blue">
+									<div class="pb-con"></div>
+									<div class="pb-border"></div>
+								</div>
+								<div class="p-address"></div>
+							</div>
+						</div>
+					</div>					
+					{{/each}}
+					{{else}}
+					<div><span style="font-size:16px">你还没有优惠券~</span></div>
+				{{/if}}
+				<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+				</script>
+			</div>
+   			<div id="pullUp" style="display:none;">
+   				<span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+   			</div>					
+		</section>
+		</section>
+	</section>
+<script>
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+function index(){
+	location.href="/ydtu/weixin/index.htm";
+}
+
+function setPage(dir){
+	if(refreshPage(dir)){
+		return getList();
+	}else{
+		return "";
+	}
+}
+
+function getList(){
+	var html;
+	$.ajax({
+		type:"post",
+		url:linkPre+"/ydtu/coupon/getList.htm",
+		dataType:"json",
+		data: getPage(),
+		async:false,
+		success:function(data){
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				html = template("loadTemp", data);
+			}
+		}
+	})
+	return html;
+}
+
+</script>
+
+</body>
+</html>

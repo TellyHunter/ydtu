@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+
+<title>停车一道通</title>
+<!-- 表单验证 -->
+<link type="text/css" rel="stylesheet"
+	href="../../resource/weixin/css/register/layer.css" id="skinlayercss">
+<link type="text/css" rel="stylesheet"
+	href="../../resource/weixin/css/register/content.css" id="skinlayercss">
+	
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+<script type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <script src="../../resource/js/md5.js"></script>
+ <script src="../../resource/frozen/js/frozen.js"></script>
+ <script src="../../resource/js/result.js"></script>
+ <script src="../../resource/js/phoneTip.js"></script>
+</head>
+<body>
+
+<div id="Content">
+	<div class="con_main ">
+		<form id="signForm" method="post">
+			<div class="acc">
+				<div class="mobile_no">
+					<input type="text" placeholder="输入手机号" name="phone" id="phone"
+						class="mobile_input">
+				</div>
+				<div class="get_right">
+					<button id="J_BtnMobileCode" class="get">获取验证码</button>
+				</div>
+				<div class="c"></div>
+			</div>
+			<ul>
+				<li class="addper">
+					<div class="right">
+						<input type="text" value="" id="code" name="code"
+							placeholder="验证码">
+					</div>
+					<div class="c"></div>
+				</li>
+
+				<li class="addper">
+					<div class="right">
+						<input type="password" value="" id="password" name="password"
+							placeholder="请输入密码">
+					</div>
+					<div class="c"></div>
+				</li>
+
+				<li class="addper">
+					<div class="right">
+						<input type="password" value="" id="rePassword" name="rePassword"
+							placeholder="再次输入密码">
+					</div>
+					<div class="c"></div>
+				</li>
+			</ul>
+			<div class="button_box">
+				<input type=button value="确认注册" class="but" id="sub">
+			</div>
+		</form>
+	</div>
+</div>
+	<script type="text/javascript">
+	
+		$("#phone").blur(function() {
+			phoneReg();
+		});
+
+		function phoneReg() {
+			var val = $("#phone").val();
+			if (val.trim() == "") {
+				frozen_warn("请输入手机号");
+				return false;
+			}
+			var re = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+			if (!re.test(val) || val.length != 11) {
+				frozen_warn("手机号输入有误");
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		$("#password").blur(function() {
+			pwd();
+		});
+		function pwd() {
+			var val = $("#password").val();
+			var reg = /^[A-Za-z0-9]+$/;
+			if (val.length < 6) {
+				frozen_warn("密码必须大于6位");
+				return false;
+			} else if (!reg.test(val)) {
+				frozen_warn("密码只能输入英文和字母");
+				return false;
+			} else {
+				return true;
+			}
+		}
+		$("#rePassword").blur(function() {
+			rePwd();
+		});
+		function rePwd() {
+			if ($("#password").val() != $("#rePassword").val()) {
+				frozen_warn("两次密码输入不一致");
+				return false;
+			}
+			return true;
+		}
+
+		$("#sub").click(function() {
+			if (!phoneReg() || !validCode() || !pwd() || !rePwd()) {
+				return false;
+			}
+			sub();
+		});
+
+		function sub() {
+			$.ajax({
+				type : "POST",
+				url:linkPre+ '/ydtu/tmember/reg.htm',
+				data : {
+					"phone" : $("#phone").val(),
+					"password" : hex_md5($("#password").val())
+				},
+				dataType : 'json',
+				success : function(data) {
+					checkResult_weixin(data.result);
+					if (data.result == SUCCESS) {
+						if (typeof WeixinJSBridge != "undefined"){
+							openid();	
+						}
+						else{
+							location.href = "infomation.html";
+						}
+					}
+				}
+			})
+
+		}
+		function openid(){
+			$.ajax({
+				type : "POST",
+				url:linkPre+ '/ydtu/tmember/openid.htm',
+				data : {},
+				dataType : 'json',
+				success : function(data) {
+					checkResult_weixin(data.result);
+					if (data.result == SUCCESS) {
+						location.href = "infomation.html";
+					}
+					else{
+						closeWindow();
+					}
+				}
+			})
+			
+		}
+	
+		var vcode_status = 0;
+		var countdown = 60;
+		$("#J_BtnMobileCode").click(function() {
+			if (!phoneReg()) {
+				return false;
+			}
+			if (vcode_status == 0) {
+				$.ajax({
+					type : "post",
+					url:linkPre+ "/ydtu/tmember/getCode.htm",
+					data : {
+						"codeType" : 0,
+						"phone" : $("#phone").val()
+					},
+					dataType : 'json',
+					async : false,
+					success : function(data) {
+						checkResult_weixin(data.result);
+						if (data.result == SUCCESS){
+							settime();
+						}else{
+							frozen_warn("号码已注册,请重新输入！");
+							return false;	
+						}
+					}
+				});
+			}
+			return false;
+		});
+
+		function settime() {
+			countdown--;
+			if (countdown <= 0) {
+				vcode_status = 0;
+				$("#J_BtnMobileCode").text("获取验证码");
+				countdown = 60;
+			} else {
+				setTimeout(settime, 1000);
+				vcode_status = 1;
+				$("#J_BtnMobileCode").text(countdown + "秒");
+			}
+		}
+
+		function validCode() {
+			var flag = false;
+			$.ajax({
+				type : "post",
+				url:linkPre+ "/ydtu/tmember/validate_code.htm",
+				data : {
+					"phone" : $("#phone").val(),
+					"code" : $("#code").val()
+				},
+				dataType : "json",
+				async : false,
+				success : function(data) {
+					checkResult_weixin(data.result);
+					if(data.result == SUCCESS){
+						flag = true;
+					}else{
+						frozen_warn("验证码错误");
+					}
+				}
+			});
+			return flag;
+		}
+	</script>
+</body>
+</html>

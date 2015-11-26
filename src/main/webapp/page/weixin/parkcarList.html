@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+ <script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+  <link rel="stylesheet" href="../../resource/frozen/css/demo.css">
+  
+   <link rel="stylesheet" type="text/css" href="../../resource/css/pulltofresh.css" media="all" />
+ 
+ <script type="text/javascript" src="../../resource/js/iscroll.js"></script>
+ <script src="../../resource/frozen/js/frozen.js"></script>
+ <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/date.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+
+<script src="../../resource/js/pulltofresh.js"></script>
+<title>停车一道通</title>
+</head>
+<body id="myBody"  onload="checkCookie()">
+
+	<header class="ui-header ui-header-positive ui-border-b" >
+	            <i class="ui-icon-return"  onclick="closeWindow()"></i><h1>月卡充值</h1>
+	</header>
+	
+	<section class="ui-container">
+          <section id="wrapper">
+          	    <div class="demo-item" id="scroller">
+          			<div id="pullDown">
+          				<p  style="margin:0 auto;width:200px;"><span class="pullDownIcon"></span><span class="pullDownLabel">下拉可以刷新</span></p>
+          				<p  style="margin:0 auto;width:200px;"><span id="refreshTime"></span></p>
+          			</div>
+          	        <div class="demo-block">
+          	            <ul class="ui-list ui-border-tb" id="loadContent">
+          	            <script type="text/html" id="loadTemp">
+          				{{if data.length > 0}}
+          					{{each data as dto}}	            
+          	                <li class="ui-border-t" style="height: 90px;line-height: 31px;margin-left: 0px;">
+          	                    <div class="ui-avatar">
+          	                        <span style="background-image:url('../../resource/images/shakeIcon.jpg')"></span>
+          	                    </div>
+          	                    <div class="ui-list-info" style="padding-top: 0px;">
+									<div style="font-weight:bold;">{{dto.parkName }}</div>
+									<div style="font-size:15px;">{{dto.carPlate}}</div>
+          	                    </div>
+          	                    <div class="ui-list-info" style="padding-right: 0px;">
+          							<div style="padding-right: 0px;text-align:right;font-weight:bold">{{dto.endDate }}</div>
+          							<div style="padding-right: 0px;text-align:right;font-size:15px;color:#00a5e0;" onclick="parkcarPay({{dto.id }},'{{dto.carPlate}}','{{dto.parkId}}');" >续费</div>
+          						</div>
+          	                </li>
+          					{{/each}}
+          					{{else}}
+          					<li  class="ui-border-t" style="height: 70px;color:#F54F12">您还没有申请月卡~</li>
+          				{{/if}}
+						<input type="hidden" name="totalPage"  id="totalPage" value="{{page.totalPage}}">
+          				</script>	              
+          	            </ul>
+          	        </div>
+          			<div id="pullUp" style="display:none;">
+          				<span class="pullUpIcon"></span><span class="pullUpLabel"></span>
+          			</div>	        
+          	    </div>
+          	</section>
+         </section>
+
+	
+<script type="text/javascript">
+//refreshTime
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+	function getList(){
+		var html;
+		$.ajax({
+			type:"post",
+			url:linkPre+"/ydtu/tparkcar/getList.htm",
+			data: getPage(),
+			dataType:"json",
+			async: false,
+			success:function(data){
+				checkResult_weixin(data.result);
+				if(data.result == SUCCESS){
+					html = template("loadTemp", data);
+				}
+			}
+		})
+		return html;
+	}
+	
+	function setPage(dir){
+		if(refreshPage(dir)){
+			return getList();
+		}else{
+			return "";
+		}	
+	}
+	
+	function parkcarPay(id, carPlate, parkId){
+		localStorage.id=id;
+		localStorage.carPlate=carPlate;
+		localStorage.parkId=parkId;
+		location.href="parkcar_pay.html";
+// 		var param=base64encode("id="+id);
+// 		location.href="parkcar_pay.html?"+param; 
+	}
+
+</script>
+</body>
+</html>

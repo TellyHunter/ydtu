@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信支付</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/result.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<body>
+<!--header Begin-->
+<div class="header" style="border:0;height:140px;">
+	<div class="topCon">
+        <h1 class="logo">大拇指用户中心-停车一道通，智慧让生活更轻松</h1>
+    </div>
+</div>
+<!--header End-->
+<!--mainContent Begin-->
+	<div class="mainContent" style="width: 995px;">
+		<div class="rightContent">
+			<div class="Usuallypark4 bor01">
+				<table cellpadding=0 cellspacing=0 class="vehicle_management_table"
+					style="padding-bottom: 2px;">
+					<tr>
+						<td>
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tbody>
+									<tr>
+										<td width="69%" align="left" valign="middle"
+											class="posin_td posin_web"><h3 class="o-title">请您及时付款，以便订单尽快处理！
+												订单号：<span id="orderId"></span></h3></td>
+										<td width="31%" align="left" valign="middle"
+											class="posin_td posin_web"><em>应付金额:</em><strong
+											style="color: #E90003; font-size: 26px;">&nbsp;&nbsp;
+												<span id="amount"></span></strong><em>元</em></td>
+									</tr>
+									<tr>
+										<td align="left" valign="middle" class="posin_td posin_web"><span
+											class="o-tips">请您在提交订单后<span class="font-red">24小时</span>内完成支付，否则订单会自动取消。
+										</span></td>
+										<td align="left" valign="middle">&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="Usuallypark bor01">
+				<h2>
+					<span>微信支付</span>
+				</h2>
+				<table align="center" cellpadding=0 cellspacing=0>
+					<tr>
+						<td>
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tbody>
+									<tr>
+										<td style="text-align: center"><img
+											src=""
+											width="300" class="erwei" height="300" alt="" id="codeurl"/></td>
+									</tr>
+									<tr>
+										<td style="text-align: center"><img
+											src="../../resource/images/scan1.png" width="300" height="61"
+											alt="" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+						<td width="427" colspan="3" style="text-align: center"><img
+							src="../../resource/images/phone-bg.png" width="329" height="421"
+							alt="" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+
+<script>
+var amount = getQueryString("amount");
+var codeurl = getQueryString("codeurl");
+var orderId = getQueryString("orderId");
+
+$(function(){
+	$("#amount").text(amount);
+	$("#orderId").text(orderId);
+	var getCodeurl = "/ydtu/custom/getWeixinImg.htm?codeurl=" + codeurl +"&num=Math.random()";
+	$("#codeurl").attr("src", getCodeurl);
+})
+</script>
+</body>
+</html>

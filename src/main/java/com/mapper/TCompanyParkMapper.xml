@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TCompanyParkMapper" >
+  <resultMap id="BaseResultMap" type="com.bean.TCompanyPark" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="total_parking_space" property="totalParkingSpace" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="position_x" property="positionX" jdbcType="VARCHAR" />
+    <result column="position_y" property="positionY" jdbcType="VARCHAR" />
+    <result column="month_rule" property="monthRule" jdbcType="TINYINT" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bankCard" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="rate" property="rate" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sync_key" property="syncKey" jdbcType="VARCHAR" />
+    <result column="parkLogo" property="parklogo" jdbcType="VARCHAR" />
+    <result column="parkCarNum" property="parkcarnum" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, company_id, park_name, total_parking_space, address, position_x, position_y, 
+    month_rule, bank_name, bank_card, bank_account, rate, remark, sync_key, parkLogo, 
+    parkCarNum, type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bean.TCompanyParkExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_company_park
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_company_park
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_company_park
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bean.TCompanyParkExample" >
+    delete from t_company_park
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bean.TCompanyPark" >
+    insert into t_company_park (id, company_id, park_name, 
+      total_parking_space, address, position_x, 
+      position_y, month_rule, bank_name, 
+      bank_card, bank_account, rate, 
+      remark, sync_key, parkLogo, 
+      parkCarNum, type)
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{parkName,jdbcType=VARCHAR}, 
+      #{totalParkingSpace,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{positionX,jdbcType=VARCHAR}, 
+      #{positionY,jdbcType=VARCHAR}, #{monthRule,jdbcType=TINYINT}, #{bankName,jdbcType=VARCHAR}, 
+      #{bankCard,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{rate,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{syncKey,jdbcType=VARCHAR}, #{parklogo,jdbcType=VARCHAR}, 
+      #{parkcarnum,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bean.TCompanyPark" >
+    insert into t_company_park
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="parkName != null" >
+        park_name,
+      </if>
+      <if test="totalParkingSpace != null" >
+        total_parking_space,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="positionX != null" >
+        position_x,
+      </if>
+      <if test="positionY != null" >
+        position_y,
+      </if>
+      <if test="monthRule != null" >
+        month_rule,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankCard != null" >
+        bank_card,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="syncKey != null" >
+        sync_key,
+      </if>
+      <if test="parklogo != null" >
+        parkLogo,
+      </if>
+      <if test="parkcarnum != null" >
+        parkCarNum,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkName != null" >
+        #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalParkingSpace != null" >
+        #{totalParkingSpace,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="positionX != null" >
+        #{positionX,jdbcType=VARCHAR},
+      </if>
+      <if test="positionY != null" >
+        #{positionY,jdbcType=VARCHAR},
+      </if>
+      <if test="monthRule != null" >
+        #{monthRule,jdbcType=TINYINT},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="syncKey != null" >
+        #{syncKey,jdbcType=VARCHAR},
+      </if>
+      <if test="parklogo != null" >
+        #{parklogo,jdbcType=VARCHAR},
+      </if>
+      <if test="parkcarnum != null" >
+        #{parkcarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bean.TCompanyParkExample" resultType="java.lang.Integer" >
+    select count(*) from t_company_park
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_company_park
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkName != null" >
+        park_name = #{record.parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalParkingSpace != null" >
+        total_parking_space = #{record.totalParkingSpace,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionX != null" >
+        position_x = #{record.positionX,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionY != null" >
+        position_y = #{record.positionY,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monthRule != null" >
+        month_rule = #{record.monthRule,jdbcType=TINYINT},
+      </if>
+      <if test="record.bankName != null" >
+        bank_name = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankCard != null" >
+        bank_card = #{record.bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccount != null" >
+        bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rate != null" >
+        rate = #{record.rate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.syncKey != null" >
+        sync_key = #{record.syncKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parklogo != null" >
+        parkLogo = #{record.parklogo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkcarnum != null" >
+        parkCarNum = #{record.parkcarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_company_park
+    set id = #{record.id,jdbcType=INTEGER},
+      company_id = #{record.companyId,jdbcType=INTEGER},
+      park_name = #{record.parkName,jdbcType=VARCHAR},
+      total_parking_space = #{record.totalParkingSpace,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      position_x = #{record.positionX,jdbcType=VARCHAR},
+      position_y = #{record.positionY,jdbcType=VARCHAR},
+      month_rule = #{record.monthRule,jdbcType=TINYINT},
+      bank_name = #{record.bankName,jdbcType=VARCHAR},
+      bank_card = #{record.bankCard,jdbcType=VARCHAR},
+      bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      rate = #{record.rate,jdbcType=DECIMAL},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      sync_key = #{record.syncKey,jdbcType=VARCHAR},
+      parkLogo = #{record.parklogo,jdbcType=VARCHAR},
+      parkCarNum = #{record.parkcarnum,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.TCompanyPark" >
+    update t_company_park
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parkName != null" >
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalParkingSpace != null" >
+        total_parking_space = #{totalParkingSpace,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="positionX != null" >
+        position_x = #{positionX,jdbcType=VARCHAR},
+      </if>
+      <if test="positionY != null" >
+        position_y = #{positionY,jdbcType=VARCHAR},
+      </if>
+      <if test="monthRule != null" >
+        month_rule = #{monthRule,jdbcType=TINYINT},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCard != null" >
+        bank_card = #{bankCard,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="syncKey != null" >
+        sync_key = #{syncKey,jdbcType=VARCHAR},
+      </if>
+      <if test="parklogo != null" >
+        parkLogo = #{parklogo,jdbcType=VARCHAR},
+      </if>
+      <if test="parkcarnum != null" >
+        parkCarNum = #{parkcarnum,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.TCompanyPark" >
+    update t_company_park
+    set company_id = #{companyId,jdbcType=INTEGER},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      total_parking_space = #{totalParkingSpace,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      position_x = #{positionX,jdbcType=VARCHAR},
+      position_y = #{positionY,jdbcType=VARCHAR},
+      month_rule = #{monthRule,jdbcType=TINYINT},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_card = #{bankCard,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      sync_key = #{syncKey,jdbcType=VARCHAR},
+      parkLogo = #{parklogo,jdbcType=VARCHAR},
+      parkCarNum = #{parkcarnum,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>个人资料</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+
+<!-- 表单验证 -->
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style>
+.error{color: red}
+</style>
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+<!-- 表单验证 -->
+
+
+</head>
+
+<body>
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 账户设置 > 个人资料</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li class="chose_2"><a href="/ydtu/page/custom/infomation.html"><img src="../../resource/images/menu-icon-wu.png" />个人设置</a></li>
+			<li><a href="/ydtu/page/custom/safe.html"><img src="../../resource/images/menu-icon-wu.png" />安全设置</a></li> 
+		</ul>
+	</div>
+	<div class="rightContent">
+		<div class="Usuallypark bor01">
+	    <h2><span>个人资料</span></h2>
+       	<div class="information_main_box" id="infoContent">
+       		<script type="text/html" id="infoTemp">
+       		<form id="sForm">
+			<table width="100%" border="0" cellpadding=0 cellspacing=0 class="user_center_table">
+				<tr class="user_tr">
+			  		<td class="left_td"><span>手机号码：</span></td>
+			    	<td class="right_td"><p><input type="text" name="phone" id="phone" class="input_sytle" disabled="disabled"/></p></td>
+			  	</tr>
+			  	<tr class="user_tr">
+			    	<td class="left_td"><span>姓名：</span></td>
+			    	<td class="right_td"><p><input type="text" name="realname" id="realname" class="input_sytle" value="{{data.realname}}" maxlength="15"/>
+					</td>
+			  	</tr>
+			  	<tr class="user_tr">
+			    	<td class="left_td"><span>密码：</span></td>
+			    	<td class="right_td"><p><input type="text" name="password" class="input_sytle" value="******" disabled="disabled"/></p></td>
+			  	</tr>
+			   	<tr>
+			    	<td class="left_td"><span>邮箱：</span></td>
+			    	<td class="right_td">
+			    	<p>
+			    	{{if data.email != null}}
+			    	<input type="text" name="email" class="input_sytle" value="{{data.email }}" maxlength="50" disabled="disabled"/>
+			    	</c:if>
+			    	{{else}}
+			    	未绑定
+			    	{{/if}}
+			    	</td>
+			  	</tr>
+			  	<tr>
+			    	<td class="left_td"><span>性别：</span></td>
+			    	<td class="right_td">
+			    	<p>
+			    		<input type="radio" name="sex" value="1" {{if data.sex==1}}checked=checked{{/if}}>男
+			    		<input type="radio" name="sex" value="2" {{if data.sex==2}}checked=checked{{/if}}>女
+			    	</p>
+			   		</td>
+			  	</tr>
+			   	<tr>
+			     	<td class="left_td">&nbsp;</td>
+			     	<td class="right_td"><input type="submit"  value="确定" name="next" class="revised_data open_160"></td>
+			   	</tr>   
+			</table>
+			<div class="height_20"></div>
+			</div>
+			</form>
+			</script>
+		</div>
+	</div>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+
+
+<script>
+$.ajax({
+	type:"post",
+	url:"/ydtu/tmember/getTmember.htm",
+	dataType:"json",
+	async:false,
+	success:function(data){
+		checkResult(data.result);
+		var html = template("infoTemp", data);
+		$("#infoContent").html(html);
+		$("#phone").val(data.data.phone);
+	}
+})
+
+$(function(){
+	 $("#sForm").validate({
+		rules:{
+			realname:{
+				required:true,
+				rangelength:[2,10]
+			}
+		},
+		messages:{
+			realname:{
+				required:"请输入姓名",
+				rangelength:"长度不符合要求",
+	 		}
+		},
+		submitHandler: function(form) {  //通过之后回调 
+			sub();
+        }, 
+        invalidHandler: function(form, validator) {  //不通过回调 
+         	return false;
+        }
+	});
+});
+
+function sub(){
+	$.ajax({
+		type:"post",
+		url:"/ydtu/tmember/save.htm",
+		data:$("#sForm").serialize(),
+		dataType:"json",
+		success:function(data){
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				layer.msg("修改成功");
+				
+			}else{
+				layer.msg("修改失败");
+			}
+		}
+	})	
+}
+</script>
+
+</body>
+</html>

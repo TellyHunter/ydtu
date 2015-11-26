@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="/ydtu/resource/weixin/css/parkNow/content.css" type="text/css" rel="stylesheet" />
+<link href="/ydtu/resource/weixin/css/parkNow/layer.css" type="text/css" rel="stylesheet" />
+
+<script  type="text/javascript" src="../../resource/js/zepto.min.js"></script>
+<script src="../../resource/frozen/js/frozen.js"></script>
+ <link rel="stylesheet" href="../../resource/frozen/css/frozen.css">
+ <script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/pageTemplate.js"></script>
+<script src="../../resource/js/phoneTip.js"></script>
+<title>停车一道通</title>
+
+</head>
+<body  id="content">
+	<script type="text/html" id="contentScript">
+	{{if data.length > 0}} 
+	{{each data as dto}}
+	<div class="con_main ">
+		<input type="hidden" name="carPlate{{$index}}" id="carPlate{{$index}}"
+			value="{{dto.inCarPlate}}">
+		<div class="addpers addtop">
+			<div class="left">车牌</div>
+			<div class="right">{{dto.inCarPlate }}</div>
+			<div class="c"></div>
+		</div>
+
+		<div class="addpers">
+			<div class="left">停车场</div>
+			<div class="right">{{dto.parkName }}</div>
+			<div class="c"></div>
+		</div>
+
+		<div class="addpers">
+			<div class="left">进入时间</div>
+			<div class="right">{{dto.inTime }}</div>
+			<div class="c"></div>
+		</div>
+
+		<div class="addpers">
+			<div class="left">停车时间</div>
+			<div class="right">{{dto.stopTime }}</div>
+			<div class="c"></div>
+		</div>
+		<div class="addpers add_bot" onclick="getCharge('carPlate{{$index}}')">
+			<div class="left">操作</div>
+			<div class="right">
+				<a style="color:#00a5e0;">缴费</a>
+			</div>
+			<div class="c"></div>
+		</div>
+	</div>
+	{{/each}}
+	 {{else}}
+	<div class="ui-dialog">
+		<div class="ui-dialog-cnt">
+			<div class="ui-dialog-bd">
+				<h3 style="color:black;font-weight:bold">提示</h3>
+				<div style="text-align:center;color:black">您暂时还没有停车！</div>
+			</div>
+			<div class="ui-dialog-ft">
+				<button type="button" id="sure" onclick="clo()">确定</button>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+	</script>
+
+	<section id="loading" hidden="hidden">
+           <div class="ui-loading-block show">
+               <div class="ui-loading-cnt">
+                   <i class="ui-loading-bright"></i>
+                   <p color:#FFFFFF>正在加载中...</p>
+               </div>
+           </div>
+	</section>
+
+</body>
+<script type="text/javascript">
+function onBridgeReady() {
+	WeixinJSBridge.call('hideOptionMenu');
+}
+if (typeof WeixinJSBridge == "undefined") {
+	if (document.addEventListener) {
+		document.addEventListener('WeixinJSBridgeReady', onBridgeReady,
+				false);
+	} else if (document.attachEvent) {
+		document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+		document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	}
+} else {
+	onBridgeReady();
+}
+
+
+	$.ajax({
+		type : "post",
+		url:linkPre+ "/ydtu/tmembercar/parkingSituation.htm",
+		dataType : "json",
+		success : function(data) {
+			checkResult_weixin(data.result);
+			if(data.result == SUCCESS){
+				var html = template('contentScript', data);
+				$("#content").html(html);
+				if (data.data.length == 0) {
+					$(".ui-dialog").dialog("show");
+				}
+			}
+		}
+	});
+
+	function getCharge(id) {
+		//显示
+		$("#loading").removeAttr("hidden");
+		var carPlate = $("#" + id).val();
+		$.ajax({
+			type : "post",
+			url:linkPre+ "/ydtu/weixin/getOrderInfo.htm",
+			data : {
+				"carPlate" : carPlate
+			},
+			dataType : "json",
+			success : function(data) {
+				//隐藏
+				$("#loading").attr("hidden", "hidden");
+				checkResult_weixin(data.result);
+				if (data.result == SUCCESS) {
+					var amount = data.data.amount;
+					var orderId = data.data.orderId;
+					var sign = data.data.sign;
+// 					var param = "orderId=" + orderId;
+// 					location.href = "/ydtu/weixin/weixinpay.html?"
+// 							+ base64encode(param);
+					localStorage.orderId=orderId;
+					location.href = "/ydtu/page/weixin/weixinpay.html";
+				} else {
+					frozen_info("未查询到停车信息");
+					return false;
+				}
+			}
+		})
+
+	}
+	function clo() {
+		$(".ui-dialog").dialog("hide");
+		closeWindow();
+	}
+</script>
+</html>

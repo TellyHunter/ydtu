@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>注册</title>
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet"  href="../../resource/css/login.css"/>
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<link rel="stylesheet" href="../../resource/css/validation.css" />
+<script src="../../resource/js/template.js"></script>
+ <script src="../../resource/js/md5.js"></script>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/result.js"></script>
+<!-- 表单验证 -->
+<script src="../../resource/js/jquery.validate2.js"></script>
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+
+<!-- 表单验证 -->
+
+<script type="text/javascript">
+
+
+$(function() {
+	$("#registForm").validate({
+		rules:{
+			phone:{
+				 required:true,
+				 phoneCheck:true
+			},
+			password:{
+	       	 	required:true ,
+	       	 	rangelength:[6,20],
+	       	 	passRule:true
+	        },
+	        repassword:{
+	        	required:true,
+	       	 	equalTo:"#password"
+	        },
+	        code:{
+	       	 	required:true
+	        },
+	        serviceRadio:{
+	        	required:true
+	        }
+		},
+		messages:{
+			phone:{
+		 		required:"请输入手机号",
+// 		 		phoneCheck:"自定义输出提示！",
+	 		},
+		 	password:{
+			 	required:"请输入密码",
+			 	rangelength:"长度不符合要求"
+		 	},
+		 	repassword:{
+		 		required:"请确认密码",
+			 	equalTo:"两次密码输入不一致"
+		 	},
+	     	code:{
+	    	 	required:"请输入验证码"
+	     	},
+	     	serviceRadio:{
+	     		required:"您还未接受用户协议"
+	     	}
+		},
+		submitHandler: function(form) {  //通过之后回调 
+			checkValidate();
+         }, 
+         invalidHandler: function(form, validator) {  //不通过回调 
+         	return false;
+         }
+	});
+})
+
+</script>
+</head>
+
+<body>
+<!--header Begin-->
+<div class="header">
+	<div class="topCon">
+        <h1 class="logo">大拇指用户中心-停车一道通，智慧让生活更轻松</h1>
+        <div class="service">
+            <ul>
+                <li>
+                    <a href="/ydtu/page/custom/helpCenter_list.html"><img src="../../resource/images/icn_10.png" />常见问题</a>
+                </li>
+                <li>
+                    <a href=""><img src="../../resource/images/icn_11.png"  />投诉建议</a>
+                </li>
+                <li>
+                    <a href=""><img src="../../resource/images/icn_12.png"  />在线客服</a>
+                </li>
+            </ul> 
+        </div>
+        <div class="uploader">
+            <a href="#"><img src="../../resource/images/icon_10.gif" />下载停车一道通APP，生活更轻松！</a>
+        </div>
+        <div class="cl"></div>
+
+    </div>
+</div>
+<!--header End-->
+<!--mainContent Begin-->
+<div class="mainContent">
+	<form id="registForm" method="post">
+	<input type="hidden" name="type" value="3">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td height="50" bgcolor="#FFFFFF">
+        <div class="Usuallypark2 bor01">
+			<h2><span>用户注册</span><a href="/ydtu/page/custom/login.html">已有账户？马上登录</a></h2>
+			<ul>
+				<div class="find_passwerd_box">
+					<table width="100%" border="0" cellpadding=0 cellspacing=0 padding-right="20px;">
+					 	<tr>
+							<td width="88"  class="left_td"><p>手机号：</p></td>
+					    	<td width="276">
+					    		<samp class="Check_code2_box">
+					    			<input type="text" name="phone" class="check_code" id="Check_code" maxlength="15" /><a href="javascript:void(0);" id="J_BtnMobileCode"><span id="fff">获取验证码</span></a> 
+					    		</samp>
+					    		<label id="msg" for="Check_code" class="tip" tip="请输入手机号码"></label>
+					    	</td>
+					  	</tr>
+				        <tr>
+				          	<td class="left_td"><p>手机验证码：</p></td>
+				          	<td><input type="text" name="code" id="code" class="input_sytle" maxlength="6"/>
+				          	<label id="cmsg" for="code" class="tip" tip="请输入验证码"></label>
+				          	</td>
+				          	
+				        </tr>
+				        <tr>
+				          	<td  class="left_td"><p>请设置密码：</p></td>
+				          	<td><input type="password" name="password" id="password" class="input_sytle"/>
+				          	<label id="pmsg" for="password" class="tip" tip="密码由6-20位字母、数字组合"></label>
+				          	</td>
+				          	
+				        </tr>
+				        <tr>
+				          	<td  class="left_td"><p>请确认密码：</p></td>
+				          	<td><input type="password" name="repassword" id="repasskey" class="input_sytle"/>
+				          	<label id="rpmsg" for="repasskey" class="tip" tip="请再次输入密码"></label>
+				          	</td>
+				          	
+				        </tr>
+				        <tr>
+				          	<td>&nbsp;</td>
+				          	<td>
+				          		<div class="verification_code">
+				          			<span id="span_chang_bg" class="checkbox"> <input type="checkbox" id="serviceRadio" name="serviceRadio"/>
+				          			<a>一道通用户协议</a><label id="smsg" for="serviceRadio" class="tip" ></label>
+				          			</span>
+				          	 	</div>
+				          	 </td>
+				          	<td>&nbsp;</td>
+				        </tr>
+				        <tr>
+				          	<td>&nbsp;</td>
+				          	<td><input type="submit" name="input_login"   value="立即注册" class="input_border input_login" id="Input_login"/>
+				          	</td>
+				        </tr>
+					</table>
+				</div>
+			</ul>
+		</div>
+        </td>
+      </tr>
+      <tr>
+        	<td bgcolor="#FFFFFF">
+        	</td>
+      </tr>
+    </tbody>
+	</table>
+	</form>
+</div>
+<!--mainContent End-->
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+<script>
+function phoneReg(){
+	var val = $("#Check_code").val();
+	if(val.trim()==""){
+		$("#msg").text("请输入手机号").addClass("error1").show();
+		return;
+	}
+	var re =/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/; 
+	if (!re.test(val)||val.length!=11) {
+	    return false;
+	}else{
+		return true;
+	}
+}
+
+var vcode_status=0;
+var countdown = 60;
+
+$("#J_BtnMobileCode").click(function(){
+	if(!phoneReg()){
+		return false;
+	}
+	if(vcode_status==0){
+		$.ajax({ 
+		    type:"POST",
+		    url:'/ydtu/tmember/getCode.htm',
+			data : {
+	  			"codeType" : 0,
+	  			"phone" : $("#Check_code").val(),
+			},
+			dataType : 'json',
+			success : function(data) {
+				checkResult(data.result);
+				if(data.result == 'FAIL'){
+ 					$("#msg").text("号码已注册,请重新输入！").addClass("error1").removeClass("valid").show();
+					return false;
+				}else{
+					settime();
+				}
+			}
+		}); 
+	}
+});
+
+function settime() {
+	countdown--;
+	if(countdown <= 0){
+		vcode_status=0;
+		$("#fff").text("获取验证码");
+		countdown = 60;
+	}else {
+		setTimeout(settime, 1000);
+		vcode_status=1;
+		$("#fff").text(countdown+"秒"); 
+	}
+}
+
+function sub(){
+	$.ajax({
+		type:"POST",
+		url:'/ydtu/tmember/reg.htm',
+		data : {"phone":$("#Check_code").val(),"password":hex_md5($("#password").val())},
+		dataType : 'json',
+		success : function(data) {
+			checkResult(data.result);
+			if(data.result == SUCCESS){
+				location.href="/ydtu/page/custom/login.html";
+			}
+		}
+	})
+}
+
+function checkValidate(){
+	$.ajax({
+		type:"POST",
+		url:'/ydtu/tmember/validate_code.htm',
+		data : {
+  			"code" : $("#code").val(),
+  			"phone" : $("#Check_code").val()
+		},
+		dataType : 'json',
+		async:false,
+		success : function(data) {
+			checkResult(data.result);
+			if (data.result == "FAIL") {
+				$("#cmsg").text("验证码错误").addClass("error1").show();
+				return;
+			}else{
+				sub();
+			}
+		}					
+	});
+}
+</script>
+</body>
+</html>

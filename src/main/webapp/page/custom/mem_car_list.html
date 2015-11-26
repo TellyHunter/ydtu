@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车辆管理</title>
+<script src="../../resource/js/template.js"></script>
+<script src="../../resource/js/jquery-1.8.0.js"></script>
+<script src="../../resource/js/result.js"></script>
+<script src="../../resource/js/common.js"></script>
+<script type="text/javascript" src="../../resource/layui/layer.js"></script>
+
+<link rel="stylesheet" href="../../resource/css/global.css" />
+<link rel="stylesheet" href="../../resource/css/userCenter.css" />
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+}
+</style>
+</head>
+
+<body>
+
+<!--header Begin-->
+<div id="top_sidebar"></div>
+<script>
+$("#top_sidebar").load("top.html"); 
+</script>
+<!--header End-->
+
+<!--mainContent Begin-->
+<div class="mainContent">
+	<p class="area">
+		首页 > 车辆管理</p>
+	</p>
+	<div class="leftNav">
+		<ul>
+			<li class="chose_2"><a href="/ydtu/page/custom/mem_car_list.html"><img src="../../resource/images/menu-icon-car.png" />车辆管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkcar_list.html"><img src="../../resource/images/menu-icon-card.png" />月卡管理</a></li>
+			<li><a href="/ydtu/page/custom/charge_list.html"><img src="../../resource/images/menu-icon-pay.png" />交易管理</a></li>
+			<li><a href="/ydtu/page/custom/tparkinout_page.html"><img src="../../resource/images/menu-icon-park.png" />停车记录</a></li>
+		</ul>
+	</div>
+	
+	<div class="rightContent">
+		<div class="Usuallypark bor01" id="carContent">
+		<script id="memberCar" type="text/html">
+	    <h2><span>我的车</span></h2>
+    	<table  cellpadding=0 cellspacing=0 class="vehicle_management_table" >
+  			<tr>
+  				<td align="center">
+				<div class="vehicle_box">
+					{{if data != null}}
+						{{each data as dto}}
+							{{if $index == 0}}
+								<div class="vehicle_02"  id="plate{{$index}}">
+								{{else}}
+								<div class="carDivHolder vehicle vehicle_center" holdid="604" status="1" id="plate{{$index}}">
+							{{/if}}
+					    	<span>{{dto.carPlate }}</span>
+					    	<samp>
+							{{if dto.status==1}}
+								解锁
+							{{else if dto.status==2}}
+								锁车
+							{{else if dto.status==3}}
+								审核中
+							{{else if dto.status==4}}
+								审核不通过
+							{{else if dto.status==5}}
+								已失效
+							{{/if}}
+					    	</samp>
+					    </div> 
+						{{/each}}
+				    {{/if}} 
+					<a href="/ydtu/page/custom/mem_car_detail.html" style="color:#555"><div class="vehicle vehicle_last"><span id="add_span">&nbsp;</span><div>添加车辆</div></div></a>  
+				</div>
+ 				</td>
+ 			 </tr>  
+		</table>
+	        <script>
+            
+            $("[id^='plate']").click(function(){
+            	$(this).attr("class", "vehicle_02");
+            	$(this).siblings("div").attr("class", "carDivHolder vehicle vehicle_center");
+            	var str = $(this).attr("id").substring(5);
+            	str = "table" + str;
+            	$("#"+str).siblings("table").css("display", "none");
+            	$("#"+str).removeAttr("style");
+            })
+            </script>
+		</script>
+	  </div> 
+      <div class="Usuallypark bor01" id="carDetail">
+	    <script id="detailCar" type="text/html">
+	    <h2><span>车辆信息</span>
+<!-- 	    <a href="">查看更多</a> -->
+	    </h2>
+				{{if data.length > 0}}
+					{{each data as dto}}
+						{{if $index == 0}}
+							<table cellpadding=0 cellspacing=0 class="vehicle_management_table" id="table{{$index}}">
+							{{else}}
+							<table cellpadding=0 cellspacing=0 class="vehicle_management_table" style="display:none"  id="table{{$index }}">
+						{{/if}}
+
+		                 <tr>
+		                 	<td class="posin_td posin_time"><p>车牌号：</p></td>
+		                 	<td colspan="3" class="posin_td posin_web" id="txt_carNum">{{dto.carPlate }}</td>
+		                 </tr>
+<!-- 	                 	<tr> -->
+<!-- 	                 		<td class="posin_td posin_time"><p>车牌颜色：</p></td> -->
+<!-- 	                 		<td colspan="3" class="posin_td posin_web" id="txt_cardNo">{{dto.carColor }}</td> -->
+<!-- 	                 	</tr> -->
+		                 <tr>
+		                 	<td class="posin_td posin_time"><p>车辆类型：</p></td>
+		                 	<td colspan="3" class="posin_td posin_web" id="txt_cardNo">
+		                 	{{if dto.carType == '1'}}
+		                 	小车
+		                 	{{else if dto.carType == '2'}}
+		                 	大车
+		                 	{{else}}
+		                 	摩托车
+		                 	{{/if}}
+		                 	</td>
+		                 </tr>
+		                 <tr>
+		                 	<td class="posin_td posin_time"><p>车架号：</p></td>
+		                 	<td colspan="3" class="posin_td posin_web" id="txt_carDriverNo">{{dto.carIdentiNum }}</td>
+		                 </tr>
+		                 <tr>
+		                 	<td class="posin_td posin_time"><p>发动机号：</p></td>
+		                 	<td colspan="3" class="posin_td posin_web" id="txt_engtinNo">{{dto.carEngineNum }}</td>
+		                 </tr>
+<!-- 	                 	<tr> -->
+<!-- 	                 		<td class="posin_td posin_time"> -->
+<!-- 	                 		<p>车辆照片：</p> -->
+<!-- 	                 		</td> -->
+<!-- 	                 		<td colspan="3" class="posin_td posin_web" id="txt_engtinNo"> -->
+<!-- 	                 			<input type="button" id="viewPic{{$index }}" value="查看" name="submitBtn1"  class="revised_data2 open_100"> -->
+<!-- 	                 			<div id="loadPic${s.index }" style="display: none;"> -->
+<!-- 	                 				<img src="/ydtc/resource/uploads/${dto.carImg}" height="180" width="240"> -->
+<!-- 	                 			</div> -->
+<!-- 	                 		</td> -->
+<!-- 	                 	</tr> -->
+<!-- 	                 	<tr> -->
+<!-- 	                 		<td class="posin_td posin_time"> -->
+<!-- 	                 		<p>行驶证照片：</p> -->
+<!-- 	                 		</td> -->
+<!-- 	                 		<td colspan="3" class="posin_td posin_web" id="txt_engtinNo"> -->
+<!-- 	                 			<input type="button" id="dviewPic{{$index }}" value="查看" name="submitBtn2"  class="revised_data2 open_100"> -->
+<!-- 	                 			<div id="dloadPic${s.index }" style="display: none;"> -->
+<!-- 	                 				<img src="../../resource/uploads/${dto.driverImg}" height="180" width="240"><br> -->
+<!-- 	                 			</div> -->
+<!-- 	                 		</td> -->
+<!-- 	                 	</tr> -->
+		                 <tr>
+		                 	<td class="posin_time"><p></p></td>
+		                 	<td colspan="3" class=" posin_web">
+		                 		<input type="button" id="editCarBtn" value="修改资料" onclick="modifyInfo({{dto.status}}, {{dto.id}});" class="revised_data" />
+<!-- 	                 			<input type="button" id="authCarBtn" value="修改授权" onclick="#" class="revised_data" style="display:none;"/> -->
+		                 	</td>
+		                 </tr>
+					{{/each}}
+					{{else}}
+					<div class="noticeMain">
+						<p style="margin-left: 30px;font-size: 17px;">暂无数据</p>
+					</div>
+				{{/if}}
+			</table>
+		</script>
+	  </div>
+	</div>
+</div>
+<!--mainContent End-->
+
+
+<!--foot Begin-->
+<div id="foot_sidebar"></div>
+<script>
+$("#foot_sidebar").load("foot.html"); 
+</script>
+<!--foot End-->
+<script>
+//加载扩展模块
+layer.config({
+    extend: 'extend/layer.ext.js'
+});
+
+$(function(){
+	$.ajax({
+		type: "post",
+		url: "/ydtu/tmembercar/getList.htm",
+		dataType: "json",
+		success:function(data){
+			checkResult(data.result);
+			var html = template('memberCar', data);
+			var detailHtml = template('detailCar', data);
+			$("#carContent").html(html);
+			$("#carDetail").html(detailHtml);
+		}
+	});
+})
+
+function modifyInfo(status, id){
+	if(status != '3'){
+		window.location.href= "/ydtu/page/custom/mem_car_detail.html?" + base64encode("id="+id);
+	}else{
+		layer.msg("审核中的车辆不能修改！");
+	}
+}
+</script>
+</body>
+</html>
